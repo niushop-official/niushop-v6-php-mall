@@ -38,7 +38,7 @@ $system = [
         'video' => [
             'ext' => ['mp4'],
             'mime' => ['video/mp4'],
-            'size' => 104857600
+            'size' => 1048576000
         ],
         'wechat' => [
             'ext' => ['pem', 'key'],
