@@ -25,7 +25,28 @@ class Member extends BaseApiController
      * @return Response
      */
     public function info(){
-        return success((new MemberService())->getInfo());
+        return success($this->_encodeUserInfo((new MemberService())->getInfo()));
+    }
+
+    /**
+     * member_no 加密展示
+     * @return void
+     */
+    private function _encodeUserInfo($userInfo) {
+        if (empty($userInfo)) {
+            return $userInfo;
+        }
+        $placeHolder = "******";
+        if(isset($userInfo['member_id'])) {
+            $md5 = md5($userInfo['member_id']);
+            $userInfo['member_id'] = $placeHolder . substr($md5 ,0, 6) . $placeHolder;
+        }
+        if (isset($userInfo['member_no'])) {
+            $md5 = md5($userInfo['member_no']);
+            $userInfo['member_no'] = $placeHolder . substr($md5 ,0, 6) . $placeHolder;
+        }
+
+        return $userInfo;
     }
 
     /**
