@@ -5,5 +5,9 @@
 *.log
 *.txt
 /.idea
-.env.*
-/assets
+niucloud/.env
+admin/.env.*
+niucloud/public/admin/assets/
+niucloud/runtime/cache/
+niucloud/runtime/temp/
+admin/public/assets/
