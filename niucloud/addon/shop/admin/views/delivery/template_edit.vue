@@ -374,10 +374,14 @@ const selectArea = (type: string, index: number) => {
 
 const areaTreeData = computed(() => {
     areaTree.value.forEach(province => {
-        province.child.forEach((city:any) => {
-            city.disabled = disabledArea.value.includes(city.id)
-        })
+        // 确保 province 存在且有 child 数组，避免 undefined.child 报错
+        if (province && Array.isArray(province.child)) {
+            province.child.forEach((city: any) => {
+                city.disabled = disabledArea.value?.includes(city.id) || false;
+            });
+        }
     })
+    
     return areaTree.value
 })
 

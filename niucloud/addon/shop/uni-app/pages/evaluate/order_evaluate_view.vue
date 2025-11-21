@@ -5,11 +5,11 @@
                 <template v-for="(item, index)  in info" :key="index">
                     <view class="card-template mb-[var(--top-m)]">
                         <view class="bg-[var(--temp-bg)] p-[20rpx] rounded-[var(--rounded-mid)] flex" @click="redirect({ url: '/addon/shop/pages/goods/detail', param: { goods_id: item.goods_id } })">
-                            <u--image radius="var(--goods-rounded-mid)" width="150rpx" height="150rpx" :src="img(item.order_goods.goods_image_thumb_mid ? item.order_goods.goods_image_thumb_mid : '')" model="aspectFill">
+                            <up-image radius="var(--goods-rounded-mid)" width="150rpx" height="150rpx" :src="img(item.order_goods.goods_image_thumb_mid ? item.order_goods.goods_image_thumb_mid : '')" model="aspectFill">
                                 <template #error>
                                     <u-icon name="photo" color="#999" size="50"></u-icon>
                                 </template>
-                            </u--image>
+                            </up-image>
                             <view class="flex-1 flex flex-wrap ml-[20rpx] my-[4rpx]">
                                 <view>
                                     <view class="text-[26rpx] leading-[40rpx] max-w-[450rpx] truncate">{{ item.order_goods.goods_name }}</view>
@@ -31,90 +31,90 @@
                         </view>
                         <view class="px-[2rpx] text-[28rpx] text-[#333] mt-[16rpx] mb-[20rpx] break-all leading-[1.5]">{{ item.content }}</view>
                         <template v-if="item.image_mid.length === 1">
-                            <u--image class="rounded-[var(--goods-rounded-big)] overflow-hidden mt-[10rpx]" width="420rpx" height="420rpx" :src="img(item.image_mid[0])" model="aspectFill" @click="imgListPreview(item.images[0])">
+                            <up-image class="rounded-[var(--goods-rounded-big)] overflow-hidden mt-[10rpx]" width="420rpx" height="420rpx" :src="img(item.image_mid[0])" model="aspectFill" @click="imgListPreview(item.images[0])">
                                 <template #error>
                                     <u-icon name="photo" color="#999" size="50"></u-icon>
                                 </template>
-                            </u--image>
+                            </up-image>
                         </template>
                         <template v-if="item.image_mid.length === 2">
                             <view class="flex justify-between mt-[10rpx]">
-                                <u--image class="rounded-[var(--goods-rounded-big)] overflow-hidden" width="322rpx" height="322rpx" :src="img(item.image_mid[0])" model="aspectFill" @click="imgListPreview(item.images[0])">
+                                <up-image class="rounded-[var(--goods-rounded-big)] overflow-hidden" width="322rpx" height="322rpx" :src="img(item.image_mid[0])" model="aspectFill" @click="imgListPreview(item.images[0])">
                                     <template #error>
                                         <u-icon name="photo" color="#999" size="50"></u-icon>
                                     </template>
-                                </u--image>
-                                <u--image class="rounded-[var(--goods-rounded-big)] overflow-hidden" width="322rpx" height="322rpx" :src="img(item.image_mid[1])" model="aspectFill" @click="imgListPreview(item.images[1])">
+                                </up-image>
+                                <up-image class="rounded-[var(--goods-rounded-big)] overflow-hidden" width="322rpx" height="322rpx" :src="img(item.image_mid[1])" model="aspectFill" @click="imgListPreview(item.images[1])">
                                     <template #error>
                                         <u-icon name="photo" color="#999" size="50"></u-icon>
                                     </template>
-                                </u--image>
+                                </up-image>
                             </view>
                         </template>
                         <template v-if="item.image_mid.length === 3">
                             <view class="flex justify-between mt-[10rpx]">
-                                <u--image class="rounded-[var(--goods-rounded-big)] overflow-hidden" width="430rpx" height="430rpx" :src="img(item.image_mid[0])" model="aspectFill" @click="imgListPreview(item.images[0])">
+                                <up-image class="rounded-[var(--goods-rounded-big)] overflow-hidden" width="430rpx" height="430rpx" :src="img(item.image_mid[0])" model="aspectFill" @click="imgListPreview(item.images[0])">
                                     <template #error>
                                         <u-icon name="photo" color="#999" size="50"></u-icon>
                                     </template>
-                                </u--image>
+                                </up-image>
                                 <view>
-                                    <u--image class="rounded-[var(--goods-rounded-big)] overflow-hidden mb-[20rpx]" width="205rpx" height="205rpx" :src="img(item.image_mid[1])" model="aspectFill" @click="imgListPreview(item.images[1])">
+                                    <up-image class="rounded-[var(--goods-rounded-big)] overflow-hidden mb-[20rpx]" width="205rpx" height="205rpx" :src="img(item.image_mid[1])" model="aspectFill" @click="imgListPreview(item.images[1])">
                                         <template #error>
                                             <u-icon name="photo" color="#999" size="50"></u-icon>
                                         </template>
-                                    </u--image>
-                                    <u--image class="rounded-[var(--goods-rounded-big)] overflow-hidden" width="205rpx" height="205rpx" :src="img(item.image_mid[2])" model="aspectFill" @click="imgListPreview(item.images[2])">
+                                    </up-image>
+                                    <up-image class="rounded-[var(--goods-rounded-big)] overflow-hidden" width="205rpx" height="205rpx" :src="img(item.image_mid[2])" model="aspectFill" @click="imgListPreview(item.images[2])">
                                         <template #error>
                                             <u-icon name="photo" color="#999" size="50"></u-icon>
                                         </template>
-                                    </u--image>
+                                    </up-image>
                                 </view>
                             </view>
                         </template>
                         <template v-if="item.image_mid.length === 4">
                             <view class="flex flex-wrap mt-[10rpx]">
-                                <u--image class="rounded-[var(--goods-rounded-big)] overflow-hidden mr-[15rpx] mb-[15rpx]"
+                                <up-image class="rounded-[var(--goods-rounded-big)] overflow-hidden mr-[15rpx] mb-[15rpx]"
                                     width="215rpx" height="215rpx" :src="img(item.image_mid[0])" model="aspectFill"
                                     @click="imgListPreview(item.images[0])">
                                     <template #error>
                                         <u-icon name="photo" color="#999" size="50"></u-icon>
                                     </template>
-                                </u--image>
-                                <u--image
+                                </up-image>
+                                <up-image
                                     class="rounded-[var(--goods-rounded-big)] overflow-hidden mr-[15rpx] mb-[15rpx]"
                                     width="215rpx" height="215rpx" :src="img(item.image_mid[1])" model="aspectFill"
                                     @click="imgListPreview(item.images[1])">
                                     <template #error>
                                         <u-icon name="photo" color="#999" size="50"></u-icon>
                                     </template>
-                                </u--image>
-                                <u--image class="rounded-[var(--goods-rounded-big)] overflow-hidden mr-[15rpx]"
+                                </up-image>
+                                <up-image class="rounded-[var(--goods-rounded-big)] overflow-hidden mr-[15rpx]"
                                           width="215rpx" height="215rpx" :src="img(item.image_mid[2])"
                                           model="aspectFill" @click="imgListPreview(item.images[2])">
                                     <template #error>
                                         <u-icon name="photo" color="#999" size="50"></u-icon>
                                     </template>
-                                </u--image>
-                                <u--image class="rounded-[var(--goods-rounded-big)] overflow-hidden mr-[15rpx]"
+                                </up-image>
+                                <up-image class="rounded-[var(--goods-rounded-big)] overflow-hidden mr-[15rpx]"
                                           width="215rpx" height="215rpx" :src="img(item.image_mid[3])"
                                           model="aspectFill" @click="imgListPreview(item.images[3])">
                                     <template #error>
                                         <u-icon name="photo" color="#999" size="50"></u-icon>
                                     </template>
-                                </u--image>
+                                </up-image>
                             </view>
                         </template>
                         <template v-if="item.image_mid.length > 4">
                             <view class="flex flex-wrap mt-[10rpx]">
-                                <u--image v-for="(imageItem, imageIndex) in item.images"
+                                <up-image v-for="(imageItem, imageIndex) in item.images"
                                           :class="['rounded-[var(--goods-rounded-big)] overflow-hidden mb-[10rpx]', (imageIndex + 1) % 3 === 0 ? '' : 'mr-[10rpx]']"
                                           width="211rpx" height="211rpx" :src="img(imageItem)" model="aspectFill"
                                           @click="imgListPreview(imageItem)">
                                     <template #error>
                                         <u-icon name="photo" color="#999" size="50"></u-icon>
                                     </template>
-                                </u--image>
+                                </up-image>
                             </view>
                         </template>
                         <view v-if="item.explain_first !=''" class="text-[26rpx] !text-[var(--text-color-light6)] mt-[20rpx] pt-[20rpx] border-0 border-t-[2rpx] border-solid border-[#F1F2F5] w-[100%] overflow-clip leading-[34rpx] break-all">

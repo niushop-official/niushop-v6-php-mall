@@ -219,10 +219,10 @@ class CoreAddonService extends CoreAddonBaseService
      * 查询已安装的有效的应用
      * @return array
      */
-    public function getInstallAddonList()
+    public function getInstallAddonList($is_change_img=true)
     {
         $addon_list = $this->model->where([['status', '=', AddonDict::ON]])->append(['status_name'])->column('title, icon, key, desc, status, type, support_app', 'key');
-        if (!empty($addon_list)) {
+        if (!empty($addon_list) &&$is_change_img) {
             foreach ($addon_list as &$data) {
                 $data['icon'] = is_file($data['icon']) ? image_to_base64($data['icon']) : '';
             }

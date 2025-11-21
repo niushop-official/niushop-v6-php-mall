@@ -3,13 +3,13 @@
         <view class="goods-sku card-template" v-if="diyComponent.goods && diyComponent.goods.attr_format && Object.keys(diyComponent.goods.attr_format).length">
             <view class="title mb-[30rpx]">商品属性</view>
             <view>
-                <template v-for="(item,index) in diyComponent.goods.attr_format" :key="index">
+                <template v-for="(item,index) in filteredAttrFormat" :key="index">
                     <view v-if="index < 4 || isAttrFormatShow" class="card-template-item">
                         <text class="text-[26rpx] leading-[30rpx] w-[160rpx] font-400 shrink-0 text-[var(--text-color-light9)]">{{ item.attr_value_name }}</text>
                         <view class="text-[#333] box-border value-wid text-[26rpx] leading-[30rpx] font-400 pl-[20rpx]">{{ Array.isArray(item.attr_child_value_name) ? item.attr_child_value_name.join(',') : item.attr_child_value_name }}</view>
                     </view>
                 </template>
-                <view v-if="diyComponent.goods.attr_format.length > 4" class="flex-center" @click="isAttrFormatShow = !isAttrFormatShow">
+                <view v-if="filteredAttrFormat.length > 4" class="flex-center" @click="isAttrFormatShow = !isAttrFormatShow">
                     <text class="text-[24rpx] mr-[10rpx]">{{ !isAttrFormatShow ? '展开' : '收起' }}</text>
                     <text class="nc-iconfont !text-[22rpx]" :class="{'nc-icon-xiaV6xx': !isAttrFormatShow, 'nc-icon-shangV6xx-1': isAttrFormatShow}"></text>
                 </view>
@@ -27,7 +27,6 @@ import useGoodsDetailStore from '@/addon/shop/stores/goodsDetail'
 const props = defineProps(['component', 'index', 'value']);
 const diyStore = useDiyStore();
 const emits = defineEmits(['update:componentIsShow']);
-
 const diyComponent = computed(() => {
     if (diyStore.mode == 'decorate') {
         const obj = {
@@ -48,6 +47,19 @@ const diyComponent = computed(() => {
         return Object.assign({}, props.component, useGoodsDetailStore().goodsDetail);
     }
 })
+
+// 过滤后的属性数组（去掉空值项）
+const filteredAttrFormat = computed(() => {
+    const originalAttrs = diyComponent.value.goods?.attr_format || [];
+    return originalAttrs.filter(item => {
+        // 过滤掉空值项
+        if (Array.isArray(item.attr_child_value_name)) {
+            return item.attr_child_value_name.length > 0;
+        } else {
+            return !!item.attr_child_value_name;
+        }
+    });
+});
 
 const warpCss = computed(() => {
     let style = '';

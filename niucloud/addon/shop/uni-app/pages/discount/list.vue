@@ -1,7 +1,7 @@
 <template>
     <view class="discount bg-[var(--page-bg-color)] min-h-[100vh]" :style="themeColor()">
         <view class="fixed top-0 left-0 w-full z-10 text-[0]">
-            <!-- #ifdef MP-WEIXIN -->
+            <!-- #ifdef MP-WEIXIN || APP-PLUS -->
             <view class="absolute top-0 left-0 right-0 z-999">
                 <top-tabbar :data="param" class="top-header" />
             </view>
@@ -36,16 +36,16 @@
 
         <mescroll-body v-if="discountList.length" ref="mescrollRef" :top="mescrollTop" @init="mescrollInit" :down="{ use: false }" @up="getActiveDiscountGoodsListFn">
             <view class="sidebar-margin py-[var(--top-m)] bg-[#F4F6F8]">
-         
+
                 <template v-for="(item,index) in list" :key="index">
-                 
+
                     <view class="bg-[#fff] p-[20rpx] flex rounded-[var(--rounded-big)]" :class="{'mb-[var(--top-m)]':index<list.length-1}" @click="toLink(item)">
                         <view class="w-[240rpx] h-[240rpx] rounded-[var(--goods-rounded-big)] overflow-hidden">
-                            <u--image width="240rpx" height="240rpx" :radius="'var(--goods-rounded-big)'" :src="img(item.goods_cover ? item.goods_cover_thumb_mid : '')" model="aspectFill">
+                            <up-image width="240rpx" height="240rpx" :radius="'var(--goods-rounded-big)'" :src="img(item.goods_cover ? item.goods_cover_thumb_mid : '')" model="aspectFill">
                                 <template #error>
                                     <image class="rounded-[var(--goods-rounded-big)] overflow-hidden w-[240rpx] h-[240rpx]" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                 </template>
-                            </u--image>
+                            </up-image>
                         </view>
 
                         <view class="ml-[20rpx] flex-1 flex flex-col justify-between">

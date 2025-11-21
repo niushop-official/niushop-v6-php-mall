@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <label-group-edit ref="editLabelGroupDialog" @complete="loadLabelGroupList" />
+            <label-group-edit ref="editLabelGroupDialog" @complete="loadLabelGroupList(getTablePageStorage(labelTable.searchParam).page)" />
         </el-card>
     </div>
 </template>
@@ -159,7 +159,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteLabelGroup(id).then(() => {
-            loadLabelGroupList()
+            loadLabelGroupList(getTablePageStorage(labelTable.searchParam).page)
         }).catch(() => {
         })
     })

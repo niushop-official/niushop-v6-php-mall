@@ -598,12 +598,16 @@ Route::group('shop', function () {
 
     // 发票列表
     Route::get('invoice', 'addon\shop\app\adminapi\controller\order\Invoice@lists');
+    //添加发票
+    Route::post('invoice/add', 'addon\shop\app\adminapi\controller\order\Invoice@add');
 
     // 发票信息
     Route::get('invoice/:id', 'addon\shop\app\adminapi\controller\order\Invoice@info');
 
     // 开票
     Route::put('invoice/:id', 'addon\shop\app\adminapi\controller\order\Invoice@invoicing');
+
+    Route::post('invoice/audit', 'addon\shop\app\adminapi\controller\order\Invoice@audit');
 
     /************************************************** 限时折扣 *****************************************************/
     //限时折扣列表

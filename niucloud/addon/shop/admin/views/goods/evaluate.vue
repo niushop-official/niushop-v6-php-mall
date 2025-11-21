@@ -105,7 +105,7 @@
             </div>
         </el-card>
 
-        <evaluate-add ref="editEvaluateDialog" @complete="loadEvaluateList" />
+        <evaluate-add ref="editEvaluateDialog" @complete="loadEvaluateList(getTablePageStorage(evaluateTable.searchParam).page)" />
 
         <el-dialog v-model="replyShowDialog" :title="t('explainFirst')" width="460px" class="diy-dialog-wrap" :destroy-on-close="true">
             <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form">
@@ -252,7 +252,7 @@ const batchDeleteEvent = () => {
         batchDelEvaluate({
             evaluate_ids: evaluate_ids
         }).then(() => {
-            loadEvaluateList()
+            loadEvaluateList(getTablePageStorage(evaluateTable.searchParam).page)
         }).catch(() => {
         })
     })
@@ -281,7 +281,7 @@ const batchAdoptEvent = (status: number) => {
         batchAdoptEvaluate({
             evaluate_ids: evaluate_ids
         }).then(() => {
-            loadEvaluateList()
+            loadEvaluateList(getTablePageStorage(evaluateTable.searchParam).page)
         }).catch(() => {
         })
     })
@@ -311,7 +311,7 @@ const batchRefuseEvent = (status: number) => {
         batchRefuseEvaluate({
             evaluate_ids: evaluate_ids
         }).then(() => {
-            loadEvaluateList()
+            loadEvaluateList(getTablePageStorage(evaluateTable.searchParam).page)
         }).catch(() => {
         })
     })
@@ -330,7 +330,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteEvaluate(id).then(() => {
-            loadEvaluateList()
+            loadEvaluateList(getTablePageStorage(evaluateTable.searchParam).page)
         }).catch(() => {
         })
     })
@@ -346,7 +346,7 @@ const adoptEvent = (id: number) => {
         }
     ).then(() => {
         adoptEvaluate(id).then(() => {
-            loadEvaluateList()
+            loadEvaluateList(getTablePageStorage(evaluateTable.searchParam).page)
         })
     })
 }
@@ -354,7 +354,7 @@ const adoptEvent = (id: number) => {
 // 审核拒绝
 const refuseEvent = (id: number) => {
     refuseEvaluate(id).then(() => {
-        loadEvaluateList()
+        loadEvaluateList(getTablePageStorage(evaluateTable.searchParam).page)
     })
 }
 
@@ -362,11 +362,11 @@ const refuseEvent = (id: number) => {
 const toppingEvent = (id: number, event:string) => {
     if (event == 'topping') {
         toppingEvaluate(id).then(() => {
-            loadEvaluateList()
+            loadEvaluateList(getTablePageStorage(evaluateTable.searchParam).page)
         })
     } else {
         cancelToppingEvaluate(id).then(() => {
-            loadEvaluateList()
+            loadEvaluateList(getTablePageStorage(evaluateTable.searchParam).page)
         })
     }
 }
@@ -397,7 +397,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
         if (valid) {
             const data = formData
             replyEvaluate(data).then(res => {
-                loadEvaluateList()
+                loadEvaluateList(getTablePageStorage(evaluateTable.searchParam).page)
                 replyShowDialog.value = false
             }).catch(() => {
                 replyShowDialog.value = false

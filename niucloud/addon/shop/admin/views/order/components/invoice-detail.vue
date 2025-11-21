@@ -12,7 +12,12 @@
                 <el-descriptions-item :label="t('invoiceTime')" label-align="right">{{ logData.invoice_time === 0 ? '--' : logData.invoice_time }}</el-descriptions-item>
                 <el-descriptions-item :label="t('invoiceVoucher')" label-align="right">
                     <span>
-                        <img class="w-[50px] max-h-[50px] inline-block" v-if="logData.invoice_voucher" :src="img(logData.invoice_voucher)" alt="" @click="previewImage" >
+                        <img class="w-[50px] max-h-[50px] inline-block" v-if="logData.invoice_voucher" :src="img(logData.invoice_voucher)" alt="" @click="previewImageInvoice(logData.invoice_voucher)" >
+                    </span>
+                </el-descriptions-item>
+                <el-descriptions-item :label="t('支付凭证')" label-align="right">
+                    <span v-if="logData.pay_voucher">
+                        <img class="w-[50px] max-h-[50px] inline-block"  v-for="(item, index) in logData.pay_voucher.split(',')" :key="index" :src="img(item)" alt="" @click="previewImageInvoice(item)" >
                     </span>
                 </el-descriptions-item>
                 <el-descriptions-item :label="t('bankTame')" label-align="right">{{ logData.bank_name || '--' }}</el-descriptions-item>
@@ -66,10 +71,10 @@ const logData = ref<LogDataType>({})
 const getInvoiceDetailList = async () => {
     logData.value = await (await getInvoiceDetail(id)).data
     loading.value = false
-    previewImageList.splice(0, previewImageList.length)
-    if (logData.value.invoice_voucher) {
-        previewImageList.push(img(logData.value.invoice_voucher))
-    }
+    // previewImageList.splice(0, previewImageList.length)
+    // if (logData.value.invoice_voucher) {
+    //     previewImageList.push(img(logData.value.invoice_voucher))
+    // }
 }
 
 let id = 0
@@ -82,6 +87,12 @@ const setFormData = async (row: any = null) => {
 }
 
 const previewImageList: string[] = reactive([])
+
+const previewImageInvoice = (item: string) => {
+    previewImageList.splice(0, previewImageList.length)
+    previewImageList.push(img(item))
+    imageViewer.show = true
+}
 
 /**
  * 查看图片

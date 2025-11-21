@@ -27,13 +27,13 @@ Route::group(function () {
     Route::get('addon/:id', 'addon.Addon/info');
 
     //安装插件
-    Route::post('addon/install/:addon', 'addon.Addon/install');
+    Route::post('addon/install/:addon', 'addon.Addon/install')->pattern(['addon' => '[\w|\,]+']);
     //云安装插件
-    Route::post('addon/cloudinstall/:addon', 'addon.Addon/cloudInstall');
+    Route::post('addon/cloudinstall/:addon', 'addon.Addon/cloudInstall')->pattern(['addon' => '[\w|\,]+']);
     // 云编译进度
-    Route::get('addon/cloudinstall/:addon', 'addon.Addon/cloudInstallLog');
+    Route::get('addon/cloudinstall/:addon', 'addon.Addon/cloudInstallLog')->pattern(['addon' => '[\w|\,]+']);
     //插件安装检测安装环境
-    Route::get('addon/install/check/:addon', 'addon.Addon/installCheck');
+    Route::get('addon/install/check/:addon', 'addon.Addon/installCheck')->pattern(['addon' => '[\w|\,]+']);
     // 获取安装任务
     Route::get('addon/installtask', 'addon.Addon/getInstallTask');
     //下载插件
@@ -77,6 +77,9 @@ Route::group(function () {
     Route::post('addon_develop/download/:key', 'addon.AddonDevelop/download');
     //插件标识黑名单
     Route::get('addon_develop/key/blacklist', 'addon.AddonDevelop/keyBlackList');
+// 获取应用列表
+    Route::get('addon/showCustomer', 'addon.Addon/showCustomer');
+    Route::get('addon/special_menu', 'addon.Addon/getSpecialMenuList');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,
@@ -89,8 +92,7 @@ Route::group(function () {
 Route::group(function () {
     //获取已安装插件列表
     Route::get('addon/list/install', 'addon.Addon/getInstallList');
-    // 获取应用列表
-    Route::get('addon/list/showapp', 'addon.Addon/showApp');
-    // 获取营销列表
+    Route::get('addon/list/showApp', 'addon.Addon/showApp');
     Route::get('showMarketing', 'addon.Addon/showMarketing');
+
 });

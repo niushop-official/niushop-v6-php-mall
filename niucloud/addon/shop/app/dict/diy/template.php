@@ -24,7 +24,7 @@ return [
         'page' => '/addon/shop/pages/goods/detail',
         'action' => 'decorate',
         'type' => '',
-        'ignoreComponents' => [ 'CarouselSearch' ], // 忽略组件名单，商品详情不支持添加轮播搜索组件
+        'ignoreComponents' => ['CarouselSearch'], // 忽略组件名单，商品详情不支持添加轮播搜索组件
         // 页面数据结构，初始化时覆盖
         'global' => [
             'topStatusBar' => [
@@ -32,7 +32,16 @@ return [
             ],
             'bottomTabBar' => [
                 'control' => false, // 隐藏底部导航，禁止编辑
-                'isShow' => false
+                'isShow' => false,
+                'designNav' => [
+                    'title' => '',
+                    'key' => ''
+                ]
+            ],
+            "copyright" => [
+                'control' => true,
+                'isShow' => false,
+                'textColor' =>'#ccc'
             ],
         ],
 

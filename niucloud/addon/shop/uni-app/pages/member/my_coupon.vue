@@ -1,15 +1,15 @@
 <template>
     <view class="bg-[#f8f8f8] min-h-screen overflow-hidden" :style="themeColor()" v-if="memberStore.info">
         <view class="fixed left-0 top-0 right-0 z-10">
-            <scroll-view :scroll-x="true" class="scroll-Y box-border px-[var(--sidebar-m)] bg-white">
+            <scroll-view :scroll-x="true" class="scroll-Y box-border px-[var(--sidebar-m)] tab-style-2">
                 <view class="flex whitespace-nowrap justify-around items-center h-[88rpx]">
                     <view :class="['text-[28rpx] text-[#333] h-[88rpx] leading-[88rpx] font-400', { 'class-select !text-primary': couponStatus === item.status }]"
                         @click="statusClickFn(item.status)" v-for="(item, index) in statusList">{{ item.status_name }}({{ item.count }})</view>
                 </view>
             </scroll-view>
-            <scroll-view :scroll-x="true" scroll-with-animation :scroll-into-view="'id' + (subActive ? subActive - 1 : 0)" class="px-[var(--sidebar-m)]  box-border bg-white">
+            <scroll-view :scroll-x="true" scroll-with-animation :scroll-into-view="'id' + (subActive ? subActive - 1 : 0)" class="px-[var(--sidebar-m)]  box-border tab-style-2">
                 <view class="items-center flex h-[88rpx]">
-                    <text class="flex-shrink-0 w-[126rpx] h-[54rpx] text-[24rpx] flex-center text-center text-[#333] bg-[var(--temp-bg)] rounded-[30rpx] box-border mr-[20rpx] border-[2rpx] border-solid border-[#F8F9FD]"
+                    <text class="flex-shrink-0 w-[126rpx] h-[54rpx] text-[24rpx] flex-center text-center text-[#333] rounded-[30rpx] box-border mr-[20rpx] border-[2rpx] border-solid border-[#ccc]"
                         :class="{'!text-primary !border-primary font-500 !bg-[var(--primary-color-light)]':item.value == curType}"
                         v-for="(item,index) in typeList" :key="index" :id="'id' + index"
                         @click="typeClick(index,item.value)">{{ item.label }}
@@ -189,19 +189,19 @@ const typeClick = (index: number, data: any) => {
 
 .class-select {
     position: relative;
-    font-weight: 500 !important;
+    font-weight: 700 !important;
 
-    &::before {
-        content: "";
-        position: absolute;
-        bottom: 10rpx;
-        height: 6rpx;
-        background-color: $u-primary;
-        width: 40rpx;
-        left: 50%;
-        border-radius: 100rpx;
-        transform: translateX(-50%);
-    }
+    // &::before {
+    //     content: "";
+    //     position: absolute;
+    //     bottom: 10rpx;
+    //     height: 6rpx;
+    //     background-color: $u-primary;
+    //     width: 40rpx;
+    //     left: 50%;
+    //     border-radius: 100rpx;
+    //     transform: translateX(-50%);
+    // }
 }
 
 .coupon-bg {

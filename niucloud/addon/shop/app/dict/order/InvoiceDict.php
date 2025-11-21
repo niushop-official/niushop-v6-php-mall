@@ -40,15 +40,19 @@ class InvoiceDict
     //专票
     const SPECIAL = '2';
 
+
+
     //未生效
     const WAIT_OPEN = 1;
     //已生效
     const OPEN = 2;
 
-    //未开票
+
     const WAIT_INVOICE = 0;
     //已开票
     const INVOICED = 1;
+    //待审核
+    const WAIT_AUDIT = 2;
 
     /**
      * 发票抬头类型
@@ -83,6 +87,7 @@ class InvoiceDict
         return [
             self::WAIT_INVOICE => get_lang('dict_shop_invoice.wait_invoice'),
             self::INVOICED => get_lang('dict_shop_invoice.invoiced'),
+            self::WAIT_AUDIT => get_lang('dict_shop_invoice.wait_audit'),
         ];
     }
 

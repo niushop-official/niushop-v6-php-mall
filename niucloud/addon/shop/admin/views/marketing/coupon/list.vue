@@ -300,7 +300,7 @@ const deleteEvent = (data: any) => {
         }
     ).then(() => {
         deleteCoupon({ ids: [data.id] }).then(() => {
-            loadCouponList()
+            loadCouponList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -316,7 +316,7 @@ const closeEvent = (data: any) => {
         }
     ).then(() => {
         closeCoupon({ ids: [data.id] }).then(() => {
-            loadCouponList()
+            loadCouponList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -345,7 +345,7 @@ const batchDeleteEvent = () => {
         deleteCoupon({
             ids: coupon_ids
         }).then(() => {
-            loadCouponList()
+            loadCouponList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -374,7 +374,7 @@ const batchcloseEvent = () => {
         closeCoupon({
             ids: coupon_ids
         }).then(() => {
-            loadCouponList()
+            loadCouponList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })

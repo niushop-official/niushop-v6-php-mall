@@ -6,7 +6,7 @@
                 <text class="text-[30rpx] mx-[18rpx] font-500 text-[#EF000C]">猜你喜欢</text>
                 <image class="w-[38rpx] h-[22rpx]" :src="img('addon/shop_fenxiao/level/title_right.png')" mode="aspectFill" />
             </view>
-            <diy-goods-list @loadingFn="getGoodsListFn" :component="goodsData" />
+            <diy-recommend-goods-list @loadingFn="getGoodsListFn" :component="goodsData" />
         </view>
 		<view class="h-[50rpx]"></view>
     </view>
@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { img } from '@/utils/common';
 import { ref } from 'vue'
-import diyGoodsList from '@/addon/shop/components/diy/goods-list/index.vue';
+import diyRecommendGoodsList from '@/addon/shop/components/diy/goods-list/index.vue';
 
 // 获取商品数据
 const goodsList = ref()

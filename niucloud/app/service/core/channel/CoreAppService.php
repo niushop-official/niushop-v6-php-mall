@@ -39,6 +39,16 @@ class CoreAppService extends BaseCoreService
     public function getConfig()
     {
         $info = (new CoreConfigService())->getConfig(ConfigKeyDict::APP)['value'] ?? [];
+        if (empty($info)) {
+            $info = [
+                'wechat_app_id' => '',
+                'wechat_app_secret' => '',
+                'uni_app_id' => '',
+                'app_name' => '',
+                'android_app_key' => '',
+                'application_id' => ''
+            ];
+        }
         return $info;
     }
 

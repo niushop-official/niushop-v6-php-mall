@@ -166,7 +166,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteElectronicSheet(id).then(() => {
-            loadList()
+            loadList(getTablePageStorage(tableData.searchParam).page)
         })
     })
 }
@@ -182,7 +182,7 @@ const setDefaultEvent = (id: number) => {
         }
     ).then(() => {
         setDefaultElectronicSheet({ id }).then(() => {
-            loadList()
+            loadList(getTablePageStorage(tableData.searchParam).page)
         })
     })
 }

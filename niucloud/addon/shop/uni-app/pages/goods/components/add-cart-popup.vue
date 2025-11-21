@@ -3,11 +3,11 @@
         <u-popup :show="goodsSkuPop" @close="closeFn" mode="bottom" zIndex="999999">
             <view v-if="Object.keys(goodsDetail).length" @touchmove.prevent.stop class="rounded-t-[20rpx] overflow-hidden bg-[#fff] py-[32rpx] relative">
                 <view class="flex px-[32rpx] mb-[58rpx]">
-                    <u--image width="180rpx" height="180rpx" :radius="'var(--goods-rounded-big)'" :src="img(detail.sku_image)" model="aspectFill">
+                    <up-image width="180rpx" height="180rpx" :radius="'var(--goods-rounded-big)'" :src="img(detail.sku_image)" model="aspectFill">
                         <template #error>
                             <image class="w-[180rpx] h-[180rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                         </template>
-                    </u--image>
+                    </up-image>
 
                     <view class="flex flex-1 flex-col justify-between ml-[20rpx] py-[10rpx]">
                         <view class="w-[100%]">
@@ -17,7 +17,7 @@
                                 <text class="text-[32rpx] price-font">.{{ parseFloat(goodsPrice(detail)).toFixed(2).split('.')[1] }}</text>
 								<image v-if="priceType(detail) == 'member_price'" class="max-w-[50rpx] h-[28rpx] ml-[6rpx]" :src="img('addon/shop/VIP.png')" mode="heightFix" />
 								<image v-else-if="priceType(detail) == 'newcomer_price'"  class="max-w-[60rpx] h-[28rpx] ml-[6rpx]" :src="img('addon/shop/newcomer.png')" mode="heightFix" />
-								<image v-else-if="priceType(detail) == 'discount_price'" class="max-w-[80rpx] h-[28rpx] ml-[6rpx]" :src="img('addon/shop/discount.png')" mode="heightFix" />	 
+								<image v-else-if="priceType(detail) == 'discount_price'" class="max-w-[80rpx] h-[28rpx] ml-[6rpx]" :src="img('addon/shop/discount.png')" mode="heightFix" />
                             </view>
                             <view class="text-[26rpx] leading-[32rpx] text-[#303133] mt-[12rpx]">库存{{ detail.stock }}{{ goodsDetail.goods.unit }}</view>
                         </view>

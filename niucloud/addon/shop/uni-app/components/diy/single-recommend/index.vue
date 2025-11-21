@@ -43,11 +43,11 @@
 
             <view class="w-[340rpx] h-[504rpx] flex flex-col bg-[#fff] box-border overflow-hidden" :style="goodsTempCss" @click="toLink(goodsList[0])">
                 <view :style="goodsImgCss" class="w-[346rpx] h-[350rpx] overflow-hidden">
-                    <u--image width="346rpx" height="350rpx" :src="img(goodsList[0].goods_cover_thumb_mid || '')" model="aspectFill">
+                    <up-image width="346rpx" height="350rpx" :src="img(goodsList[0].goods_cover_thumb_mid || '')" model="aspectFill">
                         <template #error>
                             <image class="w-[346rpx] h-[350rpx]" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                         </template>
-                    </u--image>
+                    </up-image>
                 </view>
                 <view class="px-[16rpx] flex-1 pt-[16rpx] pb-[20rpx] flex flex-col justify-between">
                     <view class="text-[#303133] leading-[40rpx] text-[28rpx] truncate" :style="{ color : diyComponent.goodsNameStyle.color, fontWeight : diyComponent.goodsNameStyle.fontWeight }">{{ goodsList[0].goods_name }}</view>
@@ -60,7 +60,7 @@
                             </view>
 							<image v-if="diyGoods.priceType(goodsList[0]) == 'member_price'" class="max-w-[50rpx] h-[28rpx] ml-[6rpx]" :src="img('addon/shop/VIP.png')" mode="heightFix" />
 							<image v-else-if="diyGoods.priceType(goodsList[0]) == 'newcomer_price'"  class="max-w-[60rpx] h-[28rpx] ml-[6rpx]" :src="img('addon/shop/newcomer.png')" mode="heightFix" />
-							<image v-else-if="diyGoods.priceType(goodsList[0]) == 'discount_price'" class="max-w-[80rpx] h-[28rpx] ml-[6rpx]" :src="img('addon/shop/discount.png')" mode="heightFix" />	 
+							<image v-else-if="diyGoods.priceType(goodsList[0]) == 'discount_price'" class="max-w-[80rpx] h-[28rpx] ml-[6rpx]" :src="img('addon/shop/discount.png')" mode="heightFix" />
                         </view>
                         <view class="w-[44rpx] h-[44rpx] bg-[red] flex items-center justify-center rounded-[50%]" :style="{ backgroundColor : diyComponent.saleStyle.color }">
                             <text class="iconfont iconjia  font-500 text-[32rpx] text-[#fff]"></text>

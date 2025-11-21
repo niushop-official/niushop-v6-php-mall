@@ -66,6 +66,7 @@ class CoreWeappAuthService extends BaseCoreService
     public function getUserPhoneNumber(string $code)
     {
         $api = CoreWeappService::appApiClient();
+        CoreWeappService::refreshToken(); // 为防止多次拒绝手机号的情况，需要刷新token
         return $api->postJson('wxa/business/getuserphonenumber', [
             'code' => (string) $code
         ]);

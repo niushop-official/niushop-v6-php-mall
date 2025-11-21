@@ -12,6 +12,7 @@
 namespace addon\shop\app\model\order;
 
 use addon\shop\app\dict\order\InvoiceDict;
+use app\dict\sys\FileDict;
 use app\model\member\Member;
 use core\base\BaseModel;
 use think\db\Query;
@@ -140,6 +141,16 @@ class Invoice extends BaseModel
     {
         return InvoiceDict::getIsInvoice()[ $data[ 'is_invoice' ] ] ?? '';
     }
+ /**
+     * 获取开票状态
+     * @param $value
+     * @param $data
+     * @return mixed|string
+     */
+    public function getInvoiceTypeNameAttr($value, $data)
+    {
+        return InvoiceDict::getIsInvoice()[ $data[ 'is_invoice' ] ] ?? '';
+    }
 
     /**
      * 开票会员
@@ -160,11 +171,101 @@ class Invoice extends BaseModel
     }
 
     /**
-     * 订单
-     * @return HasOne
+     * 开票订单
+     * @return \think\model\relation\HasMany
      */
-    public function orderData()
+    public function orderList()
     {
-        return $this->hasOne(Order::class, 'order_id', 'trade_id')->with(['orderGoods', 'pay'])->append(['status_name']);
+        return $this->hasMany(Order::class, 'invoice_id', 'id');
+    }
+
+    /**
+     * 获取商品图片缩略图（小）
+     */
+    public function getPayVoucherThumbSmallAttr($value, $data)
+    {
+        if (isset($data[ 'pay_voucher' ]) && $data[ 'pay_voucher' ] != '') {
+            $pay_voucher = explode(',', $data[ 'pay_voucher' ]);
+            $img_arr = [];
+            foreach ($pay_voucher as $k => $v) {
+                $img = get_thumb_images($v, FileDict::SMALL);
+                if (!empty($img)) {
+                    $img_arr[] = $img;
+                }
+            }
+            return $img_arr;
+        }
+        return [];
+    }
+
+    /**
+     * 获取商品图片缩略图（中）
+     */
+    public function getPayVoucherThumbMidAttr($value, $data)
+    {
+        if (isset($data[ 'pay_voucher' ]) && $data[ 'pay_voucher' ] != '') {
+            $pay_voucher = explode(',', $data[ 'pay_voucher' ]);
+            $img_arr = [];
+            foreach ($pay_voucher as $k => $v) {
+                $img = get_thumb_images($v, FileDict::MID);
+                if (!empty($img)) {
+                    $img_arr[] = $img;
+                }
+            }
+            return $img_arr;
+        }
+        return [];
+    }
+
+    /**
+     * 获取商品图片缩略图（大）
+     */
+    public function getPayVoucherThumbBigAttr($value, $data)
+    {
+        if (isset($data[ 'pay_voucher' ]) && $data[ 'pay_voucher' ] != '') {
+            $pay_voucher = explode(',', $data[ 'pay_voucher' ]);
+            $img_arr = [];
+            foreach ($pay_voucher as $k => $v) {
+                $img = get_thumb_images($v, FileDict::BIG);
+                if (!empty($img)) {
+                    $img_arr[] = $img;
+                }
+            }
+            return $img_arr;
+        }
+        return [];
+    }
+
+    /**
+     * 获取封面缩略图（小）
+     */
+    public function getInvoiceVoucherThumbSmallAttr($value, $data)
+    {
+        if (isset($data[ 'invoice_voucher' ]) && $data[ 'invoice_voucher' ] != '') {
+            return get_thumb_images($data[ 'invoice_voucher' ], FileDict::SMALL);
+        }
+        return [];
+    }
+
+    /**
+     * 获取封面缩略图（中）
+     */
+    public function getInvoiceVoucherThumbMidAttr($value, $data)
+    {
+        if (isset($data[ 'invoice_voucher' ]) && $data[ 'invoice_voucher' ] != '') {
+            return get_thumb_images($data[ 'invoice_voucher' ], FileDict::MID);
+        }
+        return [];
+    }
+
+    /**
+     * 获取封面缩略图（大）
+     */
+    public function getInvoiceVoucherThumbBigAttr($value, $data)
+    {
+        if (isset($data[ 'invoice_voucher' ]) && $data[ 'invoice_voucher' ] != '') {
+            return get_thumb_images($data[ 'invoice_voucher' ], FileDict::BIG);
+        }
+        return [];
     }
 }

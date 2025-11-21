@@ -47,12 +47,21 @@ class Language {
             this.loadLocale.push(`${fileKey}.${locale}`)
 
             // 引入语言包文件
+
+            // #ifdef APP-PLUS
+            const appLang = import.meta.glob('../app/locale/**/*.json', { eager: true })
+            const addonLang = import.meta.glob('../addon/**/locale/**/*.json', { eager: true })
+            const messages = route == 'app' ? appLang[`../app/locale/${locale}/${file}.json`] : addonLang[`../addon/${route}/locale/${locale}/${file}.json`]
+            // #endif
+
+            // #ifndef APP-PLUS
             const messages = await import(route == 'app' ? `../${route}/locale/${locale}/${file}.json` : `../addon/${route}/locale/${locale}/${file}.json`)
+            // #endif
+
             let data: Record<string, string> = {}
             Object.keys(messages.default).forEach(key => {
                 data[`${fileKey}.${key}`] = messages.default[key]
             })
-
             this.i18n.global.mergeLocaleMessage(locale, data)
             this.setI18nLanguage(locale, file)
 

@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <brand-edit ref="editBrandDialog" @complete="loadBrandList" />
+            <brand-edit ref="editBrandDialog" @complete="loadBrandList(getTablePageStorage(brandTable.searchParam).page)" />
         </el-card>
     </div>
 </template>
@@ -170,7 +170,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteBrand(id).then(() => {
-            loadBrandList()
+            loadBrandList(getTablePageStorage(brandTable.searchParam).page)
         }).catch(() => {
         })
     })

@@ -47,7 +47,6 @@ class  CoreWeappConfigService extends BaseCoreService
 
     /**
      * 微信小程序配置
-     * @param
      * @param array $data
      * @return SysConfig|bool|Model
      */
@@ -67,5 +66,34 @@ class  CoreWeappConfigService extends BaseCoreService
             'is_authorization' => $data[ 'is_authorization' ] ?? $old[ 'is_authorization' ]
         ];
         return ( new CoreConfigService() )->setConfig(ConfigKeyDict::WEAPP, $config);
+    }
+
+    /**
+     * 获取小程序授权信息
+     * @return mixed
+     */
+    public function getWeappAuthorizationInfo()
+    {
+        return ( new CoreConfigService() )->getConfigValue(ConfigKeyDict::WEAPP_AUTHORIZATION_INFO);
+    }
+
+    /**
+     * 设置小程序授权信息
+     * @param array $config
+     * @return SysConfig|bool|Model
+     */
+    public function setWeappAuthorizationInfo(array $config)
+    {
+        return ( new CoreConfigService() )->setConfig(ConfigKeyDict::WEAPP_AUTHORIZATION_INFO, $config);
+    }
+
+    /**
+     * 清除小程序授权信息
+     * @param array $config
+     * @return SysConfig|bool|Model
+     */
+    public function clearWeappAuthorizationInfo()
+    {
+        return ( new CoreConfigService() )->clearConfig(ConfigKeyDict::WEAPP_AUTHORIZATION_INFO);
     }
 }

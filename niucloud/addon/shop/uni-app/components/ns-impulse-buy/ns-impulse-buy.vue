@@ -16,11 +16,11 @@
 
             <view class="space-y-4 mt-[30rpx]">
                 <view v-for="(item, index) in list" :key="index" class="rounded-[20rpx] flex">
-                    <u--image radius="var(--goods-rounded-big)" width="180rpx" height="180rpx" :src="img(item.goods.goods_cover)" model="aspectFill" @click="checkDetail(item)">
+                    <up-image radius="var(--goods-rounded-big)" width="180rpx" height="180rpx" :src="img(item.goods.goods_cover)" model="aspectFill" @click="checkDetail(item)">
                         <template #error>
                             <image class="w-[180rpx] h-[180rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill"/>
                         </template>
-                    </u--image>
+                    </up-image>
                     <view class="flex flex-1 w-0 flex-col justify-between ml-[20rpx] py-[6rpx]">
                         <view class="line-normal">
                             <view class="truncate text-[#303133] text-[28rpx] mb-[6rpx] leading-[32rpx]" @click="checkDetail(item)">{{ item.goods.goods_name }}</view>

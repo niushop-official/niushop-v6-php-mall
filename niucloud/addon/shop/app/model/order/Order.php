@@ -226,6 +226,18 @@ class Order extends BaseModel
     }
 
     /**
+     * 搜索器:订单内容
+     * @param $value
+     * @param $data
+     */
+    public function searchBodyAttr($query, $value, $data)
+    {
+        if ($value != '') {
+            $query->where("body", "like", "%$value%");
+        }
+    }
+
+    /**
      * 搜索器:订单状态
      * @param $value
      * @param $data

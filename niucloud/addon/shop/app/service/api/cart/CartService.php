@@ -165,7 +165,7 @@ class CartService extends BaseApiService
      */
     public function del($data)
     {
-        $this->model->where([ [ 'member_id', '=', $this->member_id ], [ 'id', 'in', $data[ 'ids' ] ] ])->delete();
+        $this->model->where([ [ 'member_id', '=', $this->member_id ],[ 'id', 'in', $data[ 'ids' ] ] ])->delete();
         return true;
     }
 
@@ -186,20 +186,22 @@ class CartService extends BaseApiService
      */
     public function getList($data)
     {
-        $field = 'id, member_id, goods_id, sku_id, num, market_type, market_type_id, status, invalid_remark';
+        $data[ 'member_id' ] = $this->member_id;
+        $field = 'id, member_id, goods_id, sku_id, num, status, invalid_remark';
         $order = "create_time desc";
-        $list = $this->model->where([ [ 'member_id', '=', $this->member_id ] ])->field($field)
+        $list = $this->model->where([ [ 'id', '>', 0 ] ])->withSearch([ "member_id" ], $data)->field($field)
             ->with([
-                'goodsSku' => function($query) {
-                    $query->withField('sku_id, sku_image, price, sale_price, stock,member_price');
+                'goods' => function ($query) {
+                    $query->withField('goods_id, goods_name, goods_cover, unit, stock, status, delete_time, member_discount')
+                        ->append([ 'goods_cover_thumb_mid' ]);
                 },
-                'goods' => function($query) {
-                    $query->withField('goods_id, status,delete_time,member_discount,is_discount');
-                },
+                'goodsSku' => function ($query) {
+                    $query->withField('sku_id,goods_id, sku_name, sku_image, sku_spec_format, price, market_price, sale_price, member_price, stock')->append([ 'sku_image_thumb_mid' ]);
+                }
             ])->order($order)->select()->toArray();
 
         array_multisort(array_column($list, 'id'), SORT_ASC, $list);
-        $goods_active_price_service = (new CoreGoodsActivePriceService());
+        $goods_active_price_service = ( new CoreGoodsActivePriceService() );
         foreach ($list as $k => &$v) {
             if (!empty($v[ 'goodsSku' ])) {
                 $v[ 'goodsSku' ][ 'member_discount' ] = $v[ 'goods' ][ 'member_discount' ] ?? '';
@@ -225,25 +227,23 @@ class CartService extends BaseApiService
      */
     public function getGoodsList($data)
     {
-        $field = 'id, member_id, goods_id, sku_id, num, market_type, market_type_id, status, invalid_remark';
+        $data[ 'member_id' ] = $this->member_id;
+        $field = 'id, goods_id, sku_id, num, status, invalid_remark';
         $order = "create_time desc";
-        $list = $this->model->where([ [ 'member_id', '=', $this->member_id ] ])->field($field)
+        $list = $this->model->where([ [ 'id', '>', 0] ])->withSearch([ "member_id" ], $data)->field($field)
             ->with([
-                'goods' => function($query) {
-                    $query->withField('goods_id, goods_name, goods_type, sub_title, goods_cover, unit, stock, sale_num + virtual_sale_num as sale_num, is_limit,limit_type,max_buy,min_buy,status,delete_time,member_discount,label_ids,brand_id')->append([ 'goods_label_name', 'goods_brand' ]);
+                'goods' => function ($query) {
+                    $query->withField('goods_id,  goods_name, goods_cover, unit, stock, status, delete_time, label_ids, member_discount')
+                        ->append([ 'goods_label_name', 'goods_cover_thumb_mid' ]);
                 },
-                'goodsSku' => function($query) {
-                    $query->withField('sku_id, sku_name, sku_image, sku_no, goods_id, sku_spec_format, price, market_price, sale_price, stock, weight, volume, is_default,member_price');
-                },
-                // 商品规格项/规格值列表
-                'goodsSpec' => function($query) {
-                    $query->field('spec_id, goods_id, spec_name, spec_values');
+                'goodsSku' => function ($query) {
+                    $query->withField('sku_id,goods_id, sku_name, sku_image, sku_spec_format, price, market_price, sale_price, member_price, stock')->append([ 'sku_image_thumb_mid' ]);
                 },
             ])->order($order)->select()->toArray();
 
 
         array_multisort(array_column($list, 'id'), SORT_ASC, $list);
-        $goods_active_price_service = (new CoreGoodsActivePriceService());
+        $goods_active_price_service = ( new CoreGoodsActivePriceService() );
         $gift_goods = [];
         foreach ($list as $k => &$v) {
             if (!empty($v[ 'goodsSku' ])) {
@@ -281,7 +281,7 @@ class CartService extends BaseApiService
         //满减
         $data = ( new CoreManjianService() )->manjianPromotion($data, $this->member_id);
         $promotion_money = $data[ 'promotion_money' ] ?? 0;
-        $order_money = max($data['goods_money'] - $promotion_money, 0);
+        $order_money = max($data[ 'goods_money' ] - $promotion_money, 0);
         $data[ 'order_money' ] = $order_money;
 
         $good_list = $data[ 'goods_list' ];
@@ -290,10 +290,16 @@ class CartService extends BaseApiService
             $match_list[ $k ][ 'goods_id' ] = $v[ 'goods_id' ];
             $match_list[ $k ][ 'sku_id' ] = $v[ 'sku_id' ];
             foreach ($v[ 'promotion' ] as $kk => $vv) {
+//                dd($vv);
                 switch ($kk) {
                     case 'manjian':
-                        if ($vv[ 'discount_array' ][ 'level' ] >= 0) {
-                            $match_list[ $k ][ 'level' ] = $vv[ 'discount_array' ][ 'level' ];
+                        foreach ($vv as $item){
+                            if ($item[ 'discount_array' ][ 'level' ] >= 0) {
+                                $match_list[ $k ][$kk][] = [
+                                    'manjian_id' => $item[ 'manjian_id' ],
+                                    'level'  => $item[ 'discount_array' ][ 'level' ]
+                                ];
+                            }
                         }
                         break;
                     default:
@@ -332,6 +338,7 @@ class CartService extends BaseApiService
             ->where($condition)
             ->join('shop_cart cart', 'cart.sku_id = goodsSku.sku_id and cart.member_id = ' . $member_id)
             ->join('shop_goods goods', 'goods.goods_id = goodsSku.goods_id')
+            ->with(['goods'])
             ->select()
             ->toArray();
 
@@ -340,10 +347,11 @@ class CartService extends BaseApiService
         $data[ 'goods_list' ] = [];
         $data[ 'coupon_money' ] = 0; //优惠券金额
         $data[ 'promotion_money' ] = 0; //优惠金额
-        $goods_active_price_service = (new CoreGoodsActivePriceService());
+        $goods_active_price_service = ( new CoreGoodsActivePriceService() );
         if (!empty($goods_list)) {
             foreach ($goods_list as $k => $v) {
                 //获取展示活动价格
+                $v['member_discount'] = $v['goods']['member_discount'];
                 $show_price_data = $goods_active_price_service->getActivePrice($v, $this->member_id);
                 $v[ 'show_price' ] = $show_price_data[ 'show_price' ];
                 $v[ 'show_type' ] = $show_price_data[ 'show_type' ];

@@ -2,8 +2,8 @@
     <view class="min-h-screen bg-[var(--page-bg-color)] overflow-hidden">
         <view class="mescroll-box bg-[#f6f6f6]" :class="{ 'cart': config.cart.control && config.cart.event === 'cart', 'detail': !(config.cart.control && config.cart.event === 'cart') }" v-if="tabsData.length">
             <mescroll-body ref="mescrollRef" :down="{ use: false }" @init="mescrollInit" @up="getListFn">
-                <view v-if="config.search.control" class="box-border search-box z-10 bg-[#fff] fixed top-0 left-0 right-0 h-[96rpx]" :style="{'top': systemStore.topTabbarInfo.fullHeight || 0}">
-                    <view class="flex-1 search-input">
+                <view v-if="config.search.control" class="box-border search-box z-10 bg-[#f6f6f6] fixed top-0 left-0 right-0 h-[96rpx]" :style="{'top': systemStore.topTabbarInfo.fullHeight || 0}">
+                    <view class="flex-1 search-input bg-[#fff]">
                         <text @click.stop="searchNameFn" class="nc-iconfont nc-icon-sousuo-duanV6xx1 btn"></text>
                         <input class="input" type="text" v-model.trim="searchName" :placeholder="config.search.title" placeholderClass="text-[var(--text-color-light9)]" @confirm="searchNameFn">
                         <text v-if="searchName" class="nc-iconfont nc-icon-cuohaoV6xx1 clear" @click="searchName=''"></text>
@@ -78,11 +78,11 @@
                         <view class="w-[536rpx] box-border bg-white w-full flex mx-[20rpx] py-[24rpx] px-[20rpx] rounded-[var(--rounded-small)]"
                             :class="{ 'mt-[20rpx]': index }" @click.stop="toLink(item.goods_id)">
                             <view class="w-[168rpx] h-[168rpx] flex items-center justify-center mr-[20rpx] rounded-[var(--goods-rounded-small)] overflow-hidden">
-                                <u--image width="168rpx" height="168rpx" :radius="'var(--goods-rounded-small)'" :src="img( item.goods_cover_thumb_mid || '')" model="aspectFill">
+                                <up-image width="168rpx" height="168rpx" :radius="'var(--goods-rounded-small)'" :src="img( item.goods_cover_thumb_mid || '')" model="aspectFill">
                                     <template #error>
                                         <image class="w-[168rpx] h-[168rpx]" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                     </template>
-                                </u--image>
+                                </up-image>
                             </view>
                             <view class="flex flex-1 flex-wrap flex-col">
                                 <view class="max-h-[80rpx] text-[26rpx] leading-[40rpx] multi-hidden">{{ item.goods_name }}</view>
@@ -93,19 +93,19 @@
                                         <text class="text-[24rpx] font-500">.{{ parseFloat(goodsPrice(item)).toFixed(2).split('.')[1] }}</text>
                                         <image class="h-[24rpx] max-w-[46rpx] ml-[6rpx]" v-if="priceType(item) == 'member_price'" :src="img('addon/shop/VIP.png')" mode="heightFix" />
 										<image class="h-[24rpx] max-w-[60rpx] ml-[6rpx]" v-if="priceType(item) == 'newcomer_price'" :src="img('addon/shop/newcomer.png')" mode="heightFix" />
-										<image class="h-[24rpx] max-w-[80rpx] ml-[6rpx]" v-if="priceType(item) == 'discount_price'" :src="img('addon/shop/discount.png')" mode="heightFix" /> 
+										<image class="h-[24rpx] max-w-[80rpx] ml-[6rpx]" v-if="priceType(item) == 'discount_price'" :src="img('addon/shop/discount.png')" mode="heightFix" />
                                     </view>
                                     <template v-if="!item.isMaxBuy">
                                         <view v-if="(item.goods_type == 'real' || (item.goods_type == 'virtual' && item.virtual_receive_type != 'verify')) && item.goodsSku.sku_spec_format === '' && cartList['goods_' + item.goods_id] && cartList['goods_' + item.goods_id]['sku_' + item.goodsSku.sku_id] && config.cart.control && config.cart.event === 'cart'" class="flex items-center">
-                                            <view class="relative w-[32rpx] h-[32rpx]">
-                                                <text class="text-[32rpx] text-color nc-iconfont nc-icon-jianshaoV6xx absolute flex items-center justify-center -left-[12rpx] -bottom-[14rpx] -right-[14rpx] -top-[14rpx]"
+                                            <view class="relative w-[44rpx] h-[44rpx]">
+                                                <text class="text-[44rpx] text-color nc-iconfont nc-icon-jianshaoV6xx absolute flex items-center justify-center -left-[12rpx] -bottom-[14rpx] -right-[14rpx] -top-[14rpx]"
                                                     @click.stop="reduceCart(item,cartList['goods_' + item.goods_id]['sku_' + item.goodsSku.sku_id])"></text>
                                             </view>
                                             <text class="text-[#333] text-[24rpx] mx-[16rpx]">{{ cartList['goods_' + item.goods_id]['sku_' + item.goodsSku.sku_id].num }}</text>
-                                            <view class="relative w-[32rpx] h-[32rpx]">
-                                                <text class="text-[32rpx] text-color iconfont iconjiahao2fill absolute flex items-center justify-center -left-[14rpx] -bottom-[14rpx] -right-[14rpx] -top-[14rpx]"
-                                                    :id="'itemCart' + index"
-                                                    @click.stop="addCartBtn(item,cartList['goods_' + item.goods_id]['sku_' + item.goodsSku.sku_id], 'itemCart' + index)"></text>
+                                            <view class="w-[44rpx] h-[44rpx] bg-primary flex items-center justify-center rounded-[50%]">
+                                                <text class="iconfont iconjia font-500 text-[32rpx] text-[#fff]"
+                                                :id="'itemCart' + index"
+                                                @click.stop="addCartBtn(item,cartList['goods_' + item.goods_id]['sku_' + item.goodsSku.sku_id], 'itemCart' + index)"></text>
                                             </view>
                                         </view>
                                         <template v-else-if="(item.goods_type == 'virtual' && item.virtual_receive_type != 'verify') || item.goods_type == 'real'">
@@ -787,7 +787,8 @@ const goodsPrice = (data: any) => {
 .tabs-box .tab-item-active {
     position: relative;
     color: var(--primary-color);
-    background-color: #f6f6f6;
+    font-weight: bold;
+    // background-color: #f6f6f6;
 
     &::before {
         display: inline-block;

@@ -134,6 +134,7 @@ class Config extends BaseAdminController
     {
         $data = $this->request->params([
             [ 'key', '' ],
+            [ 'amap_key', ''],
             [ 'is_open', 0 ], // 是否开启定位
             [ 'valid_time', 0 ] // 定位有效期/分钟，过期后将重新获取定位信息，0为不过期
         ]);
@@ -185,6 +186,56 @@ class Config extends BaseAdminController
         ]);
         ( new ConfigService() )->setDeveloperToken($data);
         return success();
+    }
+
+    /**
+     * 设置布局设置
+     * @description 设置布局设置
+     * @return Response
+     */
+    public function setLayout()
+    {
+        $data = $this->request->params([
+            [ 'key', '' ],
+            [ 'value', '' ],
+        ]);
+        ( new ConfigService() )->setLayout($data);
+        return success();
+    }
+
+    /**
+     * 获取布局设置
+     * @description 获取布局设置
+     * @return Response
+     */
+    public function getLayout()
+    {
+        return success(data: ( new ConfigService() )->getLayout());
+    }
+
+    /**
+     * 设置色调设置
+     * @description 设置色调设置
+     * @return Response
+     */
+    public function setThemeColor()
+    {
+        $data = $this->request->params([
+            [ 'key', '' ],
+            [ 'value', '' ],
+        ]);
+        ( new ConfigService() )->setThemeColor($data);
+        return success();
+    }
+
+    /**
+     * 获取色调设置
+     * @description 获取色调设置
+     * @return Response
+     */
+    public function getThemeColor()
+    {
+        return success(data: ( new ConfigService() )->getThemeColor());
     }
 
     /**

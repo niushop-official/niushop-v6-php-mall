@@ -181,6 +181,20 @@ export function setInvoice(id: number, params: Record<string, any>) {
 }
 
 /**
+ * 开发票
+ */
+export function createInvoice(params: Record<string, any>) {
+    return request.post(`shop/invoice/add`, params, { showSuccessMessage: true })
+}
+
+/**
+ * 发票审核
+ */
+export function auditInvoice(params: Record<string, any>) {
+    return request.post(`shop/invoice/audit`, params, { showSuccessMessage: true })
+}
+
+/**
  * 获取支付类型
  */
 export function getOrderPayType() {

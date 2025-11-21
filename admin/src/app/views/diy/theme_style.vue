@@ -13,7 +13,7 @@
                 <el-table-column label="应用" min-width="120" >
                     <template #default="{ row }">
                         <div class="flex items-center">
-                            <el-image class="w-[40px] h-[40px] rounded-md overflow-hidden" :src="row.icon" fit="contain">
+                            <el-image class="w-[40px] h-[40px] rounded-md overflow-hidden" :src="img(row.icon)" fit="contain">
                                 <template #error>
                                     <div class="flex items-center w-full h-full">
                                         <img class="w-full h-full" src="@/app/assets/images/icon-addon.png" alt="">
@@ -54,8 +54,9 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch, computed } from 'vue'
 import { t } from '@/lang'
+import { img } from '@/utils/common'
 import { getDiyTheme } from '@/app/api/diy'
 import { useRoute } from 'vue-router'
 import themeList from './components/theme-list.vue'
@@ -90,7 +91,7 @@ const editEvent = (data)=> {
 <!-- 设置弹窗标题 -->
 <style scoped>
 /* 使用深度选择器 */
-::v-deep .custom-theme-dialog .el-dialog__title {
+:deep(.custom-theme-dialog .el-dialog__title) {
   font-size: 16px;
 }
 </style>

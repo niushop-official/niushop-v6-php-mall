@@ -290,7 +290,7 @@ const recycleEvent = (data: any) => {
             goods_ids: data.goods_id
         }).then((res: any) => {
             if (res.code == 1) {
-                loadGoodsList()
+                loadGoodsList(getTablePageStorage(goodsTable.searchParam).page)
             }
             repeat.value = false
         }).catch(() => {

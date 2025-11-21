@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <service-edit ref="editServeDialog" @complete="loadServeList" />
+            <service-edit ref="editServeDialog" @complete="loadServeList(getTablePageStorage(serveTable.searchParam).page)" />
         </el-card>
     </div>
 </template>
@@ -140,7 +140,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteServe(id).then(() => {
-            loadServeList()
+            loadServeList(getTablePageStorage(serveTable.searchParam).page)
         }).catch(() => {
         })
     })

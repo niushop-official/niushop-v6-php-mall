@@ -92,8 +92,8 @@
                         <div>
                             <el-radio-group v-model="formData.time_interval">
                                 <el-radio :label="30">{{ t('30minute') }}</el-radio>
-                                <el-radio :label="60">{{ t('90minute') }}</el-radio>
-                                <el-radio :label="90">{{ t('oneHour') }}</el-radio>
+                                <el-radio :label="60">{{ t('oneHour') }}</el-radio>
+                                <el-radio :label="90">{{ t('90minute') }}</el-radio>
                                 <el-radio :label="120">{{ t('twoHour') }}</el-radio>
                             </el-radio-group>
                             <!-- <p class="text-[12px] text-[#999]">{{ t('storeTimeIntervalTips') }}</p> -->

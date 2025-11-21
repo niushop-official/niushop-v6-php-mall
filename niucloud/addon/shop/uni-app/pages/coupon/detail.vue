@@ -1,7 +1,7 @@
 <template>
     <view :style="themeColor()">
         <view v-if="Object.keys(detail).length&&!loading" class="overflow-hidden min-h-screen bg-style relative" :style="{ 'background': 'url(' + img('addon/shop/coupon/coupon_bg.png') + ') no-repeat' }">
-            <!-- #ifdef MP -->
+            <!-- #ifdef MP || APP-PLUS -->
             <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()" />
             <!-- #endif -->
             <view class="relative mt-[236rpx] w-[100%] h-[932rpx]" :style="{ 'background': 'url(' + img('addon/shop/coupon/coupon_bg_02.png') + ') center / contain no-repeat' }">
@@ -58,12 +58,14 @@ import QRCode from "qrcode";
 import { topTabar } from '@/utils/topTabbar'
 import { getShopCouponInfo, getCoupon, getShopCouponQrocde } from '@/addon/shop/api/coupon'
 import useMemberStore from '@/stores/member'
+import useSystemStore from '@/stores/system'
 import { useLogin } from '@/hooks/useLogin'
 
 const loading = ref(false)
 const codeUrl = ref('')
 const detail: any = ref({})
 const memberStore = useMemberStore()
+const systemStore = useSystemStore()
 const userInfo = computed(() => memberStore.info)
 
 /********* 自定义头部 - start ***********/
@@ -130,7 +132,7 @@ const getShopCouponQrcodeFn = (id: any) => {
     });
     // #endif
 
-    // #ifdef MP-WEIXIN
+    // #ifndef H5
     getShopCouponQrocde(id).then((res: any) => {
         if (res.data) {
             codeUrl.value = img(res.data);

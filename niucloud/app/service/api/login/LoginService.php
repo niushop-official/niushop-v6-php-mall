@@ -115,10 +115,11 @@ class LoginService extends BaseApiService
         if (!empty($params['openid'])) {
             $mobile = $params[ 'mobile' ];
             $openid = $params[ 'openid' ];
-;
+
             $openid_field = match ( $this->channel ) {
                     'wechat' => 'wx_openid',
                     'weapp' => 'weapp_openid',
+                    'app' => 'wxapp_openid',
                     default => ''
             };
 
@@ -185,7 +186,7 @@ class LoginService extends BaseApiService
     public function createToken($member_info) : ?array
     {
         $expire_time = env('system.api_token_expire_time') ?? 3600;//todo  不一定和管理端合用这个token时限
-        return TokenAuth::createToken($member_info->member_id, AppTypeDict::API, [ 'member_id' => $member_info->member_id, 'username' => $member_info->username ], $expire_time);
+        return TokenAuth::createToken($member_info->member_id, AppTypeDict::API, [ 'member_id' => $member_info->member_id, 'username' => $member_info->username ] , $expire_time);
     }
 
     /**
@@ -335,6 +336,7 @@ class LoginService extends BaseApiService
      * 重置密码
      * @param string $mobile
      * @param string $password
+     * @return true
      */
     public function resetPassword(string $mobile, string $password)
     {

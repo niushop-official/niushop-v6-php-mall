@@ -3,16 +3,16 @@
         <view @touchmove.prevent.stop class="popup-common flex flex-col">
             <view class="title">买家留言</view>
             <view class="px-[var(--popup-sidebar-m)] py-[var(--pad-top-m)]" style="height: 180px;">
-                <u--textarea 
-                    class="message-input" 
-                    v-model="message" 
+                <up-textarea
+                    class="message-input"
+                    v-model="message"
                     placeholder="请输入备注信息..."
                     :maxlength="200"
 				  :height="180"
-					 
-                ></u--textarea>
+
+                ></up-textarea>
             </view>
-            
+
             <view class="btn-wrap mt-[40rpx]">
                 <button class="primary-btn-bg btn" @click="submit">提交</button>
             </view>

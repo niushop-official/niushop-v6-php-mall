@@ -47,12 +47,13 @@ let editorEl = null
 
 const serverHeaders = {}
 serverHeaders[import.meta.env.VITE_REQUEST_HEADER_TOKEN_KEY] = getToken()
+const baseUrl = import.meta.env.VITE_APP_BASE_URL.substr(-1) == '/' ? import.meta.env.VITE_APP_BASE_URL : `${import.meta.env.VITE_APP_BASE_URL}/`
 
 const editorConfig = ref({
     debug: false,
     UEDITOR_HOME_URL: import.meta.env.MODE == 'development' ? '/public/ueditor/' : '/admin/ueditor/',
     UEDITOR_CORS_URL: import.meta.env.MODE == 'development' ? location.origin + '/ueditor/' : location.origin + '/admin/ueditor/',
-    serverUrl: `${import.meta.env.VITE_APP_BASE_URL}sys/ueditor`,
+    serverUrl: `${baseUrl}sys/ueditor`,
     serverHeaders,
     // 编辑器不自动被内容撑高
     autoHeightEnabled: false,
@@ -87,6 +88,17 @@ const handleEditorReady = (editor) => {
     editor.addListener('blur', () => {
         // console.log('失焦了')
         emit('handleBlur', editor.getContent()) // 把内容传出去
+    })
+
+    // 全屏切换监听
+    editor.addListener('fullscreenchanged', (type, fullscreen) =>{
+        const editorDom = editor.ui.getDom()
+        if (fullscreen) {
+            editorDom.classList.add('edui-fullscreen')
+        } else {
+            editorDom.classList.remove('edui-fullscreen')
+        }
+        console.log('全屏切换',  fullscreen)
     })
 
     // 方案二：原型链扩展（如果编辑器版本支持）

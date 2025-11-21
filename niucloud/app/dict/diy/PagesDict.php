@@ -80,41 +80,41 @@ class PagesDict
         if (!empty($wap_index_list)) {
             foreach ($wap_index_list as $k => $v) {
 
-                $link_list = LinkDict::getLink([ 'addon' => $v[ 'key' ] ]);
+                $link_list = LinkDict::getLink(['addon' => $v['key']]);
                 $link = [];
                 foreach ($link_list as $ck => $cv) {
-                    if ($cv[ 'addon_info' ][ 'key' ] == $v[ 'key' ]) {
-                        foreach ($cv[ 'child_list' ] as $tk => $tv) {
-                            if (isset($cv[ 'type' ]) && $cv[ 'type' ] == 'folder') {
-                                if (!empty($tv[ 'child_list' ])) {
-                                    foreach ($tv[ 'child_list' ] as $child_k => $child_v) {
-                                        if ($child_v[ 'url' ] == $v[ 'url' ]) {
+                    if ($cv['addon_info']['key'] == $v['key']) {
+                        foreach ($cv['child_list'] as $tk => $tv) {
+                            if (isset($cv['type']) && $cv['type'] == 'folder') {
+                                if (!empty($tv['child_list'])) {
+                                    foreach ($tv['child_list'] as $child_k => $child_v) {
+                                        if ($child_v['url'] == $v['url']) {
                                             $link = [
                                                 "parent" => $ck,
-                                                "name" => $child_v[ 'name' ],
-                                                "title" => $child_v[ 'title' ],
-                                                "url" => $child_v[ 'url' ]
+                                                "name" => $child_v['name'],
+                                                "title" => $child_v['title'],
+                                                "url" => $child_v['url']
                                             ];
                                             break;
                                         }
                                     }
                                 }
-                            } else if ($tv[ 'url' ] == $v[ 'url' ]) {
+                            } else if ($tv['url'] == $v['url']) {
                                 $link = [
                                     "parent" => $ck,
-                                    "name" => $tv[ 'name' ],
-                                    "title" => $tv[ 'title' ],
-                                    "url" => $tv[ 'url' ]
+                                    "name" => $tv['name'],
+                                    "title" => $tv['title'],
+                                    "url" => $tv['url']
                                 ];
                                 break;
                             }
                         }
                     }
                 }
-                $default_index_value[ 'list' ][] = [
-                    "title" => $v[ 'title' ],
+                $default_index_value['list'][] = [
+                    "title" => $v['title'],
                     "link" => $link,
-                    "imageUrl" => $v[ 'icon' ],
+                    "imageUrl" => $v['icon'],
                     "label" => [
                         "control" => false,
                         "text" => "热门",
@@ -150,7 +150,16 @@ class PagesDict
                             'imgHeight' => '',
                             "bottomTabBar" => [
                                 'control' => true,
-                                'isShow' => true
+                                'isShow' => true,
+                                'designNav' => [
+                                    'title' => '',
+                                    'key' => ''
+                                ]
+                            ],
+                            "copyright" => [
+                                'control' => true,
+                                'isShow' => false,
+                                'textColor' =>'#ccc'
                             ],
                             "template" => [
                                 'textColor' => "#303133",
@@ -225,7 +234,16 @@ class PagesDict
                             'imgHeight' => '',
                             "bottomTabBar" => [
                                 'control' => true,
-                                'isShow' => true
+                                'isShow' => true,
+                                'designNav' => [
+                                    'title' => '',
+                                    'key' => ''
+                                ]
+                            ],
+                            "copyright" => [
+                                'control' => true,
+                                'isShow' => false,
+                                'textColor' =>'#ccc'
                             ],
                             "template" => [
                                 'textColor' => "#303133",
@@ -694,7 +712,16 @@ class PagesDict
                             'imgHeight' => 403,
                             "bottomTabBar" => [
                                 'control' => true,
-                                'isShow' => true
+                                'isShow' => true,
+                                'designNav' => [
+                                    'title' => '',
+                                    'key' => ''
+                                ],
+                            ],
+                            "copyright" => [
+                                'control' => true,
+                                'isShow' => false,
+                                'textColor' =>'#ccc'
                             ],
                             "template" => [
                                 'textColor' => "#303133",
@@ -1147,19 +1174,19 @@ class PagesDict
             ]
         ];
 
-        if (!empty($params[ 'addon' ])) {
-            $pages = ( new DictLoader("UniappPages") )->load($params);
+        if (!empty($params['addon'])) {
+            $pages = (new DictLoader("UniappPages"))->load($params);
         } else {
-            $pages = ( new DictLoader("UniappPages") )->load($system_pages);
+            $pages = (new DictLoader("UniappPages"))->load($system_pages);
         }
 
-        if (!empty($params[ 'type' ])) {
-            if (!empty($pages[ $params[ 'type' ] ])) {
-                $temp = $pages[ $params[ 'type' ] ];
-                if (isset($params[ 'mode' ]) && !empty($params[ 'mode' ])) {
+        if (!empty($params['type'])) {
+            if (!empty($pages[$params['type']])) {
+                $temp = $pages[$params['type']];
+                if (isset($params['mode']) && !empty($params['mode'])) {
                     foreach ($temp as $k => $v) {
-                        if ($params[ 'mode' ] != $v[ 'mode' ]) {
-                            unset($temp[ $k ]);
+                        if ($params['mode'] != $v['mode']) {
+                            unset($temp[$k]);
                         }
                     }
                 }

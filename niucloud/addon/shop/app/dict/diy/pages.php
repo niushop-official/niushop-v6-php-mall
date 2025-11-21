@@ -21,6 +21,27 @@ $my_pintuan = [
         "bgColorEnd" => "#FE3423"
     ]
 ];
+$my_help = [
+    "id" => "9tlbcgxsyihe",
+    "title" => "我的助力",
+    "imageUrl" => "addon/friend_help/diy/member/style1/nav_my_help.png",
+    "imgWidth" => 92,
+    "imgHeight" => 92,
+    "link" => [
+        "parent" => "FRIEND_HELP_LINK",
+        "title" => "我的助力",
+        "url" => "/addon/friend_help/pages/my_help",
+        "name" => "FRIEND_HELP_MY_LIST",
+        "action" => ""
+    ],
+    "label" => [
+        "control" => false,
+        "text" => "热门",
+        "textColor" => "#FFFFFF",
+        "bgColorStart" => "#F83287",
+        "bgColorEnd" => "#FE3423"
+    ]
+];
 
 $member_index_graphic_nav_list = [
     [
@@ -263,6 +284,9 @@ if(!empty($site_addons)) {
     if (in_array('pintuan', $site_addons)) {
         $member_index_graphic_nav_list[] = $my_pintuan;
     }
+    if (in_array('friend_help', $site_addons)) {
+        $member_index_graphic_nav_list[] = $my_help;
+    }
 }
 $member_index_graphic_nav_list[] = [
     "id" => "27kxbgr5ljbw",
@@ -323,7 +347,16 @@ return [
                     ],
                     "bottomTabBar" => [
                         'control' => true,
-                        'isShow' => true
+                        'isShow' => true,
+                        'designNav' => [
+                            'title' => '',
+                            'key' => ''
+                        ]
+                    ],
+                    "copyright" => [
+                        'control' => true,
+                        'isShow' => false,
+                        'textColor' =>'#ccc'
                     ],
                     "popWindow" => [
                         "imgUrl" => "",
@@ -781,7 +814,6 @@ return [
                             [
                                 "id" => "2wggehpnako0",
                                 "title" => "限时秒杀",
-//                                "imageUrl" => "addon/shop/diy/index/style3/nav_my_address.png",
                                 "imageUrl" => "addon/shop/diy/index/style3/nav_seckill.png",
                                 "imgWidth" => 180,
                                 "imgHeight" => 180,
@@ -1744,7 +1776,16 @@ return [
                     ],
                     "bottomTabBar" => [
                         'control' => true,
-                        'isShow' => true
+                        'isShow' => true,
+                        'designNav' => [
+                            'title' => '',
+                            'key' => ''
+                        ]
+                    ],
+                    "copyright" => [
+                        'control' => true,
+                        'isShow' => false,
+                        'textColor' =>'#ccc'
                     ],
                     "popWindow" => [
                         "imgUrl" => "",
@@ -1903,26 +1944,26 @@ return [
                             'indicatorStyle' => 'style-1',
                             'indicatorAlign' => 'center',
                             'swiperStyle' => 'style-1',
-                            "imageHeight" => 164,
+                            "imageHeight" => 158,
                             "topRounded" => 10,
                             "bottomRounded" => 10,
                             "list" => [
                                 [
                                     "imageUrl" => "addon/shop/diy/index/style2/banner1.png",
                                     "imgWidth" => 630,
-                                    "imgHeight" => 300,
+                                    "imgHeight" => 290,
                                     "link" => [
                                         "name" => ""
                                     ],
                                     "id" => "2ywogh006ai0",
                                     "width" => 345,
-                                    "height" => 164.28571428571428
+                                    "height" => 158.8095238095238
                                 ],
                                 [
                                     "id" => "3p7wiewe0o00",
                                     "imageUrl" => "addon/shop/diy/index/style2/banner2.png",
                                     "imgWidth" => 630,
-                                    "imgHeight" => 300,
+                                    "imgHeight" => 290,
                                     "link" => [
                                         "name" => ""
                                     ]
@@ -3085,7 +3126,7 @@ return [
                         "id" => "65lv65b38ig0",
                         "componentName" => "ManyGoodsList",
                         "componentTitle" => "多商品组",
-                        "ignore" => [ 'componentBgUrl' ],
+                        "ignore" => ['componentBgUrl'],
                         "style" => "style-2",
                         "num" => 6,
                         "sortWay" => "default",
@@ -3194,7 +3235,602 @@ return [
                     ]
                 ]
             ]
-        ]
+        ],
+        'shop_index' => [ // 页面标识
+            "title" => "商城首页3", // 页面名称
+            'cover' => 'addon/shop/diy/template/shop_index_two_cover.png', // 页面封面图
+            'preview' => '', // 页面预览图
+            'desc' => '', // 页面描述
+            'mode' => 'diy', // 页面模式：diy：自定义，fixed：固定
+            // 页面数据源
+            "data" => [
+                "global" => [
+                    "title" => "首页",
+                    'pageStartBgColor' => 'rgba(255, 255, 255, 1)',
+                    'pageEndBgColor' => '',
+                    'pageGradientAngle' => 'to bottom',
+                    "bgUrl" => "addon/shop/diy/index/bg.png",
+                    'bgHeightScale' => 0,
+                    "imgWidth" => 750,
+                    "imgHeight" => 1485,
+                    "bottomTabBar" => [
+                        'control' => true,
+                        'isShow' => true,
+                        'designNav' => [
+                            'title' => '',
+                            'key' => ''
+                        ]
+                    ],
+                    "copyright" => [
+                        'control' => true,
+                        'isShow' => false,
+                        'textColor' =>'#ccc'
+                    ],
+                    "template" => [
+                        'textColor' => "#303133",
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 0,
+                            "both" => 10
+                        ]
+                    ],
+                    'topStatusBar' => [
+                        'control' => true,
+                        'isShow' => true,
+                        'bgColor' => "#ffffff",
+                        'rollBgColor' => "#ffffff",
+                        'style' => 'style-1',
+                        'styleName' => '风格1',
+                        'textColor' => "#333333",
+                        'rollTextColor' => "#333333",
+                        'textAlign' => 'center',
+                        'inputPlaceholder' => '请输入搜索关键词',
+                        'imgUrl' => '',
+                        'link' => [
+                            'name' => ""
+                        ]
+                    ],
+                    'popWindow' => [
+                        'imgUrl' => "",
+                        'imgWidth' => '',
+                        'imgHeight' => '',
+                        'count' => 'once',
+                        'show' => 0,
+                        'link' => [
+                            'name' => ""
+                        ],
+                    ]
+                ],
+                "value" => [
+                    [
+                        "path" => "edit-shop-search",
+                        "uses" => 1,
+                        "id" => "245qvzv4w8gw",
+                        "componentName" => "ShopSearch",
+                        "componentTitle" => "搜索",
+                        "ignore" => [],
+                        "searchStyle" => "style-1",
+                        "searchLink" => [
+                            "name" => ""
+                        ],
+                        "text" => "请输入搜索关键词",
+                        "iconType" => "img",
+                        "icon" => "",
+                        "imageUrl" => "",
+                        "textColor" => "#303133",
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 20,
+                            "bottom" => 15,
+                            "both" => 10
+                        ]
+                    ],
+                    [
+                        "path" => "edit-image-ads",
+                        "uses" => 0,
+                        "id" => "6jdfnu4e36g0",
+                        "componentName" => "ImageAds",
+                        "componentTitle" => "图片广告",
+                        "ignore" => [],
+                        "imageHeight" => 160,
+                        "isSameScreen" => false,
+                        "list" => [
+                            [
+                                "link" => [
+                                    "name" => ""
+                                ],
+                                "imageUrl" => "addon/shop/diy/index/banner.png",
+                                "imgWidth" => 702,
+                                "imgHeight" => 320,
+                                "id" => "7ao3t56ug4o0",
+                                "width" => 375,
+                                "height" => 170.94
+                            ]
+                        ],
+                        "textColor" => "#303133",
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 10,
+                            "both" => 10
+                        ]
+                    ],
+                    [
+                        "path" => "edit-notice",
+                        "uses" => 0,
+                        "id" => "1xpv3z7vvtds",
+                        "componentName" => "Notice",
+                        "componentTitle" => "公告",
+                        "ignore" => [],
+                        "noticeType" => "img",
+                        "imgType" => "system",
+                        "systemUrl" => "style_1",
+                        "imageUrl" => "",
+                        "showType" => "popup",
+                        "scrollWay" => "upDown",
+                        "fontSize" => 14,
+                        "fontWeight" => "normal",
+                        "noticeTitle" => "公告",
+                        "list" => [
+                            [
+                                "id" => "1rz6s4buaxc0",
+                                "link" => [
+                                    "name" => ""
+                                ],
+                                "text" => "最新公告：欢迎来到小店参观！"
+                            ]
+                        ],
+                        "textColor" => "#303133",
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "rgba(255, 255, 255, 1)",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 9,
+                        "bottomRounded" => 9,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 10,
+                            "both" => 10
+                        ],
+                    ],
+                    [
+                        "path" => "edit-graphic-nav",
+                        "uses" => 0,
+                        "id" => "5tnh9iiuxv40",
+                        "componentName" => "GraphicNav",
+                        "componentTitle" => "图文导航",
+                        "ignore" => [],
+                        "layout" => "horizontal",
+                        "mode" => "graphic",
+                        "showStyle" => "fixed",
+                        "rowCount" => 5,
+                        "pageCount" => 2,
+                        "carousel" => [
+                            "type" => "circle",
+                            "color" => "#FFFFFF"
+                        ],
+                        "imageSize" => 26,
+                        "aroundRadius" => 0,
+                        "font" => [
+                            "size" => 14,
+                            "weight" => "normal",
+                            "color" => "#303133"
+                        ],
+                        "list" => [
+                            [
+                                "title" => "首页",
+                                "link" => [
+                                    "parent" => "SYSTEM_LINK",
+                                    "title" => "首页",
+                                    "url" => "/app/pages/index/index",
+                                    "name" => "INDEX"
+                                ],
+                                "imageUrl" => "addon/shop/diy/index/nav_notice.png",
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ],
+                                "id" => "5b46sybkhkg0",
+                                "imgWidth" => 50,
+                                "imgHeight" => 50
+                            ],
+                            [
+                                "title" => "商品",
+                                "link" => [
+                                    "parent" => "SHOP_LINK",
+                                    "title" => "商品列表",
+                                    "url" => "/addon/shop/pages/goods/list",
+                                    "name" => "SHOP_GOODS_LIST"
+                                ],
+                                "imageUrl" => "addon/shop/diy/index/nav_supermarket.png",
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ],
+                                "id" => "4dha169dzqe0",
+                                "imgWidth" => 50,
+                                "imgHeight" => 50
+                            ],
+                            [
+                                "title" => "分类",
+                                "link" => [
+                                    "parent" => "SHOP_LINK",
+                                    "title" => "商品分类",
+                                    "url" => "/addon/shop/pages/goods/category",
+                                    "name" => "SHOP_GOODS_CATEGORY"
+                                ],
+                                "imageUrl" => "addon/shop/diy/index/nav_article.png",
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ],
+                                "id" => "7eh2hqz0w900",
+                                "imgWidth" => 50,
+                                "imgHeight" => 50
+                            ],
+                            [
+                                "id" => "7fu7atbr9bk0",
+                                "title" => "领券",
+                                "imageUrl" => "addon/shop/diy/index/nav_coupon.png",
+                                "imgWidth" => 50,
+                                "imgHeight" => 50,
+                                "link" => [
+                                    "parent" => "SHOP_LINK",
+                                    "title" => "优惠券列表",
+                                    "url" => "/addon/shop/pages/coupon/list",
+                                    "name" => "SHOP_COUPON_LIST"
+                                ],
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ],
+                            [
+                                "title" => "拼团",
+                                "link" => [
+                                    "name" => ""
+                                ],
+                                "imageUrl" => "addon/shop/diy/index/nav_pintuan.png",
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ],
+                                "id" => "5q9ogqz2vjc0",
+                                "imgWidth" => 50,
+                                "imgHeight" => 50
+                            ],
+                            [
+                                "id" => "2cc20cawafr4",
+                                "title" => "秒杀",
+                                "imageUrl" => "addon/shop/diy/index/nav_seckill.png",
+                                "imgWidth" => 50,
+                                "imgHeight" => 50,
+                                "link" => [
+                                    "parent" => "SECKILL_LINK",
+                                    "title" => "秒杀首页",
+                                    "url" => "/addon/seckill/pages/index",
+                                    "name" => "SECKILL_INDEX"
+                                ],
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ],
+                            [
+                                "id" => "532sx2po4do0",
+                                "title" => "签到",
+                                "imageUrl" => "addon/shop/diy/index/nav_signin.png",
+                                "imgWidth" => 50,
+                                "imgHeight" => 50,
+                                "link" => [
+                                    "name" => "MEMBER_MY_SIGN_IN",
+                                    "parent" => "MEMBER_LINK",
+                                    "title" => "我的签到",
+                                    "url" => "/app/pages/member/sign_in",
+                                    "action" => ""
+                                ],
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ],
+                            [
+                                "id" => "13itkrdjqteo",
+                                "title" => "邀请好友",
+                                "imageUrl" => "addon/shop/diy/index/nav_invite_friends.png",
+                                "imgWidth" => 50,
+                                "imgHeight" => 50,
+                                "link" => [
+                                    "name" => ""
+                                ],
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ],
+                            [
+                                "id" => "6sisp3zd0w80",
+                                "title" => "公告",
+                                "imageUrl" => "addon/shop/diy/index/nav_sys_message.png",
+                                "imgWidth" => 50,
+                                "imgHeight" => 50,
+                                "link" => [
+                                    "name" => ""
+                                ],
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ],
+                            [
+                                "id" => "6qoc0ssgvhc0",
+                                "title" => "积分",
+                                "imageUrl" => "addon/shop/diy/index/nav_point.png",
+                                "imgWidth" => 50,
+                                "imgHeight" => 50,
+                                "link" => [
+                                    "name" => ""
+                                ],
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ]
+                        ],
+                        // 轮播图设置
+                        'swiper' => [
+                            'indicatorColor' => 'rgba(0, 0, 0, 0.3)', // 未选中颜色
+                            "indicatorActiveColor" => '#FF0E0E',
+                            'indicatorStyle' => 'style-1',
+                            'indicatorAlign' => 'center',
+                        ],
+                        "textColor" => "#303133",
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "rgba(255, 255, 255, 0.87)",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 9,
+                        "bottomRounded" => 9,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 12,
+                            "both" => 10
+                        ]
+                    ],
+                    [
+                        "path" => "edit-hot-area",
+                        "uses" => 0,
+                        "id" => "53fen2lf6l80",
+                        "componentName" => "HotArea",
+                        "componentTitle" => "热区",
+                        "ignore" => [],
+                        "imageUrl" => "addon/shop/diy/index/hot_area.png",
+                        "imgWidth" => 698,
+                        "imgHeight" => 466,
+                        "heatMapData" => [],
+                        "textColor" => "#303133",
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 12,
+                            "both" => 10
+                        ]
+                    ],
+                    [
+                        "path" => "edit-text",
+                        "uses" => 0,
+                        "id" => "5lojzvbvg6o0",
+                        "componentName" => "Text",
+                        "componentTitle" => "标题",
+                        "ignore" => [],
+                        "style" => "style-1",
+                        "styleName" => "风格1",
+                        "text" => "商品推荐",
+                        "link" => [
+                            "name" => ""
+                        ],
+                        "textColor" => "#303133",
+                        "fontSize" => 16,
+                        "fontWeight" => "normal",
+                        "textAlign" => "center",
+                        "subTitle" => [
+                            "text" => "副标题",
+                            "color" => "#999999",
+                            "fontSize" => 14,
+                            "control" => false,
+                            "fontWeight" => "normal"
+                        ],
+                        "more" => [
+                            "text" => "查看更多",
+                            "control" => false,
+                            "isShow" => true,
+                            "link" => [
+                                "name" => ""
+                            ],
+                            "color" => "#999999"
+                        ],
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 12,
+                            "both" => 0
+                        ]
+                    ],
+                    [
+                        "path" => "edit-goods-list",
+                        "uses" => 0,
+                        "id" => "50pj7dmvbvo0",
+                        "componentName" => "GoodsList",
+                        "componentTitle" => "商品列表",
+                        "ignore" => [],
+                        'style' => 'style-1',
+                        "source" => "all",
+                        "num" => 10,
+                        "goods_category" => "",
+                        "goods_category_name" => "请选择",
+                        "goods_ids" => [],
+                        "sortWay" => "default", // 排序方式，default：综合，sale_num：销量，price：价格
+                        "goodsNameStyle" => [
+                            "color" => "#303133",
+                            "control" => true,
+                            "fontWeight" => 'bold',
+                            "isShow" => true
+                        ],
+                        "priceStyle" => [
+                            "color" => "#FF4142",
+                            "control" => true,
+                            "isShow" => true
+                        ],
+                        "saleStyle" => [
+                            "color" => "#999999",
+                            "control" => true,
+                            "isShow" => true
+                        ],
+                        "labelStyle" => [
+                            "control" => true,
+                            "isShow" => true
+                        ],
+                        "btnStyle" => [
+                            "fontWeight" => false,
+                            "padding" => 0,
+                            "aroundRadius" => 25,
+                            "cartEvent" => "detail",
+                            "text" => "购买",
+                            "textColor" => "#FFFFFF",
+                            "startBgColor" => "#FF4142",
+                            "endBgColor" => "#FF4142",
+                            "style" => "button",
+                            "control" => true
+                        ],
+                        "imgElementRounded" => 0,// 图片圆角
+                        "textColor" => "#303133",
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 0,
+                            "both" => 10
+                        ]
+                    ]
+                ]
+            ]
+        ],
     ],
     'DIY_SHOP_MEMBER_INDEX' => [
         'shop_member_index_style1' => [
@@ -3211,7 +3847,16 @@ return [
                     "imgHeight" => "",
                     "bottomTabBar" => [
                         'control' => true,
-                        'isShow' => true
+                        'isShow' => true,
+                        'designNav' => [
+                            'title' => '',
+                            'key' => ''
+                        ]
+                    ],
+                    "copyright" => [
+                        'control' => true,
+                        'isShow' => false,
+                        'textColor' =>'#ccc'
                     ],
                     "template" => [
                         "textColor" => "#303133",
@@ -3378,7 +4023,7 @@ return [
                         "id" => "6cil3ipiis40",
                         "componentName" => "HorzBlank",
                         "componentTitle" => "辅助空白",
-                        "ignore" => [ 'pageBgColor', 'componentBgUrl' ],
+                        "ignore" => ['pageBgColor', 'componentBgUrl'],
                         "height" => 10,
                         "textColor" => "#303133",
                         "componentStartBgColor" => "rgba(255, 255, 255, 1)",
@@ -3459,7 +4104,7 @@ return [
                         "id" => "5jx57rrjl940",
                         "componentName" => "HorzBlank",
                         "componentTitle" => "辅助空白",
-                        "ignore" => [ 'pageBgColor', 'componentBgUrl' ],
+                        "ignore" => ['pageBgColor', 'componentBgUrl'],
                         "height" => 8,
                         "textColor" => "#303133",
                         "componentStartBgColor" => "rgba(255, 255, 255, 1)",
@@ -3535,6 +4180,661 @@ return [
                 ]
             ]
         ],
+        'shop_member_index' => [
+            "title" => "商城个人中心2", // 页面名称
+            'cover' => 'addon/shop/diy/template/member_index_cover.png', // 页面封面图
+            'preview' => '', // 页面预览图
+            'desc' => '个人中心', // 页面描述
+            'mode' => 'diy', // 页面模式：diy：自定义，fixed：固定
+            'data' => [
+                "global" => [
+                    "title" => "个人中心",
+                    'pageStartBgColor' => 'rgba(246, 247, 252, 1)',
+                    'pageEndBgColor' => '',
+                    'pageGradientAngle' => 'to bottom',
+                    "bgUrl" => "",
+                    'bgHeightScale' => 0,
+                    "imgWidth" => "",
+                    "imgHeight" => "",
+                    "bottomTabBar" => [
+                        'control' => true,
+                        'isShow' => true,
+                        'designNav' => [
+                            'title' => '',
+                            'key' => ''
+                        ]
+                    ],
+                    "copyright" => [
+                        'control' => true,
+                        'isShow' => false,
+                        'textColor' =>'#ccc'
+                    ],
+                    "template" => [
+                        "textColor" => "#303133",
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 0,
+                            "both" => 10
+                        ]
+                    ],
+                    "topStatusBar" => [
+                        'control' => true,
+                        'isShow' => true,
+                        'bgColor' => "#ffffff",
+                        'rollBgColor' => "#ffffff",
+                        'style' => 'style-1',
+                        'styleName' => '风格1',
+                        'textColor' => "#333333",
+                        'rollTextColor' => "#333333",
+                        'textAlign' => 'center',
+                        'inputPlaceholder' => '请输入搜索关键词',
+                        'imgUrl' => '',
+                        'link' => [
+                            'name' => ""
+                        ]
+                    ],
+                    "popWindow" => [
+                        "imgUrl" => "",
+                        "imgWidth" => "",
+                        "imgHeight" => "",
+                        "count" => 'once',
+                        "show" => 0,
+                        "link" => [
+                            "name" => ""
+                        ]
+                    ]
+                ],
+                "value" => [
+                    [
+                        "path" => "edit-member-info",
+                        "id" => "40w5ay4dep00",
+                        "componentName" => "MemberInfo",
+                        "componentTitle" => "会员信息",
+                        "uses" => 1,
+                        "ignore" => [],
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 0,
+                            "both" => 0
+                        ],
+                        "textColor" => "#303133",
+                        "style" => "style-1",
+                        "styleName" => "风格1",
+                        "bgUrl" => "",
+                        "bgColorStart" => "",
+                        "bgColorEnd" => "",
+                        "isShowAccount" => true
+                    ],
+                    [
+                        "path" => "edit-horz-blank",
+                        "uses" => 0,
+                        "id" => "2da0xqyo8zms",
+                        "componentName" => "HorzBlank",
+                        "componentTitle" => "辅助空白",
+                        "ignore" => [
+                            "pageBgColor",
+                            "componentBgUrl"
+                        ],
+                        "height" => 10,
+                        "textColor" => "#303133",
+                        "pageStartBgColor" => "",
+                        "pageEndBgColor" => "",
+                        "pageGradientAngle" => "to bottom",
+                        "componentBgUrl" => "",
+                        "componentBgAlpha" => 2,
+                        "componentStartBgColor" => "rgba(255, 255, 255, 1)",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 9,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 0,
+                            "both" => 10
+                        ]
+                    ],
+                    [
+                        "path" => "edit-text",
+                        "uses" => 0,
+                        "position" => "",
+                        "id" => "1puhgfus8www",
+                        "componentName" => "Text",
+                        "componentTitle" => "标题",
+                        "ignore" => [],
+                        "style" => "style-2",
+                        "styleName" => "风格2",
+                        "text" => "我的订单",
+                        "link" => [
+                            "name" => "SHOP_ORDER_LIST",
+                            "parent" => "SHOP_LINK",
+                            "title" => "订单列表",
+                            "url" => "/addon/shop/pages/order/list",
+                            "action" => ""
+                        ],
+                        "textColor" => "#303133",
+                        "fontSize" => 16,
+                        "fontWeight" => "normal",
+                        "textAlign" => "center",
+                        "subTitle" => [
+                            "text" => "",
+                            "color" => "#999999",
+                            "fontSize" => 14,
+                            "control" => true,
+                            "fontWeight" => "normal"
+                        ],
+                        "more" => [
+                            "text" => "全部",
+                            "control" => true,
+                            "isShow" => true,
+                            "link" => [
+                                "name" => ""
+                            ],
+                            "color" => "#999999"
+                        ],
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "rgba(255, 255, 255, 1)",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 0,
+                            "both" => 10
+                        ]
+                    ],
+                    [
+                        "path" => "edit-graphic-nav",
+                        "uses" => 0,
+                        "id" => "42bjn10l0ak0",
+                        "componentName" => "GraphicNav",
+                        "componentTitle" => "图文导航",
+                        "ignore" => [],
+                        "list" => [
+                            [
+                                "link" => [
+                                    "parent" => "DIY_LINK",
+                                    "title" => "待付款",
+                                    "url" => "/addon/shop/pages/order/list?status=1",
+                                    "name" => "DIY_LINK"
+                                ],
+                                "imageUrl" => "addon/shop/diy/member/nav_wait_pay_order.png",
+                                "imgWidth" => 40,
+                                "imgHeight" => 40,
+                                "id" => "ogkw2mqwvow",
+                                "title" => "待付款",
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ],
+                            [
+                                "title" => "待发货",
+                                "link" => [
+                                    "parent" => "DIY_LINK",
+                                    "title" => "待发货",
+                                    "url" => "/addon/shop/pages/order/list?status=2",
+                                    "name" => "DIY_LINK"
+                                ],
+                                "imageUrl" => "addon/shop/diy/member/nav_wait_delivery_order.png",
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ],
+                                "id" => "37hnqfvx5va0",
+                                "imgWidth" => 40,
+                                "imgHeight" => 40
+                            ],
+                            [
+                                "title" => "待收货",
+                                "link" => [
+                                    "parent" => "DIY_LINK",
+                                    "title" => "待收货",
+                                    "url" => "/addon/shop/pages/order/list?status=3",
+                                    "name" => "DIY_LINK"
+                                ],
+                                "imageUrl" => "addon/shop/diy/member/nav_wait_take_order.png",
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ],
+                                "id" => "63n62guoiug0",
+                                "imgWidth" => 40,
+                                "imgHeight" => 40
+                            ],
+                            [
+                                "title" => "待评价",
+                                "link" => [
+                                    "parent" => "DIY_LINK",
+                                    "title" => "待评价",
+                                    "url" => "/addon/shop/pages/order/list?status=5",
+                                    "name" => "DIY_LINK"
+                                ],
+                                "imageUrl" => "addon/shop/diy/member/nav_wait_evaluate_order.png",
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ],
+                                "id" => "4wblhzd14uw0",
+                                "imgWidth" => 40,
+                                "imgHeight" => 40
+                            ],
+                            [
+                                "id" => "fl2bqfimnuo",
+                                "title" => "售后退款",
+                                "imageUrl" => "addon/shop/diy/member/nav_refund_order.png",
+                                "imgWidth" => 40,
+                                "imgHeight" => 40,
+                                "link" => [
+                                    "parent" => "SHOP_LINK",
+                                    "title" => "退款列表",
+                                    "url" => "/addon/shop/pages/refund/list",
+                                    "name" => "SHOP_REFUND_LIST"
+                                ],
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ]
+                        ],
+                        // 轮播图设置
+                        'swiper' => [
+                            'indicatorColor' => 'rgba(0, 0, 0, 0.3)', // 未选中颜色
+                            "indicatorActiveColor" => '#FF0E0E',
+                            'indicatorStyle' => 'style-1',
+                            'indicatorAlign' => 'center',
+                        ],
+                        "textColor" => "#303133",
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "rgba(255, 255, 255, 1)",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 9,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 12,
+                            "both" => 10
+                        ],
+                        "layout" => "horizontal",
+                        "mode" => "graphic",
+                        "showStyle" => "fixed",
+                        "rowCount" => 5,
+                        "pageCount" => 2,
+                        "carousel" => [
+                            "type" => "circle",
+                            "color" => "#FFFFFF"
+                        ],
+                        "imageSize" => 20,
+                        "aroundRadius" => 0,
+                        "font" => [
+                            "size" => 14,
+                            "weight" => "normal",
+                            "color" => "rgba(32, 15, 51, 1)"
+                        ]
+                    ],
+                    [
+                        "path" => "edit-horz-blank",
+                        "uses" => 0,
+                        "id" => "5fo173bx5840",
+                        "componentName" => "HorzBlank",
+                        "componentTitle" => "辅助空白",
+                        "ignore" => [
+                            "pageBgColor",
+                            "componentBgUrl"
+                        ],
+                        "height" => 10,
+                        "textColor" => "#303133",
+                        "pageStartBgColor" => "",
+                        "pageEndBgColor" => "",
+                        "pageGradientAngle" => "to bottom",
+                        "componentBgUrl" => "",
+                        "componentBgAlpha" => 2,
+                        "componentStartBgColor" => "rgba(255, 255, 255, 1)",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 9,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 0,
+                            "both" => 10
+                        ]
+                    ],
+                    [
+                        "path" => "edit-text",
+                        "uses" => 0,
+                        "position" => "",
+                        "id" => "629cgb1ygcw0",
+                        "componentName" => "Text",
+                        "componentTitle" => "标题",
+                        "ignore" => [],
+                        "style" => "style-1",
+                        "styleName" => "风格1",
+                        "text" => "常用工具",
+                        "link" => [
+                            "name" => ""
+                        ],
+                        "textColor" => "#303133",
+                        "fontSize" => 16,
+                        "fontWeight" => "normal",
+                        "textAlign" => "left",
+                        "subTitle" => [
+                            "text" => "",
+                            "color" => "#999999",
+                            "fontSize" => 14,
+                            "control" => false,
+                            "fontWeight" => "normal"
+                        ],
+                        "more" => [
+                            "text" => "查看更多",
+                            "control" => false,
+                            "isShow" => false,
+                            "link" => [
+                                "name" => ""
+                            ],
+                            "color" => "#999999"
+                        ],
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "rgba(255, 255, 255, 1)",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 0,
+                            "both" => 10
+                        ]
+                    ],
+                    [
+                        "path" => "edit-graphic-nav",
+                        "uses" => 0,
+                        "id" => "1swylyl5fvb4",
+                        "componentName" => "GraphicNav",
+                        "componentTitle" => "图文导航",
+                        "ignore" => [],
+                        "list" => [
+                            [
+                                "title" => "签到",
+                                "link" => [
+                                    "name" => "MEMBER_MY_SIGN_IN",
+                                    "parent" => "MEMBER_LINK",
+                                    "title" => "我的签到",
+                                    "url" => "/app/pages/member/sign_in",
+                                    "action" => ""
+                                ],
+                                "imageUrl" => "addon/shop/diy/member/nav_signin.png",
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ],
+                                "imgWidth" => 58,
+                                "imgHeight" => 58
+                            ],
+                            [
+                                "title" => "个人资料",
+                                "link" => [
+                                    "parent" => "MEMBER_LINK",
+                                    "title" => "个人资料",
+                                    "url" => "/app/pages/member/personal",
+                                    "name" => "MEMBER_PERSONAL"
+                                ],
+                                "imageUrl" => "addon/shop/diy/member/nav_info.png",
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ],
+                                "imgWidth" => 58,
+                                "imgHeight" => 58
+                            ],
+                            [
+                                "title" => "收货地址",
+                                "link" => [
+                                    "parent" => "MEMBER_LINK",
+                                    "title" => "收货地址",
+                                    "url" => "/app/pages/member/address",
+                                    "name" => "MEMBER_ADDRESS"
+                                ],
+                                "imageUrl" => "addon/shop/diy/member/nav_address.png",
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ],
+                                "imgWidth" => 58,
+                                "imgHeight" => 58
+                            ],
+                            [
+                                "title" => "优惠券",
+                                "link" => [
+                                    "parent" => "SHOP_LINK",
+                                    "title" => "我的优惠券",
+                                    "url" => "/addon/shop/pages/member/my_coupon",
+                                    "name" => "SHOP_MY_COUPON"
+                                ],
+                                "imageUrl" => "addon/shop/diy/member/nav_coupon.png",
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ],
+                                "imgWidth" => 58,
+                                "imgHeight" => 58
+                            ],
+                            [
+                                "id" => "su0vf82y200",
+                                "title" => "我的拼单",
+                                "imageUrl" => "addon/shop/diy/member/nav_my_pintuan.png",
+                                "imgWidth" => 58,
+                                "imgHeight" => 58,
+                                "link" => [
+                                    "name" => ""
+                                ],
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ],
+                            [
+                                "id" => "6ba0yct2b3ct",
+                                "title" => "我的助力",
+                                "imageUrl" => "addon/shop/diy/member/nav_my_help.png",
+                                "imgWidth" => 58,
+                                "imgHeight" => 58,
+                                "link" => [
+                                    "name" => ""
+                                ],
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ],
+                            [
+                                "id" => "2b0att2b3pq8",
+                                "title" => "我的礼物",
+                                "imageUrl" => "addon/shop/diy/member/nav_gift.png",
+                                "imgWidth" => 58,
+                                "imgHeight" => 58,
+                                "link" => [
+                                    "name" => ""
+                                ],
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ],
+                            [
+                                "id" => "z8x7ci5wik0",
+                                "title" => "我的足迹",
+                                "imageUrl" => "addon/shop/diy/member/nav_footmark.png",
+                                "imgWidth" => 58,
+                                "imgHeight" => 58,
+                                "link" => [
+                                    "name" => "SHOP_MY_GOODS_BROWSE",
+                                    "parent" => "SHOP_LINK",
+                                    "title" => "我的足迹",
+                                    "url" => "/addon/shop/pages/goods/browse",
+                                ],
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ],
+                            [
+                                "id" => "1sejr0g3h4zk",
+                                "title" => "积分兑换",
+                                "imageUrl" => "addon/shop/diy/member/nav_point_change.png",
+                                "imgWidth" => 58,
+                                "imgHeight" => 58,
+                                "link" => [
+                                    "name" => ""
+                                ],
+                                "label" => [
+                                    "control" => false,
+                                    "text" => "热门",
+                                    "textColor" => "#FFFFFF",
+                                    "bgColorStart" => "#F83287",
+                                    "bgColorEnd" => "#FE3423"
+                                ]
+                            ]
+                        ],
+                        // 轮播图设置
+                        'swiper' => [
+                            'indicatorColor' => 'rgba(0, 0, 0, 0.3)', // 未选中颜色
+                            "indicatorActiveColor" => '#FF0E0E',
+                            'indicatorStyle' => 'style-1',
+                            'indicatorAlign' => 'center',
+                        ],
+                        "textColor" => "#303133",
+                        'pageStartBgColor' => '',
+                        'pageEndBgColor' => '',
+                        'pageGradientAngle' => 'to bottom',
+                        'componentBgUrl' => '',
+                        'componentBgAlpha' => 2,
+                        "componentStartBgColor" => "rgba(255, 255, 255, 1)",
+                        "componentEndBgColor" => "",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 9,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => 0,
+                            "both" => 10
+                        ],
+                        "layout" => "horizontal",
+                        "mode" => "graphic",
+                        "showStyle" => "fixed",
+                        "rowCount" => 4,
+                        "pageCount" => 2,
+                        "carousel" => [
+                            "type" => "circle",
+                            "color" => "#FFFFFF"
+                        ],
+                        "imageSize" => 29,
+                        "aroundRadius" => 0,
+                        "font" => [
+                            "size" => 14,
+                            "weight" => "normal",
+                            "color" => "#303133"
+                        ]
+                    ]
+                ]
+            ]
+        ]
     ],
     'DIY_SHOP_POINT_INDEX' => [
         'shop_point_index_style1' => [
@@ -3572,7 +4872,16 @@ return [
                     ],
                     "bottomTabBar" => [
                         'control' => true,
-                        'isShow' => true
+                        'isShow' => true,
+                        'designNav' => [
+                            'title' => '',
+                            'key' => ''
+                        ]
+                    ],
+                    "copyright" => [
+                        'control' => true,
+                        'isShow' => false,
+                        'textColor' =>'#ccc'
                     ],
                     "popWindow" => [
                         "imgUrl" => "",
@@ -3962,7 +5271,16 @@ return [
                     ],
                     'bottomTabBar' => [
                         'control' => false,
-                        'isShow' => false
+                        'isShow' => false,
+                        'designNav' => [
+                            'title' => '',
+                            'key' => ''
+                        ]
+                    ],
+                    "copyright" => [
+                        'control' => true,
+                        'isShow' => false,
+                        'textColor' =>'#ccc'
                     ],
                     'popWindow' => [
                         'imgUrl' => '',
@@ -4042,13 +5360,13 @@ return [
                             'bottomRounded' => 0,
                             'priceBgColor' => '',
                             "startBgColor" => '#ffffff',
-                            "endBgColor" => '#f6f6f6',
+                            "endBgColor" => 'rgba(254, 254, 254, 1)',
                             'priceAboutMargin' => 0,
                             'priceTopMargin' => -22,
                             'topMargin' => -13,
                             'aboutMargin' => 0
                         ],
-                        'saleInfo' => [ 'underlined_price', 'sales', 'stock' ],
+                        'saleInfo' => ['underlined_price', 'sales', 'stock'],
                         'textColor' => '#303133',
                         'pageStartBgColor' => '',
                         'pageEndBgColor' => '',
@@ -4071,13 +5389,45 @@ return [
                         'isHidden' => false
                     ],
                     [
+                        "path" => "edit-horz-blank",
+                        "uses" => 0,
+                        "id" => "7lc46dh86vw0",
+                        "componentName" => "HorzBlank",
+                        "componentTitle" => "辅助空白",
+                        "ignore" => [
+                            "pageBgColor",
+                            "componentBgUrl"
+                        ],
+                        "height" => 100,
+                        "textColor" => "#303133",
+                        "pageStartBgColor" => "",
+                        "pageEndBgColor" => "",
+                        "pageGradientAngle" => "to bottom",
+                        "componentBgUrl" => "",
+                        "componentBgAlpha" => 2,
+                        "componentStartBgColor" => "rgba(253, 253, 253, 1)",
+                        "componentEndBgColor" => "rgba(246, 246, 246, 1)",
+                        "componentGradientAngle" => "to bottom",
+                        "topRounded" => 0,
+                        "bottomRounded" => 0,
+                        "elementBgColor" => "",
+                        "topElementRounded" => 0,
+                        "bottomElementRounded" => 0,
+                        "margin" => [
+                            "top" => 0,
+                            "bottom" => -100,
+                            "both" => 0
+                        ],
+                        "isHidden" => false
+                    ],
+                    [
                         'path' => 'edit-shop-goods-detail-purchase-service',
                         'uses' => 1,
                         'id' => 'c4wh1kcz3i0',
                         'componentName' => 'ShopGoodsDetailPurchaseService',
                         'componentTitle' => '商品服务',
                         'ignore' => [],
-                        'serviceConfig' => [ 'goods_service', 'spec_select', 'delivery_info', 'coupons', 'activity' ],
+                        'serviceConfig' => ['goods_service', 'spec_select', 'delivery_info', 'coupons', 'activity'],
                         'textColor' => '#303133',
                         'pageStartBgColor' => '',
                         'pageEndBgColor' => '',
@@ -4231,7 +5581,7 @@ return [
                             'topRounded',
                             'bottomRounded'
                         ],
-                        'menuContent' => [ 'index', 'service', 'cart' ],
+                        'menuContent' => ['index', 'service', 'cart'],
                         'cartName' => '加入购物车',
                         'buyName' => '立即购买',
                         'cartIsShow' => true,

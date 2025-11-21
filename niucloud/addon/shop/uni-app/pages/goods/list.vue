@@ -1,8 +1,8 @@
 <template>
     <view class="bg-gray-100 min-h-[100vh]" :style="themeColor()">
-        <view class="fixed left-0 right-0 top-0 product-warp bg-[#fff]">
+        <view class="fixed left-0 right-0 top-0 product-warp bg-[#f6f6f6]">
             <view class="py-[14rpx] flex items-center justify-between px-[20rpx]">
-                <view class="flex-1 search-input mr-[20rpx]">
+                <view class="flex-1 search-input bg-[#fff] mr-[20rpx]">
                     <text @click.stop="searchTypeFn('all')" class="nc-iconfont nc-icon-sousuo-duanV6xx1 btn"></text>
                     <input class="input" maxlength="50" type="text" v-model="goods_name"
                            placeholder="请搜索您想要的商品"
@@ -266,7 +266,7 @@ interface mescrollStructure {
     size: number,
     endSuccess: Function,
     [propName: string]: any
-}
+} 
 
 const getAllAppListFn = (mescroll: mescrollStructure) => {
     loading.value = false;

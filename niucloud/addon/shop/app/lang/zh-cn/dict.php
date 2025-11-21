@@ -105,6 +105,7 @@ return [
         'common' => '普票',
         'sprcial' => '专票',
         'wait_open' => '未生效',
+        'wait_audit' => '待审核',
         'open' => '已生效',
         'wait_invoice' => '待开票',
         'invoiced' => '已开票',
@@ -160,7 +161,8 @@ return [
         'shop_link_goods_category_select' => '商品分类',
         'shop_link_coupon_select' => '优惠券',
         'shop_link_point_exchange_select' => '积分商品',
-        'shop_link_goods_rank_select' => '商品榜单'
+        'shop_link_goods_rank_select' => '商品榜单',
+        'shop_link_invoice_list' => '发票列表'
     ],
     'dict_diy_poster' => [
         'shop_goods_component_type_basic' => '商品组件',

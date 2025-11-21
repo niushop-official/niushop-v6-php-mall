@@ -3,7 +3,7 @@
         <view class="bg-[var(--page-bg-color)] min-h-screen overflow-hidden" v-if="!loading">
             <view v-if="!loading" class="pb-20rpx">
                 <view v-if="detail.status_name" class="pl-[40rpx] pr-[35rpx] bg-linear pb-[100rpx]">
-                    <!-- #ifdef MP-WEIXIN -->
+                    <!-- #ifdef MP-WEIXIN || APP-PLUS -->
                     <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()" />
                     <!-- #endif -->
                     <view class="flex justify-between items-center pt-[40rpx]">
@@ -79,7 +79,7 @@
                             </view>
                             <text class="text-[24rpx] mt-[12rpx] leading-[26rpx]">{{ detail.taker_full_address }}</text>
                         </view>
-						
+
                     </view>
                 </view>
 				<!-- 自提核销-->
@@ -105,7 +105,7 @@
 				                <text class="text-[var(--text-color-light6)] text-[24rpx] ml-[10rpx] border-[2rpx] border-solid border-[#666] bg-[#f7f7f7] px-[12rpx] py-[6rpx] rounded" @click="copy(selfPickupInfo[0].code)">复制</text>
 				            </view>
 				        </template>
-				
+
 				    </view>
 				</template>
                 <view class="sidebar-margin card-template p-[0] py-[var(--pad-top-m)] overflow-hidden"
@@ -115,12 +115,12 @@
                           class="px-[var(--pad-sidebar-m)]">
                         <view class="order-goods-item flex justify-between flex-wrap mb-[20rpx]">
                             <view class="w-[150rpx] h-[150rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" @click="goodsEvent(goodsItem.goods_id)">
-                                <u--image class="overflow-hidden" radius="var(--goods-rounded-big)" width="150rpx"
+                                <up-image class="overflow-hidden" radius="var(--goods-rounded-big)" width="150rpx"
                                           height="150rpx" :src="img(goodsItem.goods_image_thumb_small ? goodsItem.goods_image_thumb_small : '')" model="aspectFill">
                                     <template #error>
                                         <image class="w-[150rpx] h-[150rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill"/>
                                     </template>
-                                </u--image>
+                                </up-image>
                             </view>
 
                             <view class="ml-[20rpx] flex flex-1 flex-col justify-between">
@@ -130,12 +130,13 @@
                                         <view class="text-[22rpx] mt-[14rpx] text-[var(--text-color-light9)] truncate max-w-[490rpx] leading-[28rpx]">{{ goodsItem.sku_name }}</view>
                                     </view>
                                 </view>
-                                <view v-if="goodsItem.manjian_info && Object.keys(goodsItem.manjian_info).length"
-                                      class="flex items-center mt-[10rpx] mb-[auto]"
+                                <view v-if="goodsItem.manjian_info &&goodsItem.manjian_info.length>0"
+                                      class="flex items-center mt-[10rpx] mb-[auto] flex-nowrap overflow-hidden"
                                       @click.stop="manjianOpenFn(goodsItem.manjian_info)">
                                     <view class="bg-[var(--primary-color-light)] text-[var(--primary-color)] rounded-[6rpx] text-[20rpx] flex items-center justify-center w-[88rpx] h-[36rpx] mr-[6rpx]">满减送</view>
-                                    <text class="text-[22rpx] text-[#999]">{{ goodsItem.manjian_info.manjian_name }}
-                                    </text>
+                                    <view class="text-[22rpx] text-[#999] truncate max-w-[320rpx]" >
+                                        <text v-for="(cItem,cIndex) in goodsItem.manjian_info" :key="cIndex" class="whitespace-nowrap" :class="{'ml-[6rpx]':cIndex>0}">{{ cItem.manjian_name }}</text>
+                                    </view>
                                 </view>
                                 <view class="flex justify-between items-baseline leading-[28rpx] text-[#333]">
                                     <view class="price-font">
@@ -203,11 +204,11 @@
                         <view class="order-goods-item flex justify-between flex-wrap px-[var(--pad-sidebar-m)] pb-[20rpx]"
                             v-for="(goodsItem, goodsIndex) in detail.gift_goods" :key="goodsIndex">
                             <view class="w-[120rpx] h-[120rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" @click="goodsEvent(goodsItem.goods_id)">
-                                <u--image class="overflow-hidden" radius="var(--goods-rounded-big)" width="120rpx" height="120rpx" :src="img(goodsItem.goods_image_thumb_small ? goodsItem.goods_image_thumb_small : '')" model="aspectFill">
+                                <up-image class="overflow-hidden" radius="var(--goods-rounded-big)" width="120rpx" height="120rpx" :src="img(goodsItem.goods_image_thumb_small ? goodsItem.goods_image_thumb_small : '')" model="aspectFill">
                                     <template #error>
                                         <image class="w-[120rpx] h-[120rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                     </template>
-                                </u--image>
+                                </up-image>
                             </view>
                             <view class="ml-[16rpx] py-[8rpx] flex flex-1 flex-col justify-between">
                                 <view class="flex items-center">
@@ -407,14 +408,14 @@
                             </nc-contact>
                         </view>
                         <!-- #endif -->
-                        <view class="px-[35rpx]  box-border  text-[24rpx]  h-[60rpx] flex-center text-center border-[2rpx] border-solid border-[#ccc] rounded-full ml-[20rpx] text-[var(--text-color-light3)]"
+                        <view class="order-grey-hollow-btn ml-[20rpx]"
                             @click="orderBtnFn('logistics')" v-if="showLogistics(detail)">{{ t('logisticsTracking') }}</view>
                         <view class="order-grey-hollow-btn ml-[20rpx]" v-if="detail.status == 1" @click="orderBtnFn('close')">{{ t('orderClose') }}</view>
-                        <view class="px-[35rpx] box-border  text-[24rpx] h-[60rpx] flex-center text-center text-[#fff] primary-btn-bg rounded-full ml-[20rpx]" v-if="detail.status == 1" @click="orderBtnFn('pay')">{{ t('topay') }}</view>
-                        <view v-if="detail.status == 3" class="px-[35rpx] box-border  text-[24rpx] h-[60rpx] flex-center text-center  text-[#fff]  primary-btn-bg rounded-full ml-[20rpx]" @click="orderBtnFn('finish')">{{ t('orderFinish') }}</view>
+                        <view class="px-[24rpx] min-w-[144rpx] box-border  text-[24rpx] h-[56rpx] flex-center text-center text-[#fff] primary-btn-bg rounded-full ml-[20rpx]" v-if="detail.status == 1" @click="orderBtnFn('pay')">{{ t('topay') }}</view>
+                        <view v-if="detail.status == 3" class="px-[24rpx] min-w-[144rpx] box-border  text-[24rpx] h-[56rpx] flex-center text-center  text-[#fff]  primary-btn-bg rounded-full ml-[20rpx]" @click="orderBtnFn('finish')">{{ t('orderFinish') }}</view>
                         <template v-if="detail.status == 5 && isShowEvaluate">
                             <view v-if="detail.is_evaluate == 1 || (detail.is_evaluate != 1 && evaluateConfig.is_evaluate == 1)"
-                                class="px-[35rpx] box-border text-[24rpx]  h-[60rpx] flex-center border-[2rpx] border-solid border-[#ccc] rounded-full ml-[20rpx] !text-[var(--text-color-light3)]"
+                                class="order-grey-hollow-btn ml-[20rpx]"
                                 @click="orderBtnFn('evaluate')">{{ detail.is_evaluate == 1 ? t('selectedEvaluate') : t('evaluate') }}</view>
                         </template>
                     </view>
@@ -537,11 +538,11 @@ const orderDetailFn = (id: any) => {
 
 // 满减
 const manjianOpenFn = (data: any) => {
-    let obj = {};
-    obj.condition_type = cloneDeep(data).condition_type;
-    obj.rule_json = [cloneDeep(data).rule];
-    obj.name = cloneDeep(data).manjian_name;
-    manjianShowRef.value.open(obj);
+    // let obj = {};
+    // obj.condition_type = cloneDeep(data).condition_type;
+    // obj.rule_json = [cloneDeep(data).rule];
+    // obj.name = cloneDeep(data).manjian_name;
+    manjianShowRef.value.open(data,'rule');
 }
 
 //关闭订单

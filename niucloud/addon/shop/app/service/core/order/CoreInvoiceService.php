@@ -56,6 +56,24 @@ class CoreInvoiceService extends BaseCoreService
     }
 
     /**
+     * 发票审核
+     * @param $id
+     * @return void
+     */
+    public function audit($ids)
+    {
+        $this->model->where(
+            [
+                ['id', 'in', $ids],
+                ['is_invoice', '=', InvoiceDict::WAIT_AUDIT]
+            ]
+        )->update([
+            'is_invoice' => InvoiceDict::WAIT_INVOICE
+        ]);
+        return true;
+    }
+
+    /**
      * 发票关闭
      * @param $id
      * @return true

@@ -215,6 +215,13 @@ Route::group('shop', function () {
 
     //物流跟踪
     Route::get('order/logistics', 'addon\shop\app\api\controller\order\Order@getPackage');
+    //发票相关
+    Route::get('order/invoice/list', 'addon\shop\app\api\controller\order\Invoice@list');
+    Route::get('order/invoice/:id', 'addon\shop\app\api\controller\order\Invoice@info');
+    Route::post('order/invoice/apply', 'addon\shop\app\api\controller\order\Invoice@apply');
+    Route::post('order/invoice/edit/:id', 'addon\shop\app\api\controller\order\Invoice@edit');
+    Route::delete('order/invoice/cancel/:id', 'addon\shop\app\api\controller\order\Invoice@cancel');
+    Route::post('order/invoice/calculate', 'addon\shop\app\api\controller\order\Invoice@calculate');
 
     //添加优惠券
     Route::post('coupon', 'addon\shop\app\api\controller\marketing\Coupon@receive');

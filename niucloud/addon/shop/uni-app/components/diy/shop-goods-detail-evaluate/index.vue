@@ -18,14 +18,14 @@
                     <view class="flex justify-between w-full mt-[16rpx]">
                         <view class="flex-1 w-[540rpx] text-[26rpx] text-[#333] max-h-[72rpx] leading-[36rpx] multi-hidden mr-[50rpx]">{{ item.content }}</view>
                         <view class="w-[80rpx] shrink-0">
-                            <u--image v-if="item.image_mid && item.image_mid.length" width="80rpx"
+                            <up-image v-if="item.image_mid && item.image_mid.length" width="80rpx"
                                         height="80rpx" radius="var(--goods-rounded-mid)"
                                         :src="img(item.image_mid[0])" model="aspectFill"
                                         @click="imgListPreview(item.images[0])">
                                 <template #error>
                                     <u-icon name="photo" color="#999" size="50"></u-icon>
                                 </template>
-                            </u--image>
+                            </up-image>
                         </view>
                     </view>
                 </view>
@@ -141,7 +141,7 @@ onMounted(() => {
             (newValue, oldValue) => {
                 if (newValue && newValue.componentName == 'ShopGoodsDetailEvaluate') {
                     if (!diyComponent.value.isShow) {
-                        emits('update:componentIsShow', false)   
+                        emits('update:componentIsShow', false)
                     }else{
                         emits('update:componentIsShow', true)
                     }

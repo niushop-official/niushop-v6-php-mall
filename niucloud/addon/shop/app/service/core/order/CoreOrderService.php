@@ -59,7 +59,7 @@ class CoreOrderService extends BaseCoreService
         ];
 
         //获取缓存
-        $traces = Cache::get('order_delivery:'.$data['express_no']);
+        $traces = Cache::get('order_delivery:'.$data['express_no'].$params['id']);
         if(empty($traces)){
             $traces = $class->search($data);
             if (!empty($traces[ 'list' ])) {
@@ -70,5 +70,17 @@ class CoreOrderService extends BaseCoreService
         }
         $params[ 'traces' ] = $traces;
         return $params;
+    }
+
+    public function setInvoiceIdByOrderId($order_ids, $invoice_id = 0)
+    {
+        if (is_string($order_ids)){
+            $order_ids = explode(',', $order_ids);
+        }
+        $this->model->whereIn('order_id', $order_ids)->update(['invoice_id' => $invoice_id]);
+    }
+    public function cancelInvoiceId($invoice_id = 0)
+    {
+        $this->model->whereIn('invoice_id', $invoice_id)->update(['invoice_id' => 0]);
     }
 }

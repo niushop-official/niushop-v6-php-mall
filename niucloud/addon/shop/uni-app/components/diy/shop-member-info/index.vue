@@ -12,7 +12,7 @@
                         <view class="text-[32rpx] truncate max-w-[320rpx] font-500 leading-[38rpx]">{{ info.nickname }}</view>
                         <view class="text-[26rpx] font-400 leading-[28rpx] ml-[10rpx]" v-if="info.mobile">{{ info.mobile.replace(info.mobile.substring(3, 7), "****") }}</view>
 
-                        <!-- #ifdef H5 -->
+                        <!-- #ifndef MP -->
                         <view v-else-if="!info.mobile" @click="bindMobileFn"
                               class="text-[22rpx] ml-[10rpx] px-[6rpx] border-[1rpx] border-solid border-[#E3E4E9] rounded-[8rpx] h-[34rpx] flex-center"
                               :style="diyComponent.textColor ? { boxShadow: '0 0 0 1rpx ' + diyComponent.textColor, border: 'none' } : {}">
@@ -20,7 +20,7 @@
                         </view>
                         <!-- #endif -->
 
-                        <!-- #ifdef MP-WEIXIN -->
+                        <!-- #ifdef MP -->
                         <button v-else-if="!info.mobile"
                                 class="text-[22rpx] ml-[10rpx] bg-[#fff] px-[6rpx] border-[1rpx] border-solid border-[#E3E4E9] rounded-[8rpx] h-[37rpx] flex-center mr-0"
                                 :style="diyComponent.textColor ? { boxShadow: '0 0 0 1rpx ' + diyComponent.textColor, border: 'none' } : {}"
@@ -69,7 +69,7 @@
             </view>
         </view>
 
-        <!-- #ifdef MP-WEIXIN -->
+        <!-- #ifdef MP -->
         <information-filling ref="infoFillRef"></information-filling>
         <!-- #endif -->
 
@@ -170,7 +170,7 @@ const toLogin = () => {
     let normalLogin = !configStore.login.is_username && !configStore.login.is_mobile && !configStore.login.is_bind_mobile; // 未开启普通登录
     let authRegisterLogin = !configStore.login.is_auth_register; // 自动注册登录
 
-    // #ifdef H5
+    // #ifndef MP
     if (isWeixinBrowser()) {
         // 微信浏览器
         if (normalLogin && authRegisterLogin) {
@@ -215,11 +215,11 @@ const toLogin = () => {
 
 const infoFillRef: any = ref(false)
 const clickAvatar = () => {
-    // #ifdef MP-WEIXIN
+    // #ifdef MP
     infoFillRef.value.show = true
     // #endif
 
-    // #ifdef H5
+    // #ifndef MP
     if (isWeixinBrowser()) {
         useLogin().getAuthCode({ scopes: 'snsapi_userinfo' })
     } else {

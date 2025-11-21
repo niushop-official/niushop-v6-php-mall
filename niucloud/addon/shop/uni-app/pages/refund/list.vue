@@ -15,11 +15,11 @@
                             <view class="text-[26rpx] leading-[34rpx] !text-[var(--primary-color)]">{{ item.refund_type_name }}</view>
                         </view>
                         <view class="flex mt-[20rpx]">
-                            <u--image width="150rpx" height="150rpx" :radius="'var(--goods-rounded-big)'" :src="img(item.order_goods.goods_image_thumb_small ? item.order_goods.goods_image_thumb_small : '')" model="aspectFill">
+                            <up-image width="150rpx" height="150rpx" :radius="'var(--goods-rounded-big)'" :src="img(item.order_goods.goods_image_thumb_small ? item.order_goods.goods_image_thumb_small : '')" model="aspectFill">
                                 <template #error>
                                     <image class="w-[150rpx] h-[150rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill"/>
                                 </template>
-                            </u--image>
+                            </up-image>
                             <view class="ml-[20rpx] flex flex-1 flex-col box-border">
                                 <view class="flex justify-between items-baseline">
                                     <view class="text-[28rpx] leading-[40rpx] text-[#303133] max-w-[322rpx]  truncate font-400">{{ item.order_goods.goods_name }}</view>

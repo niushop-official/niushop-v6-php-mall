@@ -635,4 +635,9 @@ class OrderService extends BaseAdminService
             throw new CommonException($e->getMessage());
         }
     }
+
+    public function getInfoByOrderNo($order_no)
+    {
+        return $this->model->where('order_no', $order_no)->findOrEmpty()->toArray();
+    }
 }

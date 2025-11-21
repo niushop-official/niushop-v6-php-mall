@@ -1,9 +1,9 @@
 <template>
     <view class="bg-[var(--page-bg-color)] min-h-[100vh]" :style="themeColor()">
-        <view class="fixed left-0 right-0 top-0 product-warp bg-[#fff]">
+        <view class="fixed left-0 right-0 top-0 product-warp bg-[#f6f6f6]">
 
             <view class="py-[14rpx] flex items-center justify-between px-[20rpx]">
-                <view class="flex-1 search-input">
+                <view class="flex-1 search-input bg-[#fff]">
                     <text @click.stop="searchTypeFn('all')" class="nc-iconfont nc-icon-sousuo-duanV6xx1 btn"></text>
                     <input class="input" maxlength="50" type="text" v-model="goods_name" placeholder="请搜索您想要的商品"
                            placeholderClass="text-[var(--text-color-light9)] text-[24rpx]" confirm-type="search"

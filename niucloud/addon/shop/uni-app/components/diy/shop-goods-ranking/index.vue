@@ -27,11 +27,11 @@
                                     <view class="absolute top-[2rpx] left-[-3rpx] flex items-center justify-center w-[50rpx] h-[50rpx]" :style="{ zIndex: 3 }">
                                         <text class="text-[20rpx] font-bold text-[#fff]">{{ goods.rank_num }}</text>
                                     </view>
-                                    <u--image radius="var(--goods-rounded-big)" width="130rpx" height="130rpx" :src="img(goods.goods_cover_thumb_mid || '')" model="aspectFill">
+                                    <up-image radius="var(--goods-rounded-big)" width="130rpx" height="130rpx" :src="img(goods.goods_cover_thumb_mid || '')" model="aspectFill">
                                         <template #error>
                                             <image class="w-[130rpx] h-[130rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                         </template>
-                                    </u--image>
+                                    </up-image>
 <!--                                    <easy-image class="w-[130rpx] h-[130rpx]" image-class="rounded-[var(&#45;&#45;goods-rounded-big)]" :image-src="goods.goods_cover_thumb_small" />-->
                                 </view>
                                 <view class="flex flex-col">

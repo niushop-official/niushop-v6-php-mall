@@ -1,6 +1,6 @@
 <template>
     <view class="w-screen h-screen flex flex-col" :style="themeColor()">
-        <!-- #ifdef MP-WEIXIN -->
+        <!-- #ifdef MP-WEIXIN || APP-PLUS -->
         <view :style="{'height':headerHeight}">
             <top-tabbar :data="param" :scrollBool="topTabarObj.getScrollBool()" class="top-header" />
         </view>
@@ -28,7 +28,7 @@
             </u-form>
             <view class="mt-[100rpx]">
                 <view v-if="config.agreement_show" class="flex items-center mb-[20rpx] py-[10rpx]" @click.stop="agreeChange">
-                    <u-checkbox-group @change="agreeChange"> 
+                    <u-checkbox-group @change="agreeChange">
                         <u-checkbox activeColor="var(--primary-color)" :checked="isAgree" shape="circle" size="24rpx" :customStyle="{ 'marginTop': '4rpx' }" />
                     </u-checkbox-group>
                     <view class="text-[24rpx] text-[var(--text-color-light6)] flex items-center flex-wrap">

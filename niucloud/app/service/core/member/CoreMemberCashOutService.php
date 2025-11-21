@@ -80,6 +80,10 @@ class CoreMemberCashOutService extends BaseCoreService
                 $cash_out->account_type . '_cash_outing' => $member[$cash_out->account_type . '_cash_outing'] - $cash_out->apply_money
             ]
         );
+        //提现完成后事件
+        event('AfterCashFinish',[
+            'cash_out'=>$cash_out
+        ]);
         return true;
     }
 
@@ -169,12 +173,16 @@ class CoreMemberCashOutService extends BaseCoreService
                 $core_member_cash_out_service->audit($cash_out->id, 'agree');
             }
             Db::commit();
+            //发起提现后事件
+            event('AfterCashApply',[
+                'member_id'=>$member_id,
+                'data'=>$data
+            ]);
             return $cash_out['id'];
         } catch ( Exception $e ) {
             Db::rollback();
             throw new CommonException($e->getMessage());
         }
-        return true;
     }
 
     /**
@@ -191,7 +199,7 @@ class CoreMemberCashOutService extends BaseCoreService
         } else {
             ++$max_no;
         }
-        $cash_out_no = $time_str .  sprintf('%03d', $max_no);
+        $cash_out_no = $time_str . sprintf('%03d', $max_no);
         Cache::set('cash_out_no_' . $time_str, $max_no);
         return $cash_out_no;
     }
@@ -237,7 +245,7 @@ class CoreMemberCashOutService extends BaseCoreService
 //            try {
                 //会员提现需要在前端手动发起
 //                if($cash_out['transfer_type'] != TransferDict::WECHAT){
-//                    $this->transfer($cash_out['id']);
+//                    $this->transfer( $cash_out['id']);
 //                }
 
 //            } catch ( Throwable $e ) {
@@ -341,6 +349,10 @@ class CoreMemberCashOutService extends BaseCoreService
                 $cash_out->account_type . '_cash_outing' => $member[$cash_out->account_type . '_cash_outing'] - $cash_out->apply_money
             ]
         );
+        //提现拒绝后事件
+        event('AfterCashRefuse',[
+            'cash_out'=>$cash_out
+        ]);
         return true;
     }
 
@@ -382,7 +394,7 @@ class CoreMemberCashOutService extends BaseCoreService
     /**
      * 取消提现
      * @param int $id
-     * @return void
+     * @return true
      */
     public function cancel(int $id){
         $cash_out = $this->find($id);

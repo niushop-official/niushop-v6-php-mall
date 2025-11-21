@@ -11,36 +11,106 @@
 
 namespace addon\shop\app\api\controller\order;
 
+
 use addon\shop\app\service\api\order\InvoiceService;
+use addon\shop\app\service\api\order\OrderService;
 use core\base\BaseApiController;
-use think\Response;
 
 class Invoice extends BaseApiController
 {
     /**
      * 发票列表
-     * @return Response
+     * @return \think\Response
      */
-    public function lists()
+    public function list()
     {
         $data = $this->request->params([
-            ['create_time', []],
-            ['invoice_time', []],
-            ['header_name', ''],
-            ['header_type', 'all'],
-            ['is_invoice', 'all'],
+            ['status', ''],
         ]);
-        return success(( new InvoiceService() )->getPage($data));
+        $data = (new InvoiceService())->pages($data);
+        return success($data);
     }
 
     /**
-     * 发票详情
-     * @param int $id
-     * @return Response
+     * 发票列表
+     * @return \think\Response
      */
-    public function info(int $id)
+    public function info($id)
     {
-        return success(( new InvoiceService() )->getInfo($id));
+        $data = (new InvoiceService())->detail($id);
+        return success($data);
     }
 
+    /**
+     * 申请开发票
+     * @return \think\Response
+     */
+    public function apply()
+    {
+        $data = $this->request->params([
+            ['trade_ids', []],
+            ['header_type', ''],
+            ['header_name', ''],
+            ['type', ''],
+            ['name', ''],
+            ['tax_number', ''],
+            ['mobile', ''],
+            ['email', ''],
+            ['telephone', ''],
+            ['address', ''],
+            ['bank_name', ''],
+            ['bank_card_number', ''],
+            ['money', ''],
+            ['pay_voucher', ''],
+        ]);
+        (new InvoiceService())->apply($data);
+        return success("SUCCESS");
+    }
+
+    /**
+     * 计算发票金额
+     * @param $trade_ids
+     * @return \think\Response
+     */
+    public function calculate($trade_ids)
+    {
+        $info = (new OrderService())->calculateInvoiceMoney($trade_ids);
+        return success("SUCCESS", $info);
+    }
+
+    /**
+     * 发票列表
+     * @return \think\Response
+     */
+    public function edit($id)
+    {
+        $data = $this->request->params([
+            ['id', $id],
+            ['header_type', ''],
+            ['header_name', ''],
+            ['type', ''],
+            ['name', ''],
+            ['tax_number', ''],
+            ['mobile', ''],
+            ['email', ''],
+            ['telephone', ''],
+            ['address', ''],
+            ['bank_name', ''],
+            ['bank_card_number', ''],
+            ['money', ''],
+            ['pay_voucher', ''],
+        ]);
+        (new InvoiceService())->edit($data);
+        return success('EDIT_SUCCESS');
+    }
+
+    /**
+     * 取消发票
+     * @return \think\Response
+     */
+    public function cancel($id)
+    {
+        (new InvoiceService())->cancel($id);
+        return success('SUCCESS');
+    }
 }

@@ -50,6 +50,7 @@ import { img } from '@/utils/common'
 import useUserStore from '@/stores/modules/user'
 import { useRouter } from 'vue-router'
 import { t } from '@/lang'
+import storage from '@/utils/storage'
 
 const addonIndexRoute = useUserStore().addonIndexRoute
 const router = useRouter()
@@ -65,10 +66,17 @@ getAppList()
 
 const toLink = (item: any) => {
     if (item.url) {
-        router.push(item.url)
+            // 判断如果携带is_target=true就通过新窗口打开
+        if (item.url.indexOf('is_target=true') != -1) {
+            const url = router.resolve(item.url)
+            window.open(url.href)
+        } else {
+            router.push(item.url)
+        }
     } else {
         addonIndexRoute[item.key] && router.push({ name: addonIndexRoute[item.key] })
     }
+    storage.set({ key: 'activeAppKey', data: item.key })
 }
 </script>
 

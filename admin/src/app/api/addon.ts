@@ -96,17 +96,16 @@ export function getInstalledAddonList() {
  * @returns
  */
 export function getShowApp() {
-    return request.get('addon/list/showapp')
+    return request.get('addon/showCustomer')
 }
 
 /**
- * 获取营销列表
+ * 获取站点应用特殊
  * @returns
  */
-export function getShowMarketing() {
-    return request.get('showMarketing')
+export function getShowSpecialMenu() {
+    return request.get('addon/special_menu')
 }
-
 
 export function getAddonInit() {
     return request.get('addon/init')

@@ -45,19 +45,6 @@ class SysNoticeLog extends BaseModel
     // 设置JSON数据返回数组
     protected $jsonAssoc = true;
 
-    /**
-     * 名称
-     * @param $value
-     * @param $data
-     * @return string
-     */
-    public function getContentAttr($value, $data)
-    {
-        if ($value) {
-            $temp = json_decode($value, true);
-        }
-        return $temp ?? $value;
-    }
 
     /**
      * 名称

@@ -25,6 +25,7 @@ return [
         //订单创建后
         'AfterShopOrderCreate' => [
             'addon\shop\app\listener\order\AfterShopOrderCreate',
+            'addon\shop\app\listener\point_exchange\AfterShopOrderCreate',
         ],
 
         //订单支付后
@@ -155,6 +156,9 @@ return [
         //查询营销列表
         'ShowMarketing' => [
             'addon\shop\app\listener\system\ShowMarketingListener'
+        ],
+        'ShowCustomer' => [
+            'addon\shop\app\listener\system\ShowCustomerListener'
         ],
         //获取商品展示价格
         'GoodsShowPrice' => ['addon\shop\app\listener\goods\GoodsShowPriceListener'],

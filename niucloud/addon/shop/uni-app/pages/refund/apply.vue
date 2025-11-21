@@ -6,11 +6,11 @@
                     <view class="m-[var(--top-m)] sidebar-margin px-[var(--pad-sidebar-m)] py-[var(--pad-top-m)] rounded-[var(--rounded-big)] bg-white">
                         <view class="flex">
                             <view class="w-[120rpx] h-[120rpx] flex items-center justify-center">
-                                <u--image :radius="'var(--goods-rounded-small)'" width="120rpx" height="120rpx" :src="img(orderDetail.goods_image.split(',')[0])" model="aspectFill">
+                                <up-image :radius="'var(--goods-rounded-small)'" width="120rpx" height="120rpx" :src="img(orderDetail.goods_image.split(',')[0])" model="aspectFill">
                                     <template #error>
                                         <image class="w-[120rpx] h-[120rpx] rounded-[var(--goods-rounded-small)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill"/>
                                     </template>
-                                </u--image>
+                                </up-image>
                             </view>
                             <view class="flex-1 w-0 ml-[20rpx]">
                                 <view class="text-ellipsis text-[28rpx] leading-normal truncate">{{ orderDetail.goods_name }}</view>

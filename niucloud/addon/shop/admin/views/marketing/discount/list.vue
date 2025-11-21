@@ -199,7 +199,7 @@ const closeEvent = (id:number) => {
         }
     ).then(() => {
         closeActiveDiscount(id).then(() => {
-            loadDiscountList()
+            loadDiscountList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -214,7 +214,7 @@ const deleteEvent = (id:number) => {
         }
     ).then(() => {
         deleteActiveDiscount(id).then(() => {
-            loadDiscountList()
+            loadDiscountList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -243,7 +243,7 @@ const batchDeleteEvent = () => {
         batchDeleteActiveDiscount({
             ids: discount_ids
         }).then(() => {
-            loadDiscountList()
+            loadDiscountList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -272,7 +272,7 @@ const batchcloseEvent = () => {
         batchCloseActiveDiscount({
             ids: discount_ids
         }).then(() => {
-            loadDiscountList()
+            loadDiscountList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })

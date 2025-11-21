@@ -408,7 +408,7 @@ class CoreNiuSmsService extends BaseAdminService
         // 获取域名（含端口）
         $host = $_SERVER['HTTP_HOST'];
         // 组合成全域名
-        $return_url = $protocol . '://' . $host . "/site/setting/sms/pay";
+        $return_url = $protocol . '://' . $host . "/setting/sms/pay";
 
         $url = $this->niushop_url_prefix . sprintf(self::ORDER_PAY_URL, $username);
         $params['notify_url'] = $this->niushop_url_prefix . self::ORDER_NOTIFY_URL;

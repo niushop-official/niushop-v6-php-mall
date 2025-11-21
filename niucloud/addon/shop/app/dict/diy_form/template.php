@@ -36,7 +36,16 @@ return [
                     ],
                     "bottomTabBar" => [
                         'control' => true,
-                        'isShow' => true
+                        'isShow' => true,
+                        'designNav' => [
+                            'title' => '',
+                            'key' => ''
+                        ]
+                    ],
+                    "copyright" => [
+                        'control' => true,
+                        'isShow' => false,
+                        'textColor' =>'#ccc'
                     ],
                     "popWindow" => [
                         "imgUrl" => "",
@@ -262,7 +271,16 @@ return [
                     ],
                     "bottomTabBar" => [
                         'control' => true,
-                        'isShow' => true
+                        'isShow' => true,
+                        'designNav' => [
+                            'title' => '',
+                            'key' => ''
+                        ]
+                    ],
+                    "copyright" => [
+                        'control' => true,
+                        'isShow' => false,
+                        'textColor' =>'#ccc'
                     ],
                     "popWindow" => [
                         "imgUrl" => "",

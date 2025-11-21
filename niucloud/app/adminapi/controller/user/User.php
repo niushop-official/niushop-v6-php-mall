@@ -14,13 +14,13 @@ namespace app\adminapi\controller\user;
 use app\dict\sys\UserDict;
 use app\service\admin\user\UserService;
 use core\base\BaseAdminController;
-use Exception;
 use think\Response;
 
 /**
- * 站点用户接口
- * @description 站点用户
+ * 用户管理
  * Class User
+ * @description 用户管理
+ * @package app\adminapi\controller\user
  */
 class User extends BaseAdminController
 {
@@ -37,28 +37,25 @@ class User extends BaseAdminController
             ['role', ''],
             ['create_time', []],
         ]);
+
         $list = (new UserService())->getPage($data);
         return success($list);
-
     }
 
     /**
      * 用户详情
+     * @description 用户详情
      * @param $uid
      * @return Response
      */
     public function info($uid)
     {
-        if(!is_numeric($uid))
-        {
-            $uid = 0;
-        }
         return success((new UserService())->getInfo($uid));
     }
 
     /**
-     * 获取全部用户
-     * @description 获取全部用户
+     * 获取用户列表
+     * @description 获取用户列表
      * @return Response
      */
     public function getUserAll()
@@ -73,92 +70,141 @@ class User extends BaseAdminController
     }
 
     /**
-     * 新增用户
-     * @description 新增用户
+     * 获取用户下拉框
+     * @description 获取用户下拉框
      * @return Response
-     * @throws Exception
      */
-    public function add()
+    public function getUserSelect()
     {
+        $data = $this->request->params([
+            ['username', '']
+        ]);
+        $list = (new UserService())->getUserSelect($data);
+        return success($list);
+    }
+
+    /**
+     * 检查用户是否存在
+     * @description 检查用户是否存在
+     * @return Response
+     * @throws \think\db\exception\DbException
+     */
+    public function checkUserIsExist() {
+        $data = $this->request->params([
+            ['username', ''],
+        ]);
+        $is_exist = (new UserService())->checkUsername($data['username']);
+        return success(data:$is_exist);
+    }
+
+    /**
+     * 添加用户
+     * @description 添加用户
+     * @return Response
+     * @throws \Exception
+     */
+    public function add() {
         $data = $this->request->params([
             ['username', ''],
             ['password', ''],
+            ['mobile', ''],
             ['real_name', ''],
             ['head_img', ''],
             ['status', UserDict::ON],
             ['role_ids', []]
         ]);
-        $this->validate($data, 'app\validate\sys\User.add');
-        $uid = (new UserService())->addUser($data);
-        return success('ADD_SUCCESS', ['uid' => $uid]);
+        (new UserService())->add($data);
+        return success();
     }
 
     /**
-     * 更新用户
-     * @description 更新用户
+     * 编辑用户
+     * @description 编辑用户
+     * @return Response
+     * @throws \Exception
      */
-    public function edit($uid)
-    {
+    public function edit($uid) {
         $data = $this->request->params([
+            ['password', ''],
+            ['mobile', ''],
             ['real_name', ''],
             ['head_img', ''],
-            ['status', UserDict::ON],
-            ['role_ids', []],
-            ['password', '']
         ]);
-        (new UserService())->editUser($uid, $data);
-        return success('MODIFY_SUCCESS');
+        (new UserService())->edit($uid, $data);
+        return success();
     }
 
     /**
-     * 更新字段
-     * @description 更新字段
-     * @param $uid
-     * @param $field
-     * @return Response
-     */
-    public function modify($uid, $field)
-    {
-        $data = $this->request->params([
-            ['value', ''],
-            ['field', $field]
-        ]);
-        $data[$field] = $data['value'];
-//        $this->validate($data, 'app\validate\sys\User.modify');
-        (new UserService())->modify($uid, $field, $data['value']);
-        return success('MODIFY_SUCCESS');
-    }
-
-    /**
-     * 删除单个用户
-     * @description 删除单个用户
+     * 删除用户
+     * @description 删除用户
      * @param $uid
      * @return Response
      */
-    public function del($uid)
-    {
+    public function del($uid) {
         (new UserService())->del($uid);
-        return success('DELETE_SUCCESS');
+        return success("DELETE_SUCCESS");
     }
 
     /**
-     * 锁定用户
-     * @description 锁定用户
+     * 获取用户站点创建限制
+     * @description 获取用户站点创建限制
+     * @param $uid
+     * @return Response
      */
-    public function lock($uid)
-    {
-        (new UserService())->lock($uid);
-        return success('MODIFY_SUCCESS');
+    public function getUserCreateSiteLimit($uid){
+        return success(data:(new UserService())->getUserCreateSiteLimit($uid));
     }
 
     /**
-     * 解锁用户
-     * @description 解锁用户
+     * 获取用户站点创建限制
+     * @description 获取用户站点创建限制
+     * @param $id
+     * @return Response
      */
-    public function unlock($uid)
-    {
-        (new UserService())->unlock($uid);
-        return success('MODIFY_SUCCESS');
+    public function getUserCreateSiteLimitInfo($id){
+        return success(data:(new UserService())->getUserCreateSiteLimitInfo($id));
     }
 
+    /**
+     * 添加用户站点创建限制
+     * @description 添加用户站点创建限制
+     * @param $uid
+     * @return Response
+     */
+    public function addUserCreateSiteLimit($uid){
+        $data = $this->request->params([
+            ['uid', 0],
+            ['group_id', 0],
+            ['num', 1],
+            ['month', 1],
+        ]);
+        (new UserService())->addUserCreateSiteLimit($data);
+        return success('SUCCESS');
+    }
+
+    /**
+     * 编辑用户站点创建限制
+     * @description 编辑用户站点创建限制
+     * @param $id
+     * @return Response
+     */
+    public function editUserCreateSiteLimit($id){
+        $data = $this->request->params([
+            ['num', 1],
+            ['month', 1],
+        ]);
+        (new UserService())->editUserCreateSiteLimit($id, $data);
+        return success('SUCCESS');
+    }
+
+    /**
+     * 删除用户站点创建限制
+     * @description 删除用户站点创建限制
+     * @param $id
+     * @return Response
+     */
+    public function delUserCreateSiteLimit($id){
+        (new UserService())->delUserCreateSiteLimit($id);
+        return success('SUCCESS');
+    }
 }

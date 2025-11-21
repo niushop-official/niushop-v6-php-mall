@@ -90,8 +90,8 @@ class CoreAppletSiteVersionService extends BaseCoreService
         $list = $this->model->where($where)->with(['appletVersion'])->select()->toArray();
         $list = array_column($list, null, 'version_num');
         ksort($list);
-        $site_version = reset($list);
-        return $site_version['version'] ?? '';
+        $version = reset($list);
+        return $version['version'] ?? '';
     }
 
     /**

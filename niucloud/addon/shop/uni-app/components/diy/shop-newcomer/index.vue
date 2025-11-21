@@ -34,11 +34,11 @@
                 <view class="flex">
                     <view class="inline-flex bg-[#fff] p-[16rpx] box-border" :style="commonTempCss()" @click="toDetail(list[0])">
                         <view class="w-[150rpx] h-[150rpx] flex items-center justify-center">
-                            <u--image :radius="imageRounded.val" width="150rpx" height="150rpx" :src="img(list[0].sku_image || '')" model="aspectFill">
+                            <up-image :radius="imageRounded.val" width="150rpx" height="150rpx" :src="img(list[0].sku_image || '')" model="aspectFill">
                                 <template #error>
                                     <image class="w-[150rpx] h-[150rpx] overflow-hidden" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                 </template>
-                            </u--image>
+                            </up-image>
                         </view>
                         <view class="flex flex-col ml-[20rpx] py-[4rpx] flex-1">
                             <view class="text-[26rpx] w-[200rpx] whitespace-pre-wrap leading-[1.4] multi-hidden" v-if="list[0].goods">{{ list[0].goods.goods_name }}</view>
@@ -56,11 +56,11 @@
                               class="ml-[10rpx] inline-flex flex-col items-center p-[16rpx] bg-[#fff] box-border"
                               :style="commonTempCss()" @click="toDetail(item)">
                             <view class="w-[110rpx] h-[110rpx] flex items-center justify-center">
-                                <u--image :radius="imageRounded.val" width="110rpx" height="110rpx" :src="img(item.sku_image || '')" model="aspectFill">
+                                <up-image :radius="imageRounded.val" width="110rpx" height="110rpx" :src="img(item.sku_image || '')" model="aspectFill">
                                     <template #error>
                                         <image class="w-[110rpx] h-[110rpx] overflow-hidden" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                     </template>
-                                </u--image>
+                                </up-image>
                             </view>
                             <view class="flex items-center mt-[auto]">
                                 <text class="text-[24rpx] font-500">￥</text>
@@ -108,11 +108,11 @@
                           class="item-bg mr-[10rpx] inline-flex flex-col items-center p-[6rpx] bg-[#fff] box-border"
                           :style="commonTempCss()" @click="toDetail(item)">
                         <view class="flex items-center justify-center w-[146rpx] h-[146rpx]">
-                            <u--image :radius="imageRounded.val" width="146rpx" height="146rpx" :src="img(item.sku_image || '')" model="aspectFill">
+                            <up-image :radius="imageRounded.val" width="146rpx" height="146rpx" :src="img(item.sku_image || '')" model="aspectFill">
                                 <template #error>
                                     <image class="w-[146rpx] h-[146rpx] overflow-hidden" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                 </template>
-                            </u--image>
+                            </up-image>
                         </view>
                         <image class="h-[32rpx] w-[auto] mt-[12rpx] mb-[8rpx]" :src="img('addon/shop/diy/newcomer/style_2_img.png')" mode="heightFix" />
                         <view class="flex items-center text-[#fff] pb-[4rpx]">
@@ -164,11 +164,11 @@
                         <view
                             class="bg-[#f8f8f8] flex items-center justify-center w-[152rpx] h-[152rpx] overflow-hidden"
                             :style="imageRounded.style">
-                            <u--image :radius="imageRounded.val" width="152rpx" height="152rpx" :src="img(item.sku_image || '')" model="aspectFill">
+                            <up-image :radius="imageRounded.val" width="152rpx" height="152rpx" :src="img(item.sku_image || '')" model="aspectFill">
                                 <template #error>
                                     <image class="w-[152rpx] h-[152rpx] overflow-hidden" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                 </template>
-                            </u--image>
+                            </up-image>
                         </view>
                         <image class="h-[32rpx] w-[auto] mt-[12rpx] mb-[10rpx]" :src="img('addon/shop/diy/newcomer/style_3_img.png')" mode="heightFix" />
                         <view class="flex items-center text-[#FF0E00] pb-[2rpx]">
@@ -216,11 +216,11 @@
                           :class="{'mr-[20rpx]': index != (list.length-1)}" :style="commonTempCss()"
                           @click="toDetail(item)">
                         <view class="relative flex items-center justify-center w-[100%] h-[130rpx] pt-[40rpx] mb-[10rpx]">
-                            <u--image :radius="imageRounded.val" width="130rpx" height="130rpx" :src="img(item.sku_image || '')" model="aspectFill">
+                            <up-image :radius="imageRounded.val" width="130rpx" height="130rpx" :src="img(item.sku_image || '')" model="aspectFill">
                                 <template #error>
                                     <image class="w-[130rpx] h-[130rpx] overflow-hidden" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                 </template>
-                            </u--image>
+                            </up-image>
                             <view class="content-sign text-[20rpx] text-[#fff]">新人价</view>
                         </view>
                         <view class="w-[210rpx] relative -right-[2rpx] -bottom-[2rpx] flex items-center text-[#FF0E00] pb-[2rpx]">

@@ -164,7 +164,7 @@
                     </div>
                 </div>
 
-                <h3 class="panel-title mt-[30rpx]">{{ t('goodsDetail') }}</h3>
+                <h3 class="panel-title">{{ t('goodsDetail') }}</h3>
                 <el-table :data="formData.order_goods" size="large">
                     <el-table-column :label="t('goodsName')" align="left" width="300">
                         <template #default="{ row }">

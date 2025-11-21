@@ -27,7 +27,7 @@ class ManjianStart extends BaseJob
      */
     public function doJob()
     {
-        //Log::write('满减送自动开启');
+        Log::write('满减送自动开启');
         try {
 
             $ids = (new Manjian())->where([

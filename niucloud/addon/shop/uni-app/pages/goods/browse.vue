@@ -1,7 +1,7 @@
 <template>
     <view class="bg-[var(--page-bg-color)] min-h-screen overflow-hidden" :style="themeColor()">
         <view class="fixed top-0 left-0 right-0 z-200">
-            <view class="tab-style-1 py-[20rpx] bg-[#fff] border-0  border-solid border-b-[1rpx] border-[#f6f6f6] ">
+            <view class="tab-style-1 py-[20rpx] pt-[30rpx] bg-[#f6f6f6] border-0  border-solid border-b-[1rpx] border-[#f6f6f6] ">
                 <view class="tab-left text-[28rpx]">
                     <text>共</text>
                     <text class="text-primary">{{ browseTotal }}</text>
@@ -18,8 +18,8 @@
             </view>
         </view>
         <mescroll-body ref="mescrollRef" top="76" bottom="168" @init="mescrollInit" :down="{ use: false }" @up="getBrowseListFn">
-            <view v-if="browseList.length">
-                <view class="bg-[#fff] mb-[20rpx] pt-[30rpx] px-[20rpx]" v-for="(item,index) in browseList" :key="index">
+            <view class="sidebar-margin pt-[var(--top-m)]" v-if="browseList.length">
+                <view class="bg-[#fff] mb-[20rpx] pt-[30rpx] px-[20rpx] card-template" v-for="(item,index) in browseList" :key="index">
                     <view class="flex items-center h-[34rpx]  mb-[20rpx]">
                         <view class="self-center w-[58rpx]  flex items-center" v-if="isEdit" @click.stop="isSelectGroup(item)">
                             <view class="bg-[#fff] w-[34rpx] h-[34rpx] rounded-[17rpx] flex items-center justify-center">
@@ -30,14 +30,14 @@
                         <view class="text-[28rpx] font-500 text-[#333] ">{{ item.date }}</view>
                     </view>
                     <view class="flex flex-wrap">
-                        <view class="w-[230rpx] mb-[20rpx]" :class="{'mr-[10rpx]': (subIndex + 1) % 3 }" v-for="(subItem,subIndex) in item.list" :key="subIndex" @click="toDetail(subItem)">
-                            <view class="relative w-[230rpx] h-[230rpx] rounded-[var(--goods-rounded-mid)] overflow-hidden mb-[10rpx]">
-                                <u--image width="230rpx" height="230rpx" :radius="'var(--goods-rounded-mid)'" :src="img(subItem.goods_cover_thumb_mid ? subItem.goods_cover_thumb_mid : '')" mode="aspectFill">
+                        <view class="w-[216rpx] mb-[20rpx]" :class="{'mr-[10rpx]': (subIndex + 1) % 3 }" v-for="(subItem,subIndex) in item.list" :key="subIndex" @click="toDetail(subItem)">
+                            <view class="relative w-[216rpx] h-[216rpx] rounded-[var(--goods-rounded-mid)] overflow-hidden mb-[10rpx]">
+                                <up-image width="216rpx" height="216rpx" :radius="'var(--goods-rounded-mid)'" :src="img(subItem.goods_cover_thumb_mid ? subItem.goods_cover_thumb_mid : '')" mode="aspectFill">
                                     <template #error>
-                                        <image class="w-[230rpx] h-[230rpx] rounded-[var(--goods-rounded-mid)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
+                                        <image class="w-[216rpx] h-[216rpx] rounded-[var(--goods-rounded-mid)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                     </template>
-                                </u--image>
-                                <view v-if="subItem.status == 0 " class="absolute left-0 top-0  w-[230rpx] h-[230rpx]  leading-[230rpx] text-center " style="background-color: rgba(0,0,0,0.3);">
+                                </up-image>
+                                <view v-if="subItem.status == 0 " class="absolute left-0 top-0  w-[216rpx] h-[216rpx]  leading-[216rpx] text-center " style="background-color: rgba(0,0,0,0.3);">
                                     <text class="text-[#fff] text-[28rpx]">已失效</text>
                                 </view>
                                 <view class="absolute top-0 left-0 right-0 bottom-0 p-[10rpx] flex justify-end items-start z-100"
@@ -121,12 +121,25 @@ const getBrowseListFn = (mescroll: any) => {
             browseList.value = []; //如果是第一页需手动制空列表
         }
         // 按日期分组
+        // const groupedData = newArr.reduce((acc: any, item: any) => {
+        //     const date = item.browse_time.split(' ')[0]; // 提取日期部分
+        //     if (!acc[date]) {
+        //         acc[date] = [];
+        //     }
+        //     acc[date].push(item);
+        //     return acc;
+        // }, {});
+        // 按日期分组（修改日期格式）
         const groupedData = newArr.reduce((acc: any, item: any) => {
-            const date = item.browse_time.split(' ')[0]; // 提取日期部分
-            if (!acc[date]) {
-                acc[date] = [];
+            const ymdDate = item.browse_time.split(' ')[0]; // 提取日期部分
+            const [year, month, day] = ymdDate.split('-'); // 拆分年月日
+            const formattedDate = `${month}月${day}日`; // 重组日期格式
+
+            // 4. 按重组后的日期分组
+            if (!acc[formattedDate]) {
+                acc[formattedDate] = [];
             }
-            acc[date].push(item);
+            acc[formattedDate].push(item);
             return acc;
         }, {});
 

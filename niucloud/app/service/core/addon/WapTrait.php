@@ -38,7 +38,7 @@ trait WapTrait
         $content .= "           <view v-show=\"component.componentIsShow\"\n";
         $content .= "               @click=\"diyStore.changeCurrentIndex(index, component)\"\n";
         $content .= "               :class=\"diyGroup.getComponentClass(index,component)\" :style=\"component.pageStyle\">\n";
-        $content .= "                <view class=\"relative\" :style=\"{ marginTop : component.margin.top < 0 ? (component.margin.top * 2) + 'rpx' : '0' }\">\n";
+        $content .= "                <view class=\"relative\" :style=\"{ marginTop : component.margin.top < 0 ? (component.margin.top * 2) + 'rpx' : '0', marginBottom : component.margin.bottom < 0 ? (component.margin.bottom * 2) + 'rpx' : '0' }\">\n";
         $content .= "                   <!-- 装修模式下，设置负上边距后超出的内容，禁止选中设置 -->\n";
         $content .= "                    <view v-if=\"diyGroup.isShowPlaceHolder(index,component)\" class=\"absolute w-full z-1\" :style=\"{ height : (component.margin.top * 2 * -1) + 'rpx' }\" @click.stop=\"diyGroup.placeholderEvent\"></view>\n";
 
@@ -83,7 +83,12 @@ trait WapTrait
             }
         }
         if (!empty($addon)) {
-            $addon_arr[] = $addon; // 追加新装插件
+            // 追加新装插件
+            if (is_array($addon)) {
+                $addon_arr = array_merge($addon_arr, $addon);
+            } else if (is_string($addon)) {
+                $addon_arr[] = $addon;
+            }
         }
         $addon_arr = array_unique($addon_arr);
 
@@ -121,9 +126,12 @@ trait WapTrait
         $content .= "                </view>\n";
         $content .= "            </view>\n";
         $content .= "        </template>\n";
+        $content .= "        <template v-if=\"diyStore.mode == '' && data.global && diyGroup.showCopyright.value && data.global.copyright && data.global.copyright.isShow\">\n";
+        $content .= "           <copy-right :textColor=\"data.global.copyright.textColor\" />\n";
+        $content .= "        </template>\n\n";
         $content .= "        <template v-if=\"diyStore.mode == '' && data.global && data.global.bottomTabBar && data.global.bottomTabBar.isShow\">\n";
         $content .= "            <view class=\"pt-[20rpx]\"></view>\n";
-        $content .= "            <tabbar />\n";
+        $content .= "            <tabbar :addon=\"data.global.bottomTabBar.designNav.key\" />\n";
         $content .= "        </template>\n";
         $content .= "    </view>\n";
         $content .= "</template>\n";
@@ -181,7 +189,7 @@ trait WapTrait
      * @param $compile_path
      * @return bool|int|void
      */
-    public function installPageCode($compile_path)
+    public function installPageCode($compile_path, $addon = '')
     {
         if (!file_exists($this->geAddonPackagePath($this->addon) . 'uni-app-pages.php')) return;
 
@@ -192,7 +200,25 @@ trait WapTrait
         }
 
         $pages = [];
-        $addon_arr = array_unique(array_merge([ $this->addon ], array_column(( new CoreAddonService() )->getInstallAddonList(), 'key')));
+
+        $addon_service = new CoreAddonService();
+        $addon_list = $addon_service->getInstallAddonList();
+        $addon_arr = [];
+        if (!empty($addon_list)) {
+            foreach ($addon_list as $k => $v) {
+                $addon_arr[] = $v[ 'key' ];
+            }
+        }
+        if (!empty($addon)) {
+            // 追加新装插件
+            if (is_array($addon)) {
+                $addon_arr = array_merge($addon_arr, $addon);
+            } else if (is_string($addon)) {
+                $addon_arr[] = $addon;
+            }
+        }
+        $addon_arr = array_unique($addon_arr);
+
         foreach ($addon_arr as $addon) {
             if (!file_exists($this->geAddonPackagePath($addon) . 'uni-app-pages.php')) continue;
             $uniapp_pages = require $this->geAddonPackagePath($addon) . 'uni-app-pages.php';
@@ -281,8 +307,16 @@ trait WapTrait
                     $json = json_decode($app_json, true);
                     // 清空当前安装/卸载的插件语言包
                     foreach ($json as $jk => $jc) {
-                        if (strpos($jk, $addon) !== false) {
-                            unset($json[ $jk ]);
+                        if (is_array($addon)) {
+                            foreach ($addon as $key) {
+                                if (strpos($jk, $key) !== false) {
+                                    unset($json[ $jk ]);
+                                }
+                            }
+                        } else {
+                            if (strpos($jk, $addon) !== false) {
+                                unset($json[ $jk ]);
+                            }
                         }
                     }
                     $locale_data[ $cv ] = [
@@ -302,8 +336,16 @@ trait WapTrait
                 $addon_arr[] = $v[ 'key' ];
             }
         }
-        $addon_arr[] = $addon; // 追加新装插件
+        if (!empty($addon)) {
+            // 追加新装插件
+            if (is_array($addon)) {
+                $addon_arr = array_merge($addon_arr, $addon);
+            } else if (is_string($addon)) {
+                $addon_arr[] = $addon;
+            }
+        }
         $addon_arr = array_unique($addon_arr);
+
         foreach ($addon_arr as $k => $v) {
             $addon_path = $compile_path . str_replace('/', DIRECTORY_SEPARATOR, 'addon/' . $v . '/locale'); // 插件语言包根目录
             $addon_file_arr = getFileMap($addon_path, []);
@@ -337,7 +379,6 @@ trait WapTrait
     {
         $manifest_json = str_replace('/', DIRECTORY_SEPARATOR, $compile_path . 'src/manifest.json');
         $manifest_content = $this->jsonStringToArray(file_get_contents($manifest_json));
-
         ( new CoreAddonBaseService() )->writeArrayToJsonFile(array_merge2($manifest_content, $merge_data), $manifest_json);
     }
 
@@ -348,8 +389,7 @@ trait WapTrait
      */
     private function jsonStringToArray($string)
     {
-        $list = explode(PHP_EOL, $string);
-
+        $list = explode("\n", $string);
         $json_array = [];
         foreach ($list as $index => $item) {
             if (strpos($item, '/*') === false) {

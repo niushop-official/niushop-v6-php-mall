@@ -150,6 +150,7 @@ class ConfigService extends BaseAdminService
     {
         $data = [
             'key' => $value[ 'key' ],
+            'amap_key' => $value['amap_key'],
             'is_open' => $value[ 'is_open' ], // 是否开启定位
             'valid_time' => $value[ 'valid_time' ] // 定位有效期/分钟，过期后将重新获取定位信息，0为不过期
         ];
@@ -167,6 +168,7 @@ class ConfigService extends BaseAdminService
             $info = [];
             $info[ 'value' ] = [
                 'key' => '',
+                'amap_key' => '',
                 'is_open' => 1, // 是否开启定位
                 'valid_time' => 5 // 定位有效期/分钟，过期后将重新获取定位信息，0为不过期
             ];
@@ -174,6 +176,8 @@ class ConfigService extends BaseAdminService
 
         $info[ 'value' ][ 'is_open' ] = $info[ 'value' ][ 'is_open' ] ?? 1;
         $info[ 'value' ][ 'valid_time' ] = $info[ 'value' ][ 'valid_time' ] ?? 5;
+        $info[ 'value' ][ 'amap_key' ] = $info[ 'value' ][ 'amap_key' ] ?? '';
+
         return $info[ 'value' ];
     }
 
@@ -199,11 +203,56 @@ class ConfigService extends BaseAdminService
     /**
      * 设置开发者key
      * @param array $data
-     * @return \app\model\sys\SysConfig|array|bool|\think\Model
+     * @return array
      */
     public function setDeveloperToken(array $data)
     {
         return ( new CoreConfigService() )->setConfig("DEVELOPER_TOKEN", $data);
     }
+
+    /**
+     * 获取开发者key
+     * @return array
+     */
+    public function getLayout()
+    {
+        return ( new CoreConfigService() )->getConfigValue("LAYOUT_SETTING");
+    }
+
+    /**
+     * 设置布局风格
+     * @param array $data
+     * @return array
+     */
+    public function setLayout(array $data)
+    {
+        $config_service = new CoreConfigService();
+        $config = $config_service->getConfigValue( "LAYOUT_SETTING");
+        $config[ $data[ 'key' ] ] = $data[ 'value' ];
+        return ( new CoreConfigService() )->setConfig( "LAYOUT_SETTING", $config);
+    }
+
+    /**
+     * 获取色调设置
+     * @return array
+     */
+    public function getThemeColor()
+    {
+        return ( new CoreConfigService() )->getConfigValue( "THEMECOLOR_SETTING");
+    }
+
+    /**
+     * 设置色调
+     * @param array $data
+     * @return array
+     */
+    public function setThemeColor(array $data)
+    {
+        $config_service = new CoreConfigService();
+        $config = $config_service->getConfigValue("THEMECOLOR_SETTING");
+        $config[ $data[ 'key' ] ] = $data[ 'value' ];
+        return ( new CoreConfigService() )->setConfig("THEMECOLOR_SETTING", $config);
+    }
+
 
 }

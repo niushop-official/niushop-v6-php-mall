@@ -779,7 +779,7 @@ class DiyService extends BaseAdminService
      */
     public function getDiyTheme()
     {
-        $addon_list = ( new CoreAddonService() )->getInstallAddonList();
+        $addon_list = ( new CoreAddonService() )->getInstallAddonList(false);
         $apps = [];
         foreach ($addon_list as $k => $v) {
             if ($v[ 'type' ] == 'app') {

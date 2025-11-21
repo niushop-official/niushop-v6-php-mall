@@ -31,7 +31,7 @@ class DiscountEnd extends BaseJob
      */
     public function doJob()
     {
-        //Log::write('DiscountEnd 限时折扣自动关闭');
+        Log::write('DiscountEnd 限时折扣自动关闭');
         try {
 
             $ids = (new Discount())->where([
