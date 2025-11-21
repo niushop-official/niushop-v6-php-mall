@@ -15,6 +15,7 @@ use addon\shop\app\model\exchange\Exchange;
 use addon\shop\app\service\api\goods\GoodsService;
 use app\model\member\Member;
 use app\service\core\sys\CoreSysConfigService;
+use think\facade\Log;
 
 /**
  * 商品海报数据
@@ -166,7 +167,10 @@ class ShopPoster
 
             }
             $show_price = min($show_price_data);
-
+            $max_length = 35;
+            if (mb_strlen($goods_name, 'UTF-8') > $max_length) {
+                $goods_name = mb_substr($goods_name, 0, $max_length, 'UTF-8') . '...';
+            }
             $return_data = [
                 'goods_name' => $goods_name,
 //                'services' => $services,
@@ -183,6 +187,7 @@ class ShopPoster
                 $return_data[ 'nickname' ] = mb_strlen($member_info[ 'nickname' ]) > 10 ? mb_substr($member_info[ 'nickname' ], 0, 7, 'utf-8') . '...' : $member_info[ 'nickname' ];
                 $return_data[ 'headimg' ] = $member_info[ 'headimg' ];
             }
+            Log::write('海报数据'.json_encode($return_data,256));
             return $return_data;
         } elseif ($type == 'shop_point_goods') {
 
@@ -259,6 +264,7 @@ class ShopPoster
                 $return_data[ 'headimg' ] = $member_info[ 'headimg' ];
             }
             return $return_data;
+
         }
     }
 }

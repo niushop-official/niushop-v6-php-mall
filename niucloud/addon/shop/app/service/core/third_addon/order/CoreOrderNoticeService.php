@@ -71,12 +71,14 @@ class CoreOrderNoticeService extends BaseCoreService
         event('ThirdOrderRefundFinishNotice', [
             'source' => 'shop',
             'source_order_id' => $refund_data['order_id'],
+            'source_order_item_id' => $refund_data['order_goods_id'],
             'relate_source' => $relate_source,
             'relate_order_id' => $relate_order_id,
             'reason' => $refund_data['reason'],
             'refund_type' => $refund_data['refund_type'],
             'apply_time' => $refund_data['create_time'],
             'apply_money' => $refund_data['apply_money'],
+            'is_refund_third_cost' => $refund_data['is_refund_delivery'],//是否退三方费用  比如退配送费
             'money' => $refund_data['money'],
             'refund_no' => $refund_data['refund_no'],
             'order_refund_no'=>$refund_data['order_refund_no'],

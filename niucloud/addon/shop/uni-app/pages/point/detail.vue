@@ -121,11 +121,11 @@
                             <view class="flex justify-between w-full mt-[16rpx]">
                                 <view class="flex-1 w-[540rpx] text-[26rpx] text-[#333] max-h-[72rpx] leading-[36rpx] multi-hidden mr-[50rpx]">{{ item.content }}</view>
                                 <view class="w-[80rpx] shrink-0">
-                                    <u--image v-if="item.image_mid && item.image_mid.length" width="80rpx" height="80rpx" radius="16rpx" :src="img(item.image_mid[0])" model="aspectFill" @click="imgListPreview(item.images[0])">
+                                    <up-image v-if="item.image_mid && item.image_mid.length" width="80rpx" height="80rpx" radius="16rpx" :src="img(item.image_mid[0])" model="aspectFill" @click="imgListPreview(item.images[0])">
                                         <template #error>
                                             <u-icon name="photo" color="#999" size="50"></u-icon>
                                         </template>
-                                    </u--image>
+                                    </up-image>
                                 </view>
                             </view>
                         </view>
@@ -523,6 +523,13 @@ const navbarInnerStyle = computed(() => {
         style += 'font-size: 36rpx;';
     }
     // #endif
+    
+    // #ifdef APP-PLUS
+    style += 'height: 100rpx;';
+    style += 'padding-right: 30rpx;';
+    style += 'padding-left: 30rpx;';
+    style += 'top:' + (systemStore.systemInfo.statusBarHeight) + 'px;';
+    // #endif
     return style;
 })
 
@@ -600,7 +607,7 @@ onUnload(() => {
 })
 
 // 图片轮播change事件
-const swiperChangeFn = (e: any) => { 
+const swiperChangeFn = (e: any) => {
     swiperCurrentIndex.value = e.current + 1;
 }
 </script>
@@ -670,6 +677,6 @@ const swiperChangeFn = (e: any) => {
     }
 }
 .goods-video-height{
-   height: calc(100vw - 44rpx); 
+   height: calc(100vw - 44rpx);
 }
 </style>

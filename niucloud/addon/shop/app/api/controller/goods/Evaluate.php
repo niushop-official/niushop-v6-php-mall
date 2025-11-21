@@ -29,10 +29,10 @@ class Evaluate extends BaseApiController
     public function pages()
     {
         $data = $this->request->params([
-            [ 'goods_id', 0 ],
-            [ 'scores', [] ],
+            ['goods_id', 0],
+            ['scores', []],
         ]);
-        return success(( new EvaluateService() )->getPage($data));
+        return success((new EvaluateService())->getPage($data));
     }
 
     /**
@@ -42,7 +42,7 @@ class Evaluate extends BaseApiController
      */
     public function info(int $id)
     {
-        return success(( new EvaluateService() )->getInfo($id));
+        return success((new EvaluateService())->getInfo($id));
     }
 
     /**
@@ -52,9 +52,9 @@ class Evaluate extends BaseApiController
     public function add()
     {
         $data = $this->request->params([
-            [ "evaluate_array", [] ],
+            ["evaluate_array", []],
         ]);
-        ( new EvaluateService() )->add($data);
+        (new EvaluateService())->add($data);
         return success('SHOP_GOODS_EVALUATE_SUCCESS');
     }
 
@@ -66,9 +66,9 @@ class Evaluate extends BaseApiController
     public function count()
     {
         $data = $this->request->params([
-            [ 'goods_id', 0 ],
+            ['goods_id', 0],
         ]);
-        return success(( new EvaluateService() )->getCount($data[ 'goods_id' ]));
+        return success((new EvaluateService())->getCount($data['goods_id']));
     }
 
     /**
@@ -81,9 +81,9 @@ class Evaluate extends BaseApiController
     public function lists()
     {
         $data = $this->request->params([
-            [ 'goods_id', 0 ],
+            ['goods_id', 0],
         ]);
-        return success(( new EvaluateService() )->getList($data[ 'goods_id' ]));
+        return success((new EvaluateService())->getList($data['goods_id']));
     }
 
     /**
@@ -92,6 +92,6 @@ class Evaluate extends BaseApiController
      */
     public function getEvaluate($id)
     {
-        return success(( new EvaluateService() )->getDetail($id));
+        return success((new EvaluateService())->getDetail($id));
     }
 }

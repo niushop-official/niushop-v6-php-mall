@@ -46,7 +46,7 @@
                 </div>
             </div>
         </el-card>
-        <delivery-personnel-edit ref="editCategoryDialog" @complete="getShopDeliveryFn" />
+        <delivery-personnel-edit ref="editCategoryDialog" @complete="getShopDeliveryFn(getTablePageStorage(tableData.searchParam).page)" />
     </div>
 </template>
 <script lang="ts" setup>
@@ -125,7 +125,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteShopDeliver(id).then(() => {
-            getShopDeliveryFn()
+            getShopDeliveryFn(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })

@@ -25,9 +25,11 @@ class SupportAddonListener
             'name' => '商城'
         ];
         $data = [
+            'friend_help' => $shop_arr,
             'seckill' => $shop_arr,
-            'pintuan' => $shop_arr
+            'pintuan' => $shop_arr,
+            'relay' => $shop_arr
         ];
-        return $data[$source] ?? [];
+        return [$data[$source]] ?? [];
     }
 }

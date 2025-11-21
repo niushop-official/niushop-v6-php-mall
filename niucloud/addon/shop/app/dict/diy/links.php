@@ -135,6 +135,13 @@ return [
                         'is_share' => 1,
                         'action' => ''
                     ],
+                    [
+                        'name' => 'SHOP_INVOICE_LIST',
+                        'title' => get_lang('dict_diy.shop_link_invoice_list'),
+                        'url' => '/addon/shop/pages/invoice/list',
+                        'is_share' => 1,
+                        'action' => ''
+                    ],
                 ]
             ],
             [

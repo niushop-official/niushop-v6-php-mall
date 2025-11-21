@@ -324,9 +324,15 @@ watch(() => formData.district_id, (nval) => {
 
 const areaChange = debounce(() => {
     setTimeout(() => {
-        let province = areaList.province.map((item) => { if (item.id == formData.province_id) { return item.name } })
-        let city = areaList.city.map((item) => { if (item.id == formData.city_id) { return item.name } })
-        let district = areaList.district.map((item) => { if (item.id == formData.district_id) { return item.name } })
+        // let province = areaList.province.map((item) => { if (item.id == formData.province_id) { return item.name } })
+        // let city = areaList.city.map((item) => { if (item.id == formData.city_id) { return item.name } })
+        // let district = areaList.district.map((item) => { if (item.id == formData.district_id) { return item.name } })
+        // 获取省名称：找到第一个id匹配的省，取它的name；没找到则返回空字符串
+        let province = areaList.province.find(item => item.id == formData.province_id)?.name || '';
+        // 获取市名称
+        let city = areaList.city.find(item => item.id == formData.city_id)?.name || '';
+        // 获取区名称
+        let district = areaList.district.find(item => item.id == formData.district_id)?.name || '';
 
         const address = [
             formData.province_id ? (provinceRef.value.selectedLabel || province) : '',
@@ -334,7 +340,6 @@ const areaChange = debounce(() => {
             formData.district_id ? (districtRef.value.selectedLabel || district) : '',
             formData.address
         ]
-
         addressToLatLng({ mapKey, address: address.join('') }).then(({ message, result }) => {
             if (message == 'Success' || message == 'query ok') {
                 const latLng = new (window as any).TMap.LatLng(result.location.lat, result.location.lng)
@@ -394,10 +399,16 @@ const onSave = async (formEl: FormInstance | undefined) => {
             loading.value = true
 
             const data = formData
+            let province = areaList.province.find(item => item.id == formData.province_id)?.name || '';
+            // 获取市名称：逻辑同上
+            let city = areaList.city.find(item => item.id == formData.city_id)?.name || '';
+            // 获取区名称：逻辑同上
+            let district = areaList.district.find(item => item.id == formData.district_id)?.name || '';
+
             const address = [
-                data.province_id ? provinceRef.value.selectedLabel : '',
-                data.city_id ? cityRef.value.selectedLabel : '',
-                data.district_id ? districtRef.value.selectedLabel : '',
+                data.province_id ? (provinceRef.value.selectedLabel || province) : '',
+                data.city_id ? (cityRef.value.selectedLabel || city) : '',
+                data.district_id ? (districtRef.value.selectedLabel || district) : '',
                 data.address
             ]
             data.full_address = address.join('')

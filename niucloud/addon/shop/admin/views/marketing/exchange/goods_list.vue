@@ -238,7 +238,7 @@ const statusEvent = (id: number, status: number) => {
         }
     ).then(() => {
         editActiveExchangeStatus({ id, status }).then(() => {
-            loadExchangeGoodsList()
+            loadExchangeGoodsList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -253,7 +253,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteActiveExchange(id).then(() => {
-            loadExchangeGoodsList()
+            loadExchangeGoodsList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -282,7 +282,7 @@ const batchDeleteEvent = () => {
         batchDeleteActiveExchange({
             ids: exchange_ids
         }).then(() => {
-            loadExchangeGoodsList()
+            loadExchangeGoodsList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -311,7 +311,7 @@ const batchDownEvent = () => {
         batchDownActiveExchange({
             ids: exchange_ids
         }).then(() => {
-            loadExchangeGoodsList()
+            loadExchangeGoodsList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -340,7 +340,7 @@ const batchUpEvent = () => {
         batchUpActiveExchange({
             ids: exchange_ids
         }).then(() => {
-            loadExchangeGoodsList()
+            loadExchangeGoodsList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })

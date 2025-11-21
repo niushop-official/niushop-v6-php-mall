@@ -4,11 +4,11 @@
             <template v-for="(item, index)  in info" :key="index">
                 <view class="card-template mb-[var(--top-m)]">
                     <view class="bg-[var(--temp-bg)] p-[20rpx] rounded-[var(--rounded-mid)] flex">
-                        <u--image radius="var(--goods-rounded-mid)" width="150rpx" height="150rpx" :src="img(item.goods_image_thumb_small ? item.goods_image_thumb_small : '')" model="aspectFill">
+                        <up-image radius="var(--goods-rounded-mid)" width="150rpx" height="150rpx" :src="img(item.goods_image_thumb_small ? item.goods_image_thumb_small : '')" model="aspectFill">
                             <template #error>
                                 <u-icon name="photo" color="#999" size="50"></u-icon>
                             </template>
-                        </u--image>
+                        </up-image>
                         <view class="flex-1 flex flex-wrap ml-[20rpx] my-[4rpx]">
                             <view>
                                 <view class="text-[26rpx] leading-[40rpx] max-w-[450rpx] truncate">{{ item.goods_name }}</view>
@@ -60,7 +60,7 @@ import { getShopOrderDetail } from '@/addon/shop/api/order';
 import { setOrderEvaluate } from '@/addon/shop/api/evaluate';
 import { onLoad } from '@dcloudio/uni-app';
 import { img, redirect, goback } from '@/utils/common';
-import uploadImg from '@/addon/shop/pages/evaluate/components/upload-img'
+// import uploadImg from '@/addon/shop/pages/evaluate/components/upload-img'
 
 const info = ref<Array<any>>([])
 const form = ref<Array<any>>([])

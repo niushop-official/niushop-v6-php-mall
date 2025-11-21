@@ -3,7 +3,7 @@
         <view class="bg-[var(--page-bg-color)] min-h-screen overflow-hidden" v-if="!loading">
             <view class="pb-[200rpx]" v-if="type != 'logistics'">
                 <view class="bg-linear">
-                    <!-- #ifdef MP-WEIXIN -->
+                    <!-- #ifdef MP-WEIXIN || APP-PLUS -->
                     <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()" />
                     <!-- #endif -->
                     <view v-if="detail.status_name"
@@ -18,11 +18,11 @@
                 </view>
                 <view class="sidebar-margin card-template flex justify-between flex-wrap mt-[-76rpx]">
                     <view class="w-[150rpx] h-[150rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" @click="goodsEvent(detail.order_goods.goods_id)">
-                        <u--image radius="var(--goods-rounded-big)" width="150rpx" height="150rpx" :src="img(detail.order_goods.goods_image_thumb_small ? detail.order_goods.goods_image_thumb_small : '')" model="aspectFill">
+                        <up-image radius="var(--goods-rounded-big)" width="150rpx" height="150rpx" :src="img(detail.order_goods.goods_image_thumb_small ? detail.order_goods.goods_image_thumb_small : '')" model="aspectFill">
                             <template #error>
                                 <image class="w-[150rpx] h-[150rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill"/>
                             </template>
-                        </u--image>
+                        </up-image>
                     </view>
                     <view class="ml-[20rpx] flex flex-1 flex-col justify-between">
                         <view>
@@ -124,20 +124,20 @@
                             </nc-contact>
                         </view>
                         <!-- #endif -->
-                        <view class="px-[10rpx] box-border text-[24rpx] h-[60rpx] flex-center border-[2rpx] border-solid border-[#ccc] text-[#333] rounded-full ml-[20rpx]"
+                        <view class="order-grey-hollow-btn ml-[20rpx]"
                             @click="refundBtnFn('cancel')" v-if="['6','7','8','-1','-3'].indexOf(detail.status) == -1">{{ t('refundApply') }}</view>
-                        <view v-if="['3'].indexOf(detail.status) != -1" class="px-[10rpx] box-border text-[#333] text-[24rpx] h-[60rpx] flex-center border-[2rpx] border-solid border-[#ccc] rounded-full ml-[20rpx] px-[20rpx]"
+                        <view v-if="['3'].indexOf(detail.status) != -1" class="order-grey-hollow-btn ml-[20rpx]"
                               @click.stop="refundBtnFn('edit')">编辑退款信息</view>
-                        <view v-if="['2'].indexOf(detail.status) != -1" class="px-[10rpx] box-border text-[#333] text-[24rpx] h-[60rpx] flex-center border-[2rpx] border-solid border-[#ccc] rounded-full ml-[20rpx] px-[20rpx]"
+                        <view v-if="['2'].indexOf(detail.status) != -1" class="order-grey-hollow-btn ml-[20rpx]"
                               @click.stop="refundBtnFn('logistics')">填写发货物流</view>
-                        <view v-if="['5'].indexOf(detail.status) != -1" class="px-[10rpx] box-border text-[#333] text-[24rpx] h-[60rpx] flex-center border-[2rpx] border-solid border-[#ccc] rounded-full ml-[20rpx] px-[20rpx]"
+                        <view v-if="['5'].indexOf(detail.status) != -1" class="order-grey-hollow-btn ml-[20rpx]"
                               @click.stop="refundBtnFn('editLogistics')">编辑发货物流</view>
                     </view>
                 </view>
             </view>
             <view v-else>
                 <view class="bg-linear">
-                    <!-- #ifdef MP-WEIXIN -->
+                    <!-- #ifdef MP-WEIXIN || APP-PLUS -->
                     <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()" />
                     <!-- #endif -->
                     <view
@@ -150,11 +150,11 @@
                 </view>
                 <view class="sidebar-margin card-template mt-[-79rpx] flex justify-between flex-wrap">
                     <view class="w-[150rpx] h-[150rpx] flex-2" @click="goodsEvent(detail.order_goods.goods_id)">
-                        <u--image radius="var(--goods-rounded-big)" width="150rpx" height="150rpx" :src="img(detail.order_goods.sku_image ? detail.order_goods.sku_image.split(',')[0] : '')" model="aspectFill">
+                        <up-image radius="var(--goods-rounded-big)" width="150rpx" height="150rpx" :src="img(detail.order_goods.sku_image ? detail.order_goods.sku_image.split(',')[0] : '')" model="aspectFill">
                             <template #error>
                                 <image class="w-[150rpx] h-[150rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill"/>
                             </template>
-                        </u--image>
+                        </up-image>
                     </view>
                     <view class="ml-[20rpx] flex flex-1 flex-col justify-between">
                         <view>
@@ -189,27 +189,27 @@
                 </view>
                 <view class="sidebar-margin card-template top-mar py-[var(--top-m)] mb-[var(--top-m)]">
                     <view class="title">物流信息</view>
-                    <u--form labelPosition="left" :model="formData" :rules="rules" errorType='toast' ref="deliveryForm" labelWidth="140rpx" :labelStyle="{'fontSize': '28rpx'}">
+                    <up-form labelPosition="left" :model="formData" :rules="rules" errorType='toast' ref="deliveryForm" labelWidth="140rpx" :labelStyle="{'fontSize': '28rpx'}">
                         <u-form-item label="物流公司" prop="express_company" :borderBottom="false">
-                            <u--input border="none" v-model="formData.express_company" placeholder="请输入物流公司"
+                            <up-input border="none" v-model="formData.express_company" placeholder="请输入物流公司"
                                       placeholderClass="text-sm !text-[var(--text-color-light9)]" fontSize="28rpx"
-                                      maxlength="50"></u--input>
+                                      maxlength="50"></up-input>
                         </u-form-item>
                         <view class="mt-[16rpx]">
                             <u-form-item label="物流单号" prop="express_number" :borderBottom="false">
-                                <u--input border="none" placeholder="请输入物流单号" v-model="formData.express_number"
+                                <up-input border="none" placeholder="请输入物流单号" v-model="formData.express_number"
                                           placeholderClass="text-sm !text-[var(--text-color-light9)]" fontSize="28rpx"
-                                          maxlength="100"></u--input>
+                                          maxlength="100"></up-input>
                             </u-form-item>
                         </view>
                         <view class="mt-[16rpx]">
                             <u-form-item label="物流说明" :borderBottom="false">
-                                <u--input border="none" placeholder="选填" v-model="formData.remark"
+                                <up-input border="none" placeholder="选填" v-model="formData.remark"
                                           placeholderClass="text-sm !text-[var(--text-color-light9)]" fontSize="28rpx"
-                                          maxlength="100"></u--input>
+                                          maxlength="100"></up-input>
                             </u-form-item>
                         </view>
-                    </u--form>
+                    </up-form>
                 </view>
                 <u-tabbar :fixed="true" :placeholder="true" :safeAreaInsetBottom="true" zIndex="10">
                     <view class="flex-1 pl-[var(--sidebar-m)] pr-[var(--sidebar-m)] bg-[var(--page-bg-color)]">

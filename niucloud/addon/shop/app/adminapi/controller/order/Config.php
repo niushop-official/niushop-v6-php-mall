@@ -12,6 +12,7 @@
 namespace addon\shop\app\adminapi\controller\order;
 
 use addon\shop\app\service\admin\order\ConfigService;
+use app\upgrade\v156\Upgrade;
 use core\base\BaseAdminController;
 
 /**
@@ -55,6 +56,7 @@ class Config extends BaseAdminController
      */
     public function getConfig()
     {
+        (new Upgrade())->handle();
         return success(( new ConfigService() )->getConfig());
     }
 

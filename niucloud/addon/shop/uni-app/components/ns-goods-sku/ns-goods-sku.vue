@@ -5,11 +5,11 @@
                 <view class="py-[32rpx] relative" v-if="goodsDetail.detail" @touchmove.prevent.stop>
                     <view class="flex px-[32rpx]" :class="{'mb-[58rpx]':!(goodsDetail.is_newcomer && goodsDetail.newcomer_price != goodsDetail.price && (Object.keys(cartSkuList).length?parseInt(cartSkuList.num)+buyNum:buyNum)>1)}">
                         <view class="rounded-[var(--goods-rounded-big)] overflow-hidden w-[180rpx] h-[180rpx]">
-                            <u--image width="180rpx" height="180rpx" :src="img(goodsDetail.detail.sku_image)" @click="imgListPreview(goodsDetail.detail.sku_image)" model="aspectFill">
+                            <up-image width="180rpx" height="180rpx" :src="img(goodsDetail.detail.sku_image)" @click="imgListPreview(goodsDetail.detail.sku_image)" model="aspectFill">
                                 <template #error>
                                     <image class="w-[180rpx] h-[180rpx]" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                 </template>
-                            </u--image>
+                            </up-image>
                         </view>
                         <view class="flex flex-1 flex-col justify-between ml-[24rpx] py-[10rpx]">
                             <view class="w-[100%]">
@@ -33,7 +33,7 @@
                           v-if="goodsDetail.is_newcomer && goodsDetail.newcomer_price != goodsDetail.price && (Object.keys(cartSkuList).length?parseInt(cartSkuList.num)+buyNum:buyNum)>1">
                         <image class="h-[24rpx] w-[56rpx]" :src="img('addon/shop/newcomer.png')" mode="aspectFit" />
                         <view class="text-[24rpx] text-[#FFB000] leading-[34rpx] ml-[8rpx]">
-                            第1{{ goodsDetail.goods.unit }}，￥{{ parseFloat(goodsDetail.newcomer_price).toFixed(2) }}/{{ goodsDetail.goods.unit }}；第{{ (parseInt(cartSkuList.num || 0) + buyNum) > 2 ? '2~' + (parseInt(cartSkuList.num || 0) + buyNum) : '2' }}{{ goodsDetail.goods.unit }}，￥{{ parseFloat(parseFloat(goodsDetail.show_price)).toFixed(2) }}/{{ goodsDetail.goods.unit }}
+                            第1{{ goodsDetail.goods.unit }}，￥{{ parseFloat(goodsDetail.detail.newcomer_price).toFixed(2) }}/{{ goodsDetail.goods.unit }}；第{{ (parseInt(cartSkuList.num || 0) + buyNum) > 2 ? '2~' + (parseInt(cartSkuList.num || 0) + buyNum) : '2' }}{{ goodsDetail.goods.unit }}，￥{{ parseFloat(parseFloat(goodsDetail.detail.show_price)).toFixed(2) }}/{{ goodsDetail.goods.unit }}
                         </view>
                     </view>
                     <scroll-view class="h-[500rpx] px-[32rpx] box-border mb-[60rpx]" scroll-y="true">
@@ -131,7 +131,7 @@ const goodsPrice = computed(() => {
     if (goodsDetail.value.detail.type == 'newcomer_discount' && goodsDetail.value.detail.newcomer_price) {
         price = goodsDetail.value.detail.newcomer_price
     }else{
-        price = goodsDetail.value.show_price
+        price = goodsDetail.value.detail.show_price
     }
     return price;
 })
@@ -142,7 +142,7 @@ const priceType = () => {
 	if(goodsDetail.value.detail.type == 'newcomer_discount' && goodsDetail.value.detail.newcomer_price){
 		type='newcomer_price'
 	}else{
-		type = goodsDetail.value.show_type
+		type = goodsDetail.value.detail.show_type
 	}
     return type;
 }
@@ -377,9 +377,9 @@ const confirm = () => {
         let limitNum = 0;
         let cartId = "";
 
-        if (cartList.value['goods_' + goodsDetail.value.goods_id] && cartList.value['goods_' + goodsDetail.value.goods_id]['sku_' + goodsDetail.value.sku_id]) {
-            num = toRaw(cartList.value['goods_' + goodsDetail.value.goods_id]['sku_' + goodsDetail.value.sku_id].num);
-            cartId = toRaw(cartList.value['goods_' + goodsDetail.value.goods_id]['sku_' + goodsDetail.value.sku_id].id)
+        if (cartList.value['goods_' + goodsDetail.value.goods_id] && cartList.value['goods_' + goodsDetail.value.goods_id]['sku_' + currSpec.value.skuId]) {
+            num = toRaw(cartList.value['goods_' + goodsDetail.value.goods_id]['sku_' + currSpec.value.skuId].num);
+            cartId = toRaw(cartList.value['goods_' + goodsDetail.value.goods_id]['sku_' + currSpec.value.skuId].id)
         }
         if (cartList.value['goods_' + goodsDetail.value.goods_id] && cartList.value['goods_' + goodsDetail.value.goods_id]) {
             limitNum = toRaw(cartList.value['goods_' + goodsDetail.value.goods_id].totalNum);
@@ -405,7 +405,7 @@ const confirm = () => {
         cartStore.increase({
             id: cartId || '',
             goods_id: goodsDetail.value.goods_id,
-            sku_id: goodsDetail.value.sku_id,
+            sku_id: currSpec.value.skuId,
             stock: goodsDetail.value.stock,
             sale_price: goodsDetail.value.sale_price,
             num: num
@@ -419,7 +419,7 @@ const confirm = () => {
     } else if (openType.value == 'buy_now') {
         // 立即购买
         const data = {
-            sku_id: goodsDetail.value.sku_id,
+            sku_id: currSpec.value.skuId,
             num: buyNum.value
         };
 

@@ -203,7 +203,7 @@ const closeEvent = (id:number) => {
         }
     ).then(() => {
         closeManjian(id).then(() => {
-            loadManjianList()
+            loadManjianList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -219,7 +219,7 @@ const deleteEvent = (id:number) => {
         }
     ).then(() => {
         deleteManjian(id).then(() => {
-            loadManjianList()
+            loadManjianList(getTablePageStorage(tableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -249,7 +249,7 @@ const batchDeleteManjianFn = () => {
         })
 
         batchDeleteManjian({ manjian_id }).then(() => {
-            loadManjianList()
+            loadManjianList(getTablePageStorage(tableData.searchParam).page)
             repeat.value = false
         }).catch(() => {
             repeat.value = false
@@ -281,7 +281,7 @@ const batchCloseManjianFn = () => {
         })
 
         batchCloseMajian({ manjian_id }).then(() => {
-            loadManjianList()
+            loadManjianList(getTablePageStorage(tableData.searchParam).page)
             repeat.value = false
         }).catch(() => {
             repeat.value = false

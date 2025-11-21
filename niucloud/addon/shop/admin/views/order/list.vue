@@ -195,14 +195,14 @@
             </div>
         </el-card>
 
-        <adjust-money ref="orderAdjustMoneyActionDialog" @complete="loadOrderList" />
-        <delivery-action ref="deliveryActionDialog" @complete="loadOrderList" />
-        <order-notes ref="orderNotesDialog" @complete="loadOrderList" />
+        <adjust-money ref="orderAdjustMoneyActionDialog" @complete="loadOrderList(getTablePageStorage(orderTable.searchParam).page)" />
+        <delivery-action ref="deliveryActionDialog" @complete="loadOrderList(getTablePageStorage(orderTable.searchParam).page)" />
+        <order-notes ref="orderNotesDialog" @complete="loadOrderList(getTablePageStorage(orderTable.searchParam).page)" />
         <order-export-select ref="selectExportDialog" @complete="exportEvent" />
         <export-sure ref="exportSureDialog" :show="flag" :type="exportType" :searchParam="orderTable.searchParam" @close="handleClose" />
-        <order-edit-address ref="orderEditAddressDialog" @complete="loadOrderList" />
+        <order-edit-address ref="orderEditAddressDialog" @complete="loadOrderList(getTablePageStorage(orderTable.searchParam).page)" />
         <electronic-sheet-print ref="electronicSheetPrintDialog" @complete="electronicSheetPrintComplete" />
-        <shop-active-refund ref="shopActiveRefundDialog" @complete="loadOrderList" />
+        <shop-active-refund ref="shopActiveRefundDialog" @complete="loadOrderList(getTablePageStorage(orderTable.searchParam).page)" />
     </div>
 </template>
 
@@ -476,7 +476,7 @@ const close = (data: any) => {
         }
     ).then(() => {
         orderClose(data.order_id).then(() => {
-            loadOrderList()
+            loadOrderList(getTablePageStorage(orderTable.searchParam).page)
         })
     })
 }
@@ -516,7 +516,7 @@ const finish = (data: any) => {
         }
     ).then(() => {
         orderFinish(data.order_id).then(() => {
-            loadOrderList()
+            loadOrderList(getTablePageStorage(orderTable.searchParam).page)
         })
     })
 }
@@ -646,7 +646,7 @@ const deleteEvent = (data: any) => {
         }
     ).then(() => {
         orderDelete({ order_ids: [data.order_id] }).then(() => {
-            loadOrderList()
+            loadOrderList(getTablePageStorage(orderTable.searchParam).page)
         }).catch(() => {
         })
     })
@@ -672,7 +672,7 @@ const batchDeleteFn = () => {
     }).then(() => {
         orderDelete({ order_ids: orderIds }).then(() => {
             resetSelection() // 重置选择状态
-            loadOrderList()
+            loadOrderList(getTablePageStorage(orderTable.searchParam).page)
         }).catch(() => {
         })
     })

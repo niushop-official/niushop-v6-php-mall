@@ -29,6 +29,7 @@ class Order extends BaseApiController
             [ 'order_no', '' ],
             [ 'status', '' ],
             [ 'activity_type', '' ],
+            [ 'body', '' ],
         ]);
         return success(( new OrderService() )->getPage($data));
     }

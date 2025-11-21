@@ -54,7 +54,7 @@
             </template>
         </scroll-view>
 
-        <diy-goods-list class="many-goods-list-body" v-if="goodsValue" :value="goodsValue"></diy-goods-list>
+        <diy-shop-goods-list class="many-goods-list-body" v-if="goodsValue" :value="goodsValue"></diy-shop-goods-list>
 
     </view>
 </template>
@@ -64,7 +64,7 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { img } from '@/utils/common';
 import useDiyStore from '@/app/stores/diy';
-import diyGoodsList from '@/addon/shop/components/diy/goods-list/index.vue';
+import diyShopGoodsList from '@/addon/shop/components/diy/goods-list/index.vue';
 import { getGoodsCategoryList } from '@/addon/shop/api/goods';
 
 const props = defineProps(['component', 'index']);

@@ -71,7 +71,6 @@ trait CoreOrderCreateTrait
 
     public $order_key;
     public $error = [];
-    public $join_manjian = true;
 
     public function createOrder(array $data)
     {
@@ -110,7 +109,7 @@ trait CoreOrderCreateTrait
             $order_data[ 'order_id' ] = $this->order_id;
 
             // 订单创建后事件
-            CoreOrderEventService::orderCreate([ 'order_id' => $this->order_id, 'order_data' => $order_data, 'order_goods_data' => $order_goods_data, 'cart_ids' => $this->cart_ids, 'basic' => get_object_vars($this), 'main_type' => $main_type, 'main_id' => $main_id, 'time' => time() ]);
+            CoreOrderEventService::orderCreate(['order_id' => $this->order_id, 'order_data' => $order_data, 'order_goods_data' => $order_goods_data, 'cart_ids' => $this->cart_ids, 'basic' => get_object_vars($this), 'main_type' => $main_type, 'main_id' => $main_id, 'time' => time() ]);
 
             Db::commit();
 
@@ -119,11 +118,11 @@ trait CoreOrderCreateTrait
 
             // 订单创建后事件
             CoreOrderEventService::orderCreateAfter([ 'order_id' => $this->order_id, 'order_data' => $order_data, 'order_goods_data' => $order_goods_data, 'cart_ids' => $this->cart_ids, 'basic' => get_object_vars($this), 'main_type' => $main_type, 'main_id' => $main_id, 'time' => time() ]);
-//            event('AfterShopOrderCreate', [ 'order_id' => $this->order_id, 'order_data' => $order_data, 'order_goods_data' => $order_goods_data, 'cart_ids' => $this->cart_ids, 'basic' => get_object_vars($this), 'main_type' => $main_type, 'main_id' => $main_id, 'time' => time()]);
+//            event('AfterShopOrderCreate', ['order_id' => $this->order_id, 'order_data' => $order_data, 'order_goods_data' => $order_goods_data, 'cart_ids' => $this->cart_ids, 'basic' => get_object_vars($this), 'main_type' => $main_type, 'main_id' => $main_id, 'time' => time()]);
 
             // 订单金额为0的话,要直接支付
             if ($order_data[ 'order_money' ] == 0) {
-                ( new CoreOrderPayService() )->pay([ 'trade_id' => $this->order_id, 'main_type' => $main_type, 'main_id' => $main_id ]);
+                ( new CoreOrderPayService() )->pay(['trade_id' => $this->order_id, 'main_type' => $main_type, 'main_id' => $main_id ]);
             }
 
             return [
@@ -133,7 +132,7 @@ trait CoreOrderCreateTrait
 
         } catch (Exception $e) {
             Db::rollback();
-            throw new CommonException($e->getMessage());
+            throw new CommonException($e->getMessage().$e->getFile().$e->getLine());
         }
     }
 
@@ -267,19 +266,34 @@ trait CoreOrderCreateTrait
                         'discount_type' => $v[ 'discount_type' ],
                         'discount_type_id' => $v[ 'discount_type_id' ],
                         'content' => $v[ 'content' ] ?? $v[ 'title' ] ?? "",
-                        'order_id' => $this->order_id
+                        'order_id' => $this->order_id,
                     ];
                 } else {
                     foreach ($v as $vv) {
-                        $insert_discount_data[] = [
-                            'type' => $vv[ 'type' ],
-                            'num' => $vv[ 'num' ],
-                            'money' => $vv[ 'money' ],
-                            'discount_type' => $vv[ 'discount_type' ],
-                            'discount_type_id' => $vv[ 'discount_type_id' ],
-                            'content' => $vv[ 'content' ] ?? $vv[ 'title' ] ?? "",
-                            'order_id' => $this->order_id
-                        ];
+                        if (isset($vv[ 'type' ])){
+                            $insert_discount_data[] = [
+                                'type' => $vv[ 'type' ],
+                                'num' => $vv[ 'num' ],
+                                'money' => $vv[ 'money' ],
+                                'discount_type' => $vv[ 'discount_type' ],
+                                'discount_type_id' => $vv[ 'discount_type_id' ],
+                                'content' => $vv[ 'content' ] ?? $vv[ 'title' ] ?? "",
+                                'order_id' => $this->order_id,
+                            ];
+                        }elsE{
+                            foreach ($vv as $vvv) {
+                                $insert_discount_data[] = [
+                                    'type' => $vvv[ 'type' ],
+                                    'num' => $vvv[ 'num' ],
+                                    'money' => $vvv[ 'money' ],
+                                    'discount_type' => $vvv[ 'discount_type' ],
+                                    'discount_type_id' => $vvv[ 'discount_type_id' ],
+                                    'content' => $vvv[ 'content' ] ?? $vvv[ 'title' ] ?? "",
+                                    'order_id' => $this->order_id,
+                                ];
+                            }
+                        }
+
                     }
                 }
 
@@ -405,9 +419,7 @@ trait CoreOrderCreateTrait
         //查询积分优惠
 //        $this->getPoint();
         //满减送优惠计算
-        if($this->join_manjian){
             $this->calculateManjian();
-        }
         //查询可用优惠券
         $this->calculateCoupon();
     }

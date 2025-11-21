@@ -4,11 +4,11 @@
             <view class="py-[32rpx] relative" v-if="goodsDetail.detail" @touchmove.prevent.stop>
                 <view class="flex px-[32rpx] mb-[40rpx]">
                     <view class="w-[180rpx] h-[180rpx]">
-                        <u--image width="180rpx" height="180rpx" :radius="'var(--goods-rounded-big)'" :src="img(goodsDetail.detail.sku_image)" @click="imgListPreview(goodsDetail.detail.sku_image)" model="aspectFill">
+                        <up-image width="180rpx" height="180rpx" :radius="'var(--goods-rounded-big)'" :src="img(goodsDetail.detail.sku_image)" @click="imgListPreview(goodsDetail.detail.sku_image)" model="aspectFill">
                             <template #error>
                                 <image class="w-[180rpx] h-[180rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill"/>
                             </template>
-                        </u--image>
+                        </up-image>
                     </view>
                     <view class="flex flex-1 flex-col justify-between ml-[20rpx] py-[10rpx]">
                         <view class="w-[100%]">
@@ -66,7 +66,7 @@
                     </view>
                 </scroll-view>
                 <view class="px-[20rpx]">
-                    
+
                     <template v-if="goodsDetail.detail.stock > 0">
                         <!-- #ifdef H5 -->
                         <button v-if="isPointGoods" hover-class="none"
@@ -77,7 +77,7 @@
                                 disabled>该规格未参与积分商品</button>
                         <!-- #endif -->
 
-                        <!-- #ifdef MP-WEIXIN -->
+                        <!-- #ifndef H5 -->
                         <!--<button v-if="isBindMobile && userInfo && !userInfo.mobile" hover-class="none" class="!h-[80rpx] primary-btn-bg leading-[80rpx] text-[26rpx] rounded-[50rpx] font-500" type="primary" open-type="getPhoneNumber" @getphonenumber="memberStore.bindMobile">确定</button>-->
                         <!--<button v-else hover-class="none" class="!h-[80rpx] primary-btn-bg leading-[80rpx] text-[26rpx] rounded-[50rpx] font-500" type="primary" @click="confirm">确定</button>-->
                         <button hover-class="none"  v-if="isPointGoods"
@@ -199,7 +199,7 @@ const goodsDetail = computed(() => {
                 if (idItem.sku_id == currSpec.value.skuId) {
                     data.detail = idItem;
                     data.is_join_exchange = idItem.is_join_exchange;
-                    
+
                 }
             })
         }
@@ -223,7 +223,7 @@ const detectionGoodsIsDisable = (data: any, currSkuName: any)=>{
     })
     isPointGoods.value = true
     if(currSkuName && currSkuName.length && !skuNameArr.includes(currSkuName.join(' '))){
-        isPointGoods.value = false 
+        isPointGoods.value = false
     }
 }
 

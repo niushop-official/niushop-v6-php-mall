@@ -141,7 +141,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteCompany(id).then(() => {
-            loadCompanyList()
+            loadCompanyList(getTablePageStorage(companyTable.searchParam).page);
         }).catch(() => {
         })
     })

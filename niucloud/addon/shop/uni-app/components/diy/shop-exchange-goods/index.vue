@@ -6,11 +6,11 @@
                 <view class="overflow-hidden bg-[#fff] flex flex-col box-border w-[calc(50%-10rpx)]"
                       :class="{'mt-[20rpx]': index > 1}" :style="itemCss" v-for="(item,index) in goodsList"
                       :key="item.goods_id" @click="toLink(item)">
-                    <u--image :width="style2Width" :height="style2Width" :radius="imageRounded.val" :src="img(item.goods_cover_thumb_mid || '')" model="aspectFill">
+                    <up-image :width="style2Width" :height="style2Width" :radius="imageRounded.val" :src="img(item.goods_cover_thumb_mid || '')" model="aspectFill">
                         <template #error>
                             <image class="overflow-hidden" :style="{'width': style2Width,'height': style2Width, 'border-radius': imageRounded.val}" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                         </template>
-                    </u--image>
+                    </up-image>
 <!--                    <easy-image :image-src="item.goods_cover_thumb_small" :imageStyle="imageStyle" />-->
                     <view class="flex-1 pt-[10rpx] pb-[20rpx] px-[16rpx] flex flex-col justify-between">
 						<view class="text-[28rpx] leading-[40rpx] text-[#303133] multi-hidden mb-[10rpx]" :style="{ color : diyComponent.goodsNameStyle.color, fontWeight : diyComponent.goodsNameStyle.fontWeight }">

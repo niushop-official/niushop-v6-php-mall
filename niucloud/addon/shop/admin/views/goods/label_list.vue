@@ -87,7 +87,7 @@
                 </div>
             </div>
 
-            <label-edit ref="editLabelDialog" @complete="loadLabelList" :groupList="groupList" />
+            <label-edit ref="editLabelDialog" @complete="loadLabelList(getTablePageStorage(labelTable.searchParam).page)" :groupList="groupList" />
         </el-card>
     </div>
 </template>
@@ -206,7 +206,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteLabel(id).then(() => {
-            loadLabelList()
+            loadLabelList(getTablePageStorage(labelTable.searchParam).page)
         }).catch(() => {
         })
     })
@@ -228,6 +228,7 @@ const sortInputListener = debounce((sort, row) => {
         label_id: row.label_id,
         sort
     }).then((res) => {
+        loadLabelList(getTablePageStorage(labelTable.searchParam).page)
     })
 })
 
@@ -242,7 +243,7 @@ const modifyLabelStatusEvent = (label_id: any, status: any) => {
         label_id,
         status
     }).then((res) => {
-        loadLabelList()
+        loadLabelList(getTablePageStorage(labelTable.searchParam).page)
         isRepeat.value = false
     })
 }
@@ -262,7 +263,7 @@ const copyEvent = (data: any) => {
             label_id: data.label_id
         }).then((res: any) => {
             if (res.code == 1) {
-                loadLabelList()
+                loadLabelList(getTablePageStorage(labelTable.searchParam).page)
             }
             isRepeat.value = false
         }).catch(() => {

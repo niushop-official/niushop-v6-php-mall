@@ -1,7 +1,7 @@
 <template>
-    <view :style="themeColor()">
+    <view :style="themeColor()" class="bg-[var(--page-bg-color)] min-h-[100vh]">
         <view class="flex items-center px-[20rpx] h-[120rpx]">
-            <view class="h-[68rpx] bg-[var(--temp-bg)] px-[30rpx] flex items-center rounded-[100rpx] flex-1">
+            <view class="h-[68rpx] bg-[#fff] px-[30rpx] flex items-center rounded-[100rpx] flex-1">
                 <text class="nc-iconfont nc-icon-sousuo-duanV6xx1 text-[var(--text-color-light9)] text-[26rpx] mr-[18rpx]"></text>
                 <input class="text-[28rpx] flex-1" maxlength="50" type="text" v-model="inputValue"
                        :placeholder="config.default_word ? config.default_word : '请搜索您想要的商品'"
@@ -200,7 +200,7 @@ const rankingComponent = {
 
 .search-content {
     box-sizing: border-box;
-    background: #ffffff;
+    background: #f6f6f6;
 }
 
 .history {
@@ -210,7 +210,7 @@ const rankingComponent = {
     .history-box {
         width: 100%;
         height: 100%;
-        background: #ffffff;
+        background: #f6f6f6;
         padding: 16rpx 20rpx 0 20rpx;
 
         box-sizing: border-box;

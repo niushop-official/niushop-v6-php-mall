@@ -127,14 +127,14 @@ return [
                     "style": {
                         "navigationBarTitleText": "%shop.pages.goods.collect%"
                     },
-					"needLogin": true
+                    "needLogin": true
                 },
                 {
                     "path": "pages/goods/browse",
                     "style": {
                         "navigationBarTitleText": "%shop.pages.goods.browse%"
                     },
-					"needLogin": true
+                    "needLogin": true
                 },
                 {
                     "path": "pages/goods/category",
@@ -158,6 +158,9 @@ return [
                 {
                     "path": "pages/order/list",
                     "style": {
+                        // #ifndef H5
+                        "navigationStyle": "custom",
+                        // #endif
                         "navigationBarTitleText": "%shop.pages.order.list%"
                     },
                     "needLogin": true
@@ -245,6 +248,36 @@ return [
                     "path": "pages/point/order_list",
                     "style": {
                         "navigationBarTitleText": "%shop.pages.point.order_list%"
+                    }
+                },
+                {
+                    "path": "pages/invoice/list",
+                    "style": {
+                        "navigationBarTitleText": "%shop.pages.invoice.list%"
+                    }
+                },
+                {
+                    "path": "pages/invoice/detail",
+                    "style": {
+                        "navigationBarTitleText": "%shop.pages.invoice.detail%"
+                    }
+                },
+                {
+                    "path": "pages/invoice/invoice",
+                    "style": {
+                        "navigationBarTitleText": "%shop.pages.invoice.invoice%"
+                    }
+                },
+                {
+                    "path": "pages/invoice/invoice_edit",
+                    "style": {
+                        "navigationBarTitleText": "%shop.pages.invoice.invoice_edit%"
+                    }
+                },
+                {
+                    "path": "pages/invoice/invoice_order",
+                    "style": {
+                        "navigationBarTitleText": "%shop.pages.invoice.invoice_order%"
                     }
                 }
             ]

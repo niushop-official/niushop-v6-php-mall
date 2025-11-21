@@ -7,7 +7,8 @@
                     <view class="nc-iconfont nc-icon-shouyeV6xx11 text-[36rpx]"></view>
                     <text class="text-[20rpx] mt-[10rpx]">首页</text>
                 </view>
-                <view v-if="menuContent.includes('service')" class="flex flex-col justify-center items-center mr-[38rpx]" @click="redirect({ url: '/app/pages/member/contact' })">
+                <view v-if="menuContent.includes('service')" class="flex flex-col justify-center items-center mr-[38rpx]"
+                      @click="redirect({ url: '/app/pages/member/contact', param: {send_title: sendMessageTitle, send_path: encodeURIComponent(sendMessagePath), send_img: encodeURIComponent(sendMessageImg)} })">
                     <text class="nc-iconfont text-[36rpx] nc-icon-kefuV6xx-1 text-[#303133]"></text>
                     <text class="text-[20rpx] mt-[10rpx]">客服</text>
                 </view>
@@ -254,7 +255,7 @@ onMounted(() => {
         watch(
             () => diyComponent.value,
             (newValue, oldValue) => {
-                
+
             }
         )
         watch(
@@ -281,7 +282,7 @@ const initFn = () => {
     if (diyComponent.value.type) {
         sendMessagePath.value += '&type=' + diyComponent.value.type;
     }
-    sendMessageImg.value = img(diyComponent.value.goods.goods_cover_thumb_mid) 
+    sendMessageImg.value = img(diyComponent.value.goods.goods_cover_thumb_mid)
     menuContent.value = (typeof diyComponent.value?.menuContent == 'object') ? diyComponent.value?.menuContent : diyComponent.value?.menuContent.split(',');
 }
 

@@ -33,7 +33,7 @@
                 <text class="text-[#333] text-[26rpx] leading-[30rpx] font-400 shrink-0 mr-[20rpx]">优惠</text>
                 <view class="ml-auto flex-1 flex-nowrap flex items-center overflow-hidden h-[44rpx] justify-end">
                     <view class="bg-[var(--primary-color-light)] text-[var(--primary-color)] rounded-[6rpx]	text-[22rpx] flex items-center justify-center w-[86rpx] h-[34rpx] mr-[6rpx]">满减送</view>
-                    <view class="truncate max-w-[430rpx] text-[26rpx]">{{ manjianData.name }}</view>
+                    <view class="truncate max-w-[430rpx] text-[26rpx]" :class="{'ml-[5rpx]':index>0}" v-for="(item, index) in manjianData" :key="index">{{ item.manjian_name }}</view>
                 </view>
                 <text class="nc-iconfont nc-icon-youV6xx text-[26rpx] text-[var(--text-color-light6)] ml-[8rpx]"></text>
             </view>
@@ -48,7 +48,7 @@
                             <view class="flex mb-[28rpx]" v-for="(item, index) in diyComponent.service">
                                 <image class="mt-[4rpx] w-[32rpx] h-[32rpx] mr-[14rpx]" :src="img(item.image || 'addon/shop/icon_service.png')" mode="aspectFit" />
                                 <view class="flex-1">
-                                    <view class="text-[30rpx] leading-[36rpx] text-[#333] mb-[12rpx]">{{ item.service_name }}</view>
+                                    <view class="text-[28rpx] leading-[36rpx] text-[#333] mb-[12rpx]">{{ item.service_name }}</view>
                                     <view class="text-[24rpx] leading-[36rpx] text-[var(--text-color-light9)]">{{ item.desc }}</view>
                                 </view>
                             </view>
@@ -67,7 +67,7 @@
                             <view class="flex mb-[40rpx]" v-for="(item, index) in diyComponent.goods.delivery_type_list" @click="distributionListFn(item,index)">
                                 <image class="mt-[4rpx] w-[32rpx] h-[32rpx] mr-[14rpx]" :src="img('addon/shop/icon_service.png')" mode="aspectFit" />
                                 <view class="flex-1">
-                                    <view class="text-[30rpx] leading-[36rpx] text-[#333] mb-[8rpx]">{{ item.name }}</view>
+                                    <view class="text-[28rpx] leading-[36rpx] text-[#333] mb-[8rpx]">{{ item.name }}</view>
                                     <view class="text-[24rpx] leading-[36rpx] text-[var(--text-color-light9)]">{{ item.desc }}</view>
                                 </view>
                             </view>
@@ -236,21 +236,22 @@ const getCouponFn = (data: any, index: any) => {
 }
 
 const manjianOpenFn = () => {
-    manjianShowRef.value.open(manjianData.value);
+    manjianShowRef.value.open(manjianData.value,'rule_json');
 }
 
 // 获取满减信息
-let manjianData = ref({})
+let manjianData = ref([])
 const getManjianInfo = () => {
     getManjian({
         goods_id: diyComponent.value.goods_id || '',
         sku_id: diyComponent.value.sku_id || ''
     }).then((res: any) => {
-        if (Object.keys(res.data).length) {
-            manjianData.value.condition_type = res.data.condition_type;
-            manjianData.value.rule_json = res.data.rule_json;
-            manjianData.value.name = res.data.manjian_name;
-        }
+        manjianData.value = res.data;
+        // if (Object.keys(res.data).length) {
+        //     manjianData.value.condition_type = res.data.condition_type;
+        //     manjianData.value.rule_json = res.data.rule_json;
+        //     manjianData.value.name = res.data.manjian_name;
+        // }
         isGoodsPropertyTemp()
     })
 }

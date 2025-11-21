@@ -12,7 +12,7 @@ return [
                 if ($order_money <= 0) return 0;
                 $point = ((float)$config['money'] * (float)$config['point']);
                 if ($point <= 0) return 0;
-                return (int)round($order_money / $point);
+                return (int) round($order_money / $config[ 'money' ] * $config[ 'point' ]);
             },
             'content' => [
                 'admin' => function ($config) {

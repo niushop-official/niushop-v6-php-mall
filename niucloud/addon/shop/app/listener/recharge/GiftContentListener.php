@@ -26,7 +26,7 @@ class GiftContentListener
             $data[ 'info' ] = '优惠券*' . $count; // 大概信息
             $data[ 'detail' ] = []; // 详细信息
             foreach ($params[ 'value' ] as $k => $v) {
-                $data[ 'detail' ][] = $v[ 'num' ] . '张 ' . $v[ 'title' ];
+                $data[ 'detail' ][] = $v[ 'num' ] . '张 ' . ( isset($v[ 'title' ]) ? $v[ 'title' ] : '' );
             }
         }
         return $data;

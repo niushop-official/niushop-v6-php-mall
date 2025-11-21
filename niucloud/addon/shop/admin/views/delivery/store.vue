@@ -147,7 +147,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteStore(id).then(() => {
-            loadStoreList()
+            loadStoreList(getTablePageStorage(storeTable.searchParam).page);
         }).catch(() => {
         })
     })

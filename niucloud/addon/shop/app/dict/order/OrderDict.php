@@ -210,6 +210,7 @@ class OrderDict
             'newcomer_discount' => '新人专享',
             'discount' => '限时折扣',
             'manjiansong' => '满减送',
+            'friend_help' => '好友助力',
         ];
         return $data[$type] ?? '';
     }

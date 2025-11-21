@@ -127,7 +127,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteShippingTemplate(id).then(() => {
-            loadTemplateList()
+            loadTemplateList(getTablePageStorage(templateTable.searchParam).page);
         }).catch(() => {
         })
     })

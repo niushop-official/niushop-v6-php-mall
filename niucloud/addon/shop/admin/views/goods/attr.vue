@@ -194,7 +194,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
             save(formData).then(res => {
                 loading.value = false
                 showDialog.value = false
-                loadShopGoodsAttrList()
+                loadShopGoodsAttrList(getTablePageStorage(goodsAttrTable.searchParam).page)
             }).catch(err => {
                 loading.value = false
             })
@@ -222,7 +222,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteAttr(id).then(() => {
-            loadShopGoodsAttrList()
+            loadShopGoodsAttrList(getTablePageStorage(goodsAttrTable.searchParam).page)
         }).catch(() => {
         })
     })

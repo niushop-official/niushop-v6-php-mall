@@ -1,7 +1,7 @@
 <template>
     <view :style="themeColor()"  class="payment-wrap">
         <view class="payment-body min-h-[100vh]" v-if="orderData">
-            <!-- #ifdef MP -->
+            <!-- #ifdef MP || APP-PLUS -->
             <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()"/>
             <!-- #endif -->
             <view class="pt-[30rpx] sidebar-margin payment-bottom">
@@ -98,11 +98,11 @@
                 <view class="mb-[var(--top-m)] card-template">
                     <view class="mb-[30rpx]">
                         <view class="flex" v-for="(item, key, index) in orderData.goods_data" :key="index" :class="{'pb-[40rpx]': (index + 1) != Object.keys(orderData.goods_data).length}">
-                            <u--image radius="var(--goods-rounded-big)" width="180rpx" height="180rpx" :src="img(item.sku_image.split(',')[0])" model="aspectFill">
+                            <up-image radius="var(--goods-rounded-big)" width="180rpx" height="180rpx" :src="img(item.sku_image.split(',')[0])" model="aspectFill">
                                 <template #error>
                                     <image class="w-[180rpx] h-[180rpx] rounded-[var(--goods-rounded-big)] overflow-hidden" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                 </template>
-                            </u--image>
+                            </up-image>
                             <view class="flex flex-1 w-0 flex-col justify-between ml-[20rpx] py-[6rpx]">
                                 <view class="line-normal">
                                     <view class="truncate text-[#303133] text-[28rpx] leading-[32rpx]">{{ item.goods.goods_name }}</view>
@@ -638,7 +638,7 @@ const confirmAddress = (data: object) => {
     /*  #ifdef MP  */
     background: linear-gradient(180deg, transparent 0%, transparent 10%, var(--page-bg-color) 30%);
     /*  #endif  */
-    /*  #ifdef H5  */
+    /*  #ifndef MP */
     background: linear-gradient(180deg, transparent 0%, var(--page-bg-color) 25%);
     /*  #endif  */
     &::after {
@@ -652,7 +652,7 @@ const confirmAddress = (data: object) => {
         height: 560rpx;
         background: linear-gradient(180deg, var(--shop-payment-header-color) 20%, var(--page-bg-color) 90%), var(--page-bg-color);
         /*  #endif  */
-        /*  #ifdef H5  */
+        /*  #ifndef MP  */
         height: 360rpx;
         background: linear-gradient(180deg, var(--shop-payment-header-color) 0%, var(--page-bg-color) 90%), var(--page-bg-color);
         /*  #endif  */

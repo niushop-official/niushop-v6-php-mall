@@ -5,11 +5,11 @@
                 <scroll-view scroll-y="true" class="bg-page min-h-screen overflow-hidden">
                     <view class="m-[var(--top-m)] sidebar-margin px-[var(--pad-sidebar-m)] py-[var(--pad-top-m)] rounded-[var(--rounded-big)] bg-white">
                         <view class="flex">
-                            <u--image :radius="'var(--goods-rounded-small)'" width="120rpx" height="120rpx" :src="img(orderDetail.sku_image.split(',')[0])" model="aspectFill">
+                            <up-image :radius="'var(--goods-rounded-small)'" width="120rpx" height="120rpx" :src="img(orderDetail.sku_image.split(',')[0])" model="aspectFill">
                                 <template #error>
                                     <image class="w-[120rpx] h-[120rpx]" :radius="'var(--goods-rounded-small)'" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill"/>
                                 </template>
-                            </u--image>
+                            </up-image>
                             <view class="flex-1 w-0 ml-[20rpx]">
                                 <view class="text-ellipsis text-[28rpx] leading-normal truncate">{{ orderDetail.goods_name }}</view>
                                 <view v-if="orderDetail.sku_name" class="mt-[6rpx] text-[24rpx] leading-[1.3] text-[var(--text-color-light9)] truncate">{{ orderDetail.sku_name }}</view>

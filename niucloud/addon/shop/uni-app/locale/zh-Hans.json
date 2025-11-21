@@ -29,6 +29,11 @@
     "pages.point.payment": "待付款订单",
     "pages.point.order_list": "积分兑换记录",
     "pages.newcomer.list": "新人专享",
+    "pages.invoice.list": "发票管理",
+    "pages.invoice.detail": "发票详情",
+    "pages.invoice.invoice": "申请发票",
+    "pages.invoice.invoice_edit": "编辑发票信息",
+    "pages.invoice.invoice_order": "发票订单",
     "pages.pay.index": "待支付",
     "pages.pay.result": ""
 }

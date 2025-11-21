@@ -140,7 +140,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteShopAddress(id).then(() => {
-            loadShopAddressList()
+            loadShopAddressList(getTablePageStorage(shopAddressTable.searchParam).page)
         }).catch(() => {
         })
     })

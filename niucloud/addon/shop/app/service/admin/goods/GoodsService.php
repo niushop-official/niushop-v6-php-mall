@@ -56,130 +56,130 @@ class GoodsService extends BaseAdminService
         $res = [];
 
         $addon_service = new AddonService();
-        $res[ 'addon_shop_supplier' ] = $addon_service->getInfoByKey('shop_supplier');
+        $res['addon_shop_supplier'] = $addon_service->getInfoByKey('shop_supplier');
 
-        if (!empty($params[ 'goods_id' ])) {
+        if (!empty($params['goods_id'])) {
             // 查询商品信息，用于编辑
             $field = 'goods_id,goods_name,sub_title,goods_type,goods_cover,goods_image,goods_video,goods_desc,brand_id,goods_category,label_ids,service_ids,unit,stock,virtual_sale_num,is_limit,limit_type,max_buy,min_buy,status,sort,delivery_type,is_free_shipping,fee_type,delivery_money,delivery_template_id,supplier_id,attr_ids,attr_format,member_discount,poster_id,is_gift,form_id,diy_detail_id';
-            $goods_info = $this->model->field($field)->where([ [ 'goods_id', '=', $params[ 'goods_id' ] ] ])->findOrEmpty()->toArray();
+            $goods_info = $this->model->field($field)->where([['goods_id', '=', $params['goods_id']]])->findOrEmpty()->toArray();
             if (!empty($goods_info)) {
 
-                if (!empty($goods_info[ 'goods_category' ])) {
-                    $goods_category = array_values($goods_info[ 'goods_category' ]);
+                if (!empty($goods_info['goods_category'])) {
+                    $goods_category = array_values($goods_info['goods_category']);
                     $category_service = new CategoryService();
-                    $goods_info[ 'goods_category' ] = $category_service->checkCategoryValid($goods_category);
+                    $goods_info['goods_category'] = $category_service->checkCategoryValid($goods_category);
                 }
 
                 // 商品品牌，处理数据类型
-                if (empty($goods_info[ 'brand_id' ])) {
-                    $goods_info[ 'brand_id' ] = '';
+                if (empty($goods_info['brand_id'])) {
+                    $goods_info['brand_id'] = '';
                 } else {
-                    $brand_count = ( new Brand() )->where([ [ 'brand_id', '=', $goods_info[ 'brand_id' ] ] ])->count();
-                    if ($brand_count == 0) $goods_info[ 'brand_id' ] = '';
+                    $brand_count = (new Brand())->where([['brand_id', '=', $goods_info['brand_id']]])->count();
+                    if ($brand_count == 0) $goods_info['brand_id'] = '';
                 }
 
                 // 供应商，处理数据类型
-                if (empty($goods_info[ 'supplier_id' ])) {
-                    $goods_info[ 'supplier_id' ] = '';
+                if (empty($goods_info['supplier_id'])) {
+                    $goods_info['supplier_id'] = '';
                 }
 
                 // 标签组
-                if (empty($goods_info[ 'label_ids' ])) {
-                    $goods_info[ 'label_ids' ] = [];
+                if (empty($goods_info['label_ids'])) {
+                    $goods_info['label_ids'] = [];
                 } else {
-                    $goods_info[ 'label_ids' ] = array_map(function ($item) {
-                        return (int) $item;
-                    }, $goods_info[ 'label_ids' ]);
+                    $goods_info['label_ids'] = array_map(function ($item) {
+                        return (int)$item;
+                    }, $goods_info['label_ids']);
                 }
 
                 // 商品服务
-                if (empty($goods_info[ 'service_ids' ])) {
-                    $goods_info[ 'service_ids' ] = [];
+                if (empty($goods_info['service_ids'])) {
+                    $goods_info['service_ids'] = [];
                 } else {
-                    $goods_info[ 'service_ids' ] = array_map(function ($item) {
-                        return (int) $item;
-                    }, $goods_info[ 'service_ids' ]);
+                    $goods_info['service_ids'] = array_map(function ($item) {
+                        return (int)$item;
+                    }, $goods_info['service_ids']);
                 }
 
                 // 商品参数，处理数据类型
-                if (empty($goods_info[ 'attr_ids' ])) {
-                    $goods_info[ 'attr_ids' ] = [];
+                if (empty($goods_info['attr_ids'])) {
+                    $goods_info['attr_ids'] = [];
                 } else {
-                    $goods_info[ 'attr_ids' ] = array_map(function ($item) {
-                        return (int) $item;
-                    }, $goods_info[ 'attr_ids' ]);
+                    $goods_info['attr_ids'] = array_map(function ($item) {
+                        return (int)$item;
+                    }, $goods_info['attr_ids']);
                 }
 
                 // 商品海报id，处理数据类型
-                if (empty($goods_info[ 'poster_id' ])) {
-                    $goods_info[ 'poster_id' ] = '';
+                if (empty($goods_info['poster_id'])) {
+                    $goods_info['poster_id'] = '';
                 }
 
                 // 自定义商品详情模板id，处理数据类型
-                if (!empty($goods_info[ 'diy_detail_id' ])) {
+                if (!empty($goods_info['diy_detail_id'])) {
                     $diy_model = new Diy();
                     $diy_count = $diy_model->where([
-                        [ 'id', '=', $goods_info[ 'diy_detail_id' ] ]
+                        ['id', '=', $goods_info['diy_detail_id']]
                     ])->count();
                     if ($diy_count == 0) {
-                        $goods_info[ 'diy_detail_id' ] = '';
+                        $goods_info['diy_detail_id'] = '';
                     }
                 } else {
-                    $goods_info[ 'diy_detail_id' ] = '';
+                    $goods_info['diy_detail_id'] = '';
                 }
 
                 // 万能表单id，处理数据类型
-                if (!empty($goods_info[ 'form_id' ])) {
+                if (!empty($goods_info['form_id'])) {
                     $diy_form_model = new DiyForm();
                     $diy_form_count = $diy_form_model->where([
-                        [ 'form_id', '=', $goods_info[ 'form_id' ] ]
+                        ['form_id', '=', $goods_info['form_id']]
                     ])->count();
                     if ($diy_form_count == 0) {
-                        $goods_info[ 'form_id' ] = '';
+                        $goods_info['form_id'] = '';
                     }
                 } else {
-                    $goods_info[ 'form_id' ] = '';
+                    $goods_info['form_id'] = '';
                 }
 
                 //  配送方式
-                if (empty($goods_info[ 'delivery_type' ])) {
-                    $goods_info[ 'delivery_type' ] = [];
+                if (empty($goods_info['delivery_type'])) {
+                    $goods_info['delivery_type'] = [];
                 }
 
-                $goods_info[ 'status' ] = (string) $goods_info[ 'status' ];
+                $goods_info['status'] = (string)$goods_info['status'];
 
                 // 运费模板，处理数据类型
-                if (empty($goods_info[ 'delivery_template_id' ])) {
-                    $goods_info[ 'delivery_template_id' ] = '';
+                if (empty($goods_info['delivery_template_id'])) {
+                    $goods_info['delivery_template_id'] = '';
                 }
 
                 $goods_sku_model = new GoodsSku();
 
                 $sku_field = 'sku_id,sku_name,sku_image,sku_no,goods_id,sku_spec_format,price,market_price,cost_price,stock,weight,volume,is_default';
                 $sku_order = 'sku_id asc';
-                $goods_info[ 'sku_list' ] = $goods_sku_model->withSearch([ "goods_id" ], [ 'goods_id' => $params[ 'goods_id' ] ])->field($sku_field)->order($sku_order)->select()->toArray();
+                $goods_info['sku_list'] = $goods_sku_model->withSearch(["goods_id"], ['goods_id' => $params['goods_id']])->field($sku_field)->order($sku_order)->select()->toArray();
 
-                $temp_sku_data = array_filter(array_column($goods_info[ 'sku_list' ], 'sku_spec_format'));
-                $goods_info[ 'spec_type' ] = 'single';
+                $temp_sku_data = array_filter(array_column($goods_info['sku_list'], 'sku_spec_format'));
+                $goods_info['spec_type'] = 'single';
                 if (!empty($temp_sku_data)) {
                     // 多规格
-                    $goods_info[ 'spec_type' ] = 'multi';
+                    $goods_info['spec_type'] = 'multi';
 
                     $goods_spec_model = new GoodsSpec();
                     $spec_field = 'spec_id,goods_id,spec_name,spec_values';
                     $spec_order = 'spec_id asc';
-                    $goods_info[ 'spec_list' ] = $goods_spec_model->withSearch([ "goods_id" ], [ 'goods_id' => $params[ 'goods_id' ] ])->field($spec_field)->order($spec_order)->select()->toArray();
+                    $goods_info['spec_list'] = $goods_spec_model->withSearch(["goods_id"], ['goods_id' => $params['goods_id']])->field($spec_field)->order($spec_order)->select()->toArray();
 
                 }
 
                 // 查询商品参与营销活动的数量
-                $goods_info[ 'active_goods_count' ] = $this->getActiveGoodsCount($goods_info[ 'goods_id' ]);
+                $goods_info['active_goods_count'] = $this->getActiveGoodsCount($goods_info['goods_id']);
 
-                $res[ 'goods_info' ] = $goods_info;
+                $res['goods_info'] = $goods_info;
             }
 
         }
-        $res[ 'default_sort' ] = ( new CoreGoodsConfigService() )->getDefaultSort();
+        $res['default_sort'] = (new CoreGoodsConfigService())->getDefaultSort();
 
         return $res;
     }
@@ -194,29 +194,28 @@ class GoodsService extends BaseAdminService
         $field = 'goods_id,goods_name,goods_type,goods_cover,stock,sale_num,status,sort,create_time,member_discount,is_gift';
         $order = 'create_time desc';
         $sku_where = [
-            [ 'goodsSku.is_default', '=', 1 ],
+            ['goodsSku.is_default', '=', 1],
         ];
 
-        if (!empty($where[ 'start_price' ]) && !empty($where[ 'end_price' ])) {
-            $money = [ $where[ 'start_price' ], $where[ 'end_price' ] ];
+        if (!empty($where['start_price']) && !empty($where['end_price'])) {
+            $money = [$where['start_price'], $where['end_price']];
             sort($money);
-            $sku_where[] = [ 'goodsSku.price', 'between', $money ];
-        } else if (!empty($where[ 'start_price' ])) {
-            $sku_where[] = [ 'goodsSku.price', '>=', $where[ 'start_price' ] ];
-        } else if (!empty($where[ 'end_price' ])) {
-            $sku_where[] = [ 'goodsSku.price', '<=', $where[ 'end_price' ] ];
+            $sku_where[] = ['goodsSku.price', 'between', $money];
+        } else if (!empty($where['start_price'])) {
+            $sku_where[] = ['goodsSku.price', '>=', $where['start_price']];
+        } else if (!empty($where['end_price'])) {
+            $sku_where[] = ['goodsSku.price', '<=', $where['end_price']];
         }
-        if (!empty($where[ 'order' ])) {
-            $order = $where[ 'order' ] . ' ' . $where[ 'sort' ];
+        if (!empty($where['order'])) {
+            $order = $where['order'] . ' ' . $where['sort'];
         }
-
-        $search_model = $this->model->where([ [ 'goods.goods_id', '>', 0 ] ])->withSearch([ "goods_name", "goods_type", "brand_id", "goods_category", "label_ids", 'service_ids', "sale_num", "status" ], $where)
+        $search_model = $this->model->where([['goods.goods_id', '>', 0]])->withSearch(["goods_name", "goods_type", "brand_id", "goods_category", "label_ids", 'service_ids', "sale_num", "status"], $where)
             ->field($field)
             ->withJoin([
-                'goodsSku' => [ 'sku_id', 'goods_id', 'price', 'member_price' ]
-            ])->where($sku_where)->order($order)->append([ 'goods_type_name', 'goods_edit_path', 'goods_cover_thumb_small' ]);
+                'goodsSku' => ['sku_id', 'goods_id', 'price', 'member_price']
+            ])->where($sku_where)->order($order)->append(['goods_type_name', 'goods_edit_path', 'goods_cover_thumb_small']);
         $list = $this->pageQuery($search_model);
-        $list[ 'data' ] = $this->formatGoodsJoinActive($list[ 'data' ]);
+        $list['data'] = $this->formatGoodsJoinActive($list['data']);
         return $list;
     }
 
@@ -229,7 +228,7 @@ class GoodsService extends BaseAdminService
     {
         $goods_ids = array_column($goods_data, 'goods_id');
         $join_list = event('GetGoodsJoinInfo', [
-            'goods_ids' => $goods_ids
+            'goods_ids' => $goods_ids,
         ]);
         $goods_join = [];
         foreach ($join_list as $item) {
@@ -237,9 +236,9 @@ class GoodsService extends BaseAdminService
                 continue;
             }
             foreach ($item as $goods_id => $value) {
-                if (!isset($goods_join[ $goods_id ])) {
+                if (!isset($goods_join[$goods_id])) {
                     {
-                        $goods_join[ $goods_id ] = [];
+                        $goods_join[$goods_id] = [];
                     }
                 }
                 $goods_join[ $goods_id ] = array_merge($goods_join[ $goods_id ], array_values($value));
@@ -454,7 +453,7 @@ class GoodsService extends BaseAdminService
             $goods_sku_model = new GoodsSku();
             $goods_spec_model = new GoodsSpec();
             $order_goods_model = new OrderGoods();
-
+            $goods_price = 0;
             // 查询商品参与营销活动的数量
             $active_goods_count = $this->getActiveGoodsCount($goods_id);
             if ($data[ 'status' ] == 0) {
@@ -509,8 +508,7 @@ class GoodsService extends BaseAdminService
                 'update_time' => time()
             ];
 
-            $this->model->where([ [ 'goods_id', '=', $goods_id ] ])->update($goods_data);
-
+            $this->model->where([ [ 'goods_id', '=', $goods_id ]])->update($goods_data);
             $sku_data = [];
             if ($data[ 'spec_type' ] == 'single') {
                 if (!empty($data[ 'sku_no' ])) {
@@ -557,7 +555,7 @@ class GoodsService extends BaseAdminService
                     // 防止存在遗留规格项，删除旧规格
                     $goods_spec_model->where([ [ 'goods_id', '=', $goods_id ] ])->delete();
                 }
-
+                $goods_price = $sku_data['price'] ?? $goods_sku_model->price;
             } elseif ($data[ 'spec_type' ] == 'multi') {
                 $sku_no = implode(',', array_column($data[ 'goods_sku_data' ] ?? [], 'sku_no'));
                 if (!empty($sku_no)) {
@@ -612,7 +610,11 @@ class GoodsService extends BaseAdminService
                             $sku_model = $goods_sku_model->create($sku_data);
                             $sku_id_arr[] = $sku_model->sku_id;
                         }
-                        if ($v[ 'is_default' ] == 1) $default_spec_count++;
+                        if ($v[ 'is_default' ] == 1) {
+
+                            $goods_price = $v[ 'price' ] ?? $goods_sku_model->price;
+                            $default_spec_count++;
+                        }
                     }
 
                     // 校验默认必须存在默认规格
@@ -759,6 +761,14 @@ class GoodsService extends BaseAdminService
                 'goods_data' => $goods_data,
                 'sku_data' => $sku_data
             ]);
+            event('TreasureDataSync',[
+                'relate_id'=>$goods_id,
+                'relate_type'=>'shop',
+                'treasure_name'=>$data['goods_name'],
+                'treasure_sub_name'=>$data['sub_title'],
+                'treasure_image'=>$data['goods_image'],
+                'treasure_price'=>$goods_price,
+            ]);
             return true;
         } catch (\Exception $e) {
             Db::rollback();
@@ -807,7 +817,7 @@ class GoodsService extends BaseAdminService
      */
     public function recycle($goods_ids)
     {
-        $res = $this->model->restore([ [ 'goods_id', 'in', $goods_ids ] ]);
+        $res = $this->model->restore([ [ 'goods_id', 'in', $goods_ids ]]);
         return $res;
     }
 
@@ -827,7 +837,7 @@ class GoodsService extends BaseAdminService
      */
     public function editSort($data)
     {
-        return $this->model->where([ [ 'goods_id', '=', $data[ 'goods_id' ] ] ])->update([ 'sort' => $data[ 'sort' ] ]);
+        return $this->model->where([ [ 'goods_id', '=', $data[ 'goods_id' ] ]])->update([ 'sort' => $data[ 'sort' ] ]);
     }
 
     /**
@@ -889,7 +899,7 @@ class GoodsService extends BaseAdminService
             // 查询商品信息
             $field = 'goods_name,sub_title,goods_type,goods_cover,goods_image,goods_video,goods_desc,brand_id,goods_category,label_ids,service_ids,unit,stock,virtual_sale_num,is_limit,limit_type,max_buy,min_buy,status,sort,delivery_type,is_free_shipping,fee_type,delivery_money,delivery_template_id,supplier_id,attr_ids,attr_format,virtual_auto_delivery,virtual_receive_type,virtual_verify_type,virtual_indate,poster_id,form_id';
 
-            $goods_data = $this->model->field($field)->where([ [ 'goods_id', '=', $goods_id ] ])->findOrEmpty()->toArray();
+            $goods_data = $this->model->field($field)->where([ [ 'goods_id', '=', $goods_id ]])->findOrEmpty()->toArray();
             if (empty($goods_data)) {
                 throw new AdminException('SHOP_GOODS_NOT_EXIST');
             }
@@ -1160,7 +1170,7 @@ class GoodsService extends BaseAdminService
      */
     public function getBuyGoodsSelect(array $where = [])
     {
-        $field = 'goods_id, goods_name, goods_type, goods_cover,goods_image, stock,sub_title,goods_desc,is_limit,limit_type,max_buy,min_buy,member_discount';
+        $field = ' goods_id, goods_name, goods_type, goods_cover,goods_image, stock,sub_title,goods_desc,is_limit,limit_type,max_buy,min_buy,member_discount';
         $order = 'sort desc,create_time desc';
 
         $sku_where = [
@@ -1189,7 +1199,7 @@ class GoodsService extends BaseAdminService
                     $v[ 'goodsSku' ][ 'member_price' ] = $this->getMemberPrice($member_info, $v[ 'member_discount' ], $v[ 'goodsSku' ][ 'member_price' ], $v[ 'goodsSku' ][ 'price' ]);
                 }
                 // 限购查询当前会员已购数量
-                $has_buy = ( new CoreGoodsLimitBuyService() )->getGoodsHasBuyNumber( $where[ 'member_id' ], $v[ 'goods_id' ]);
+                $has_buy = ( new CoreGoodsLimitBuyService() )->getGoodsHasBuyNumber($where[ 'member_id' ], $v[ 'goods_id' ]);
                 $v[ 'has_buy' ] = $has_buy;
                 // 满减活动
                 $manjian_info = ( new ManjianService() )->getManjianInfo([ 'goods_id' => $v[ 'goods_id' ], 'sku_id' => $v[ 'goodsSku' ][ 'sku_id' ], 'member_id' => $where[ 'member_id' ] ]);
@@ -1240,7 +1250,7 @@ class GoodsService extends BaseAdminService
 
         $goods_sku_model = new GoodsSku();
 
-        $info = $goods_sku_model->where([ [ 'sku_id', '=', $data[ 'sku_id' ] ] ])
+        $info = $goods_sku_model->where([  [ 'sku_id', '=', $data[ 'sku_id' ] ] ])
             ->field($field)
             ->with([
                 // 商品主表
@@ -1250,7 +1260,7 @@ class GoodsService extends BaseAdminService
                 },
                 // 商品规格列表
                 'skuList' => function ($query) {
-                    $query->field('sku_id, sku_name, sku_image, sku_no, goods_id, sku_spec_format, price, market_price, sale_price, stock, weight, volume, is_default,member_price');
+                    $query->field(' sku_id, sku_name, sku_image, sku_no, goods_id, sku_spec_format, price, market_price, sale_price, stock, weight, volume, is_default,member_price');
                 },
                 // 商品规格项/规格值列表
                 'goodsSpec' => function ($query) {
@@ -1298,6 +1308,11 @@ class GoodsService extends BaseAdminService
      */
     public function getGoodsCount()
     {
+        $data = [
+            "sale_goods_num" => 0, //销售
+            "warehouse_goods_num" => 0, //仓库
+        ];
+
         $data[ 'sale_goods_num' ] = $this->model->where([ [ 'status', '=', 1 ] ])->count();
         $data[ 'warehouse_goods_num' ] = $this->model->where([ [ 'status', '=', 0 ] ])->count();
         return $data;
@@ -1314,7 +1329,7 @@ class GoodsService extends BaseAdminService
             Db::startTrans();
 
             $goods_info = $this->model->where([
-                [ 'goods_id', '=', $params[ 'goods_id' ] ]
+                [ 'goods_id', '=', $params[ 'goods_id' ] ],
             ])->field('goods_type')->findOrEmpty()->toArray();
 
             if (empty($goods_info)) {
@@ -1362,7 +1377,7 @@ class GoodsService extends BaseAdminService
             Db::startTrans();
 
             $goods_info = $this->model->where([
-                [ 'goods_id', '=', $params[ 'goods_id' ] ]
+                [ 'goods_id', '=', $params[ 'goods_id' ] ],
             ])->field('goods_id,goods_type')->findOrEmpty()->toArray();
 
             if (empty($goods_info)) {
@@ -1411,7 +1426,7 @@ class GoodsService extends BaseAdminService
             Db::startTrans();
 
             $goods_info = $this->model->where([
-                [ 'goods_id', '=', $params[ 'goods_id' ] ]
+                [ 'goods_id', '=', $params[ 'goods_id' ] ],
             ])->field('goods_type')->findOrEmpty()->toArray();
 
             if (empty($goods_info)) {
@@ -1420,7 +1435,7 @@ class GoodsService extends BaseAdminService
 
             // 修改商品的会员等级折扣
             $this->model->where([
-                [ 'goods_id', '=', $params[ 'goods_id' ] ]
+                [ 'goods_id', '=', $params[ 'goods_id' ] ],
             ])->update([
                 'member_discount' => $params[ 'member_discount' ]
             ]);
@@ -1693,7 +1708,7 @@ class GoodsService extends BaseAdminService
                     } else {
                         $query = GoodsSku::alias('goodsSku')
                             ->join(( new Goods() )->getTable() . ' goods', 'goods.goods_id = goodsSku.goods_id')
-                            ->whereIn('goods.goods_id', $goods_ids);
+                           ->whereIn('goods.goods_id', $goods_ids);
                     }
                     $query->update([
                         'goodsSku.stock' => Db::raw("goodsSku.stock + {$update_stock}"),
@@ -1714,12 +1729,13 @@ class GoodsService extends BaseAdminService
                 if ($is_all) {
                     $query = $this->getBatchAllQuery($data[ 'where' ], $goods_ids);
                     $query->update([
-                        'goods.stock' => Db::raw("(SELECT COALESCE(SUM(stock), 0)  FROM " . ( new GoodsSku() )->getTable() . "  WHERE goods_id = goods.goods_id ")
+                        'goods.stock' => Db::raw("(SELECT COALESCE(SUM(stock), 0)  FROM " . ( new GoodsSku() )->getTable() . "  WHERE goods_id = goods.goods_id )")
                     ]);
                 } else {
-                    Goods::alias('goods')->whereIn('goods.goods_id', $goods_ids)
-                        ->update([
-                        'stock' => Db::raw("(SELECT COALESCE(SUM(stock), 0)  FROM " . ( new GoodsSku() )->getTable() . "  WHERE goods_id = goods.goods_id ")
+                    $query = Goods::alias('goods');
+                    $query = $query->whereIn('goods.goods_id', $goods_ids);
+                    $query->update([
+                        'stock' => Db::raw("(SELECT COALESCE(SUM(stock), 0)  FROM " . ( new GoodsSku() )->getTable() . "  WHERE goods_id = goods.goods_id )")
                     ]);
                 }
 
@@ -1799,7 +1815,6 @@ class GoodsService extends BaseAdminService
         $goods_category = [];
 
         $category_goods_list = ( new Goods() )->where([
-            [ 'goods_id', '>', 0 ]
         ])->withSearch([ 'goods_category' ], [
             'goods_category' => $category_id
         ])->select()->toArray();

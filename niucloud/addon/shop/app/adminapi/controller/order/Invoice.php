@@ -59,4 +59,42 @@ class Invoice extends BaseAdminController
         return success('SUCCESS', data:(new InvoiceService())->invoicing($id, $data));
     }
 
+    /**
+     * @description 审核发票
+     * @param int $id
+     * @return Response
+     */
+    public function audit() {
+        $data = $this->request->params([
+            ['ids', []]
+        ]);
+        return success('SUCCESS', data:(new InvoiceService())->audit($data));
+    }
+
+    /**
+     * @description 添加发票
+     * @return Response
+     */
+    public function add()
+    {
+        $data = $this->request->params([
+            ['order_no', ''],
+            ['header_type', ''],
+            ['header_name', ''],
+            ['type', ''],
+            ['name', ''],
+            ['tax_number', ''],
+            ['mobile', ''],
+            ['email', ''],
+            ['telephone', ''],
+            ['address', ''],
+            ['bank_name', ''],
+            ['bank_card_number', ''],
+            ['pay_voucher', ''],
+            ['money', ''],
+        ]);
+        (new InvoiceService())->add($data);
+        return success('SUCCESS');
+    }
+
 }

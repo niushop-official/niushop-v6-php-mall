@@ -1,8 +1,8 @@
 <template>
     <view class=" bg-[var(--page-bg-color)] overflow-hidden min-h-screen">
         <view class="mescroll-box" v-if="tabsData.length">
-            <view v-if="config.search.control" class="search-box box-border z-10 fixed top-0 left-0 right-0  h-[100rpx] bg-[#fff]" :style="{'top': systemStore.topTabbarInfo.fullHeight || 0}">
-                <view class="flex-1 search-input">
+            <view v-if="config.search.control" class="search-box box-border z-10 fixed top-0 left-0 right-0  h-[100rpx] bg-[#f6f6f6]" :style="{'top': systemStore.topTabbarInfo.fullHeight || 0}">
+                <view class="flex-1 search-input bg-[#fff]">
                     <text @click.stop="searchNameFn" class="nc-iconfont nc-icon-sousuo-duanV6xx1 btn"></text>
                     <input class="input" type="text" v-model.trim="searchName" :placeholder="config.search.title" placeholderClass="text-[var(--text-color-light9)]" @confirm="searchNameFn">
                     <text v-if="searchName" class="nc-iconfont nc-icon-cuohaoV6xx1 clear" @click="searchName=''"></text>
@@ -25,16 +25,16 @@
                         v-if="tabsData[tabActive]?.child_list && !loading">
                         <template v-for="(item, index) in tabsData[tabActive]?.child_list" :key="item.category_id">
                             <view @click="toLink(item.category_id)" class=" flex items-center justify-center flex-col">
-                                <u--image radius="var(--goods-rounded-big)" width="120rpx" height="120rpx" :src="img(item.image ? item.image : '')" model="aspectFill">
+                                <up-image radius="var(--goods-rounded-big)" width="120rpx" height="120rpx" :src="img(item.image ? item.image : '')" model="aspectFill">
                                     <template #error>
                                         <image class="rounded-[var(--goods-rounded-big)] overflow-hidden w-[120rpx] h-[120rpx]" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                     </template>
-                                </u--image>
+                                </up-image>
                                 <view class="text-[24rpx] text-center mt-[16rpx] leading-[34rpx]">{{item.category_name }}</view>
                             </view>
                         </template>
                     </view>
-                    
+
                     <mescroll-empty class="part" v-if="!tabsData[tabActive]?.child_list && !loading" :option="{tip : '暂无商品分类'}"></mescroll-empty>
                 </view>
             </scroll-view>
@@ -225,7 +225,8 @@ const searchNameFn = () => {
 .tabs-box .tab-item-active {
     position: relative;
     color: var(--primary-color);
-    background-color: var(--temp-bg);
+    font-weight: bold;
+    // background-color: var(--temp-bg);
 
     &::before {
         display: inline-block;

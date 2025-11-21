@@ -166,7 +166,7 @@ const deleteEvent = (id: number) => {
         type: 'warning'
     }).then(() => {
         deleteGoodRank(id).then(() => {
-            loadRankList()
+            loadRankList(getTablePageStorage(tableData.searchParam).page)
         })
     })
 }
@@ -248,7 +248,7 @@ const batchDeleteGoods = () => {
         batchDelete({
             rank_id: rankIds
         }).then(() => {
-            loadRankList()
+            loadRankList(getTablePageStorage(tableData.searchParam).page)
             repeat.value = false
         }).catch(() => {
             repeat.value = false
@@ -278,7 +278,7 @@ const sortInputListener = debounce((sort, row) => {
         rank_id: row.rank_id,
         sort
     }).then((res) => {
-        loadRankList()
+        loadRankList(getTablePageStorage(tableData.searchParam).page)
     })
 })
 </script>

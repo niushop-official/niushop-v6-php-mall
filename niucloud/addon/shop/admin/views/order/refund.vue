@@ -136,9 +136,9 @@
                 </div>
             </div>
         </el-card>
-        <order-notes ref="orderNotesDialog" @complete="loadOrderList"></order-notes>
+        <order-notes ref="orderNotesDialog" @complete="loadOrderList(getTablePageStorage(orderTable.searchParam).page)"></order-notes>
         <export-sure ref="exportSureDialog" :show="flag" type="shop_order_refund" :searchParam="orderTable.searchParam" @close="handleClose" />
-        <refund-detail ref="refundDetailDialog" @load="loadOrderList"></refund-detail>
+        <refund-detail ref="refundDetailDialog" @load="loadOrderList(getTablePageStorage(orderTable.searchParam).page)"></refund-detail>
     </div>
 </template>
 

@@ -49,6 +49,9 @@ class Exchange extends BaseModel
     // 设置JSON数据返回数组
     protected $jsonAssoc = true;
 
+    protected $autoWriteTimestamp = false;
+
+
 
     /**
      * 搜索器商品名称
