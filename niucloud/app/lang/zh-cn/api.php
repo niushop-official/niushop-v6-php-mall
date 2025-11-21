@@ -24,6 +24,7 @@ return [
     'ADD_FAIL' => '添加失败',
     'ADD_SUCCESS' => '添加成功',
     'UPLOAD_FAIL' => '上传失败',
+    'RELEASE_SUCCESS' => '发布成功',
     'ATTACHMENT_DELETE_FAIL' => '附件删除失败',
     'DATA_NOT_EXIST' => '数据不存在',
     'DOWNLOAD_FAIL' => '下载失败',
@@ -65,6 +66,7 @@ return [
     'NOT_EXIST_UPGRADE_CONTENT' => '没有获取到可以升级的内容',
     'CLOUD_BUILD_AUTH_CODE_NOT_FOUND' => '请先填写授权码',
     'TASK_CYCLE_ERROR' => '任务周期填写错误',
+    'UPGRADE_TASK_EXIST' => '有正在执行的升级任务，可以展开正在升级的任务，也可以在开发>更新缓存中清除缓存重新开始升级',
     //登录注册重置账号....
 
     'LOGIN_SUCCESS' => '登录成功',
@@ -77,6 +79,7 @@ return [
     'OLD_PASSWORD_ERROR' => '原始密码不正确',
     'MOBILE_LOGIN_UNOPENED' => '手机号登录注册未开启',
     'APP_TYPE_NOT_EXIST' => '无效的登录端口',
+    "USER_NOT_ALLOW_DEL" => "该用户是一些站点的管理员不允许删除",
     "SUPER_ADMIN_NOT_ALLOW_DEL" => "超级管理员不允许删除",
 
     //用户组权限
@@ -96,6 +99,7 @@ return [
     'USER_NOT_EXIST' => '用户不存在',
     'ADMIN_NOT_ALLOW_EDIT_ROLE' => '超级管理员不允许改动权限',
     'USERNAME_REPEAT' => '账号重复',
+    'MOBILE_REPEAT' => '手机号重复',
 
     //角色管理
     'USER_ROLE_NOT_EXIST' => '角色不存在',
@@ -133,8 +137,6 @@ return [
     'NOTICE_SMS_EMPTY' => '手机号为空',
     'NOTICE_SMS_NOT_OPEN' => '短信未启用',
     'NOTICE_TEMPLATE_IS_NOT_EXIST' => '消息不存在',
-
-    'WEB_ADV_POSITION_NOT_EXIST' => '广告位不存在',
 
     //会员相关
     'MOBILE_IS_EXIST' => '当前手机号已绑定账号',
@@ -216,8 +218,8 @@ return [
     'WEAPP_NOT_EXIST' => '微信小程序未配置完善',
     'WEAPP_EMPOWER_NOT_EXIST' => '微信小程序授信信息不存在',
     'WEAPP_EMPOWER_TEL_NOT_EXIST' => '微信小程序授信手机号不存在',
-    'CURR_SITE_IS_NOT_OPEN_SSL' => '微信小程序请求地址只支持https请先配置ssl',
     'WECHAT_MINI_PROGRAM_CODE_GENERATION_FAILED' => '微信小程序码生成失败',
+
 
     //支付相关(todo  注意:7段不共享)
     'ALIPAY_TRANSACTION_NO_NOT_EXIST' => '无效的支付交易号',
@@ -284,6 +286,8 @@ return [
     // 授权相关
     'AUTH_NOT_EXISTS' => '未获取到授权信息',
 
+    /********************************************************* home端专用 **************************************/
+
     // 云服务
     'CLOUD_WEAPP_COMPILE_NOT_EXIST' => '未找到微信小程序编译包',
     'WEAPP_APPID_EMPTY' => '还没有配置微信小程序',
@@ -322,6 +326,14 @@ return [
     'EXPORT_NO_DATA' => '暂无可导出数据',
     'DIRECTORY' => '目录',
     'WAS_NOT_CREATED' => '创建失败',
+
+    /********************************************************* 微信开放平台 **************************************/
+    'WECHAT_OPLATFORM_NOT_EXIST' => '未配置微信开放平台',
+    'WEAPP_EXIST' => '该小程序已经授权给其他站点',
+    'WECHAT_EXIST' => '该公众号已经授权给其他站点',
+    'NOT_YET_PRESENT_TEMPLATE_LIBRARY' => '平台尚未上传小程序到模板库',
+    'WEAPP_VERSION_NOT_EXIST' => '未获取到小程序版本提交记录',
+    'NOT_ALLOWED_CANCEL_AUDIT' => '只有审核中的才可以撤回',
 
     'PRINTER_NOT_EXIST' => '打印机不存在',
     /*******************************************牛云短信 start ********************************************************/

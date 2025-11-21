@@ -52,14 +52,23 @@ class Request extends \think\Request
      */
     public function paramFilter($param, bool $filter = true)
     {
-        if (!$param || !$filter || !is_string($param)) return $param;
-        // 把数据过滤
+        if (!$param || !$filter || !is_string($param)) {
+            return $param;
+        }
+
+        // 过滤危险标签
         $filter_rule = [
-            "/<(\\/?)(script|i?frame|style|html|body|title|link|metaf|alert|font|object|\\?|\\%)([^>]*?)>/isU",
-            "/(<[^>]*)on[a-zA-Z]+\s*=([^>]*>)/isU",
+            "/<(\\/?)(script|iframe|frame|style|html|body|title|link|meta|alert|font|object|\\?|\\%)([^>]*?)>/isU",
+            "/(<[^>]*?)on[a-zA-Z]+\s*=[\s\"'][^\"']*?([\s\"'][^>]*?>)/isU",
             "/\\b(select|join|where|drop|like|modify|rename|insert|update|table|database|alter|truncate|\'|\/\*|\.\.\/|\.\/|union|into|load_file|outfile)\\b/is"
         ];
-        return preg_replace($filter_rule, '', $param);
+
+        $replace = [
+            '', // 移除整个危险标签
+            '$1$2', // 仅移除 onxxx 属性，保留标签
+            ''
+        ];
+        return preg_replace($filter_rule, $replace, $param);
     }
 
     /**
@@ -88,6 +97,7 @@ class Request extends \think\Request
             return static::$auth_info['member_id'] ?? 0;
         }
     }
+
 
     /**
      * 用户账号
@@ -135,6 +145,7 @@ class Request extends \think\Request
     public function apiToken(){
         return $this->header(system_name('api_token_name'));
     }
+
 
     /**
      * 获取场景

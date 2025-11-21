@@ -9,7 +9,6 @@ import { useLogin } from '@/hooks/useLogin'
 import { useShare } from '@/hooks/useShare'
 
 onLaunch((data: any) => {
-
     // 添加初始化拦截器
     launchInterceptor()
     const systemStore = useSystemStore()
@@ -54,7 +53,6 @@ onLaunch((data: any) => {
             console.log('uni-app App.vue 接受数据错误', e)
         }
     }, false);
-
 
     try {
         uni.hideTabBar() // 隐藏tabbar
@@ -207,6 +205,10 @@ onLaunch((data: any) => {
 
     // 控制弹窗展示
     uni.setStorageSync('isOnLoad', true); // 存储是页面是否加载完成的状态
+    
+    // #ifdef APP-PLUS
+    systemStore.getVersionInfoFn()
+    // #endif
 })
 
 onShow(() => {

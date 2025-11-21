@@ -39,8 +39,6 @@ Route::group('sys', function() {
     Route::put('role/:role_id', 'sys.Role/edit');
     //删除用户组
     Route::delete('role/:role_id', 'sys.Role/del');
-    // 修改用户组状态
-    Route::put('role/status', 'sys.Role/modifyStatus');
     /***************************************************** 菜单 ****************************************************/
     //菜单新增
     Route::post('menu', 'sys.Menu/add');
@@ -66,8 +64,6 @@ Route::group('sys', function() {
     Route::get('menu/mothod', 'sys.Menu/getMethodType');
 
     Route::get('menu/system_menu', 'sys.Menu/getSystem');
-
-    Route::get('menu/addon_menu/all', 'sys.Menu/getAllAddonMenu');
 
     Route::get('menu/addon_menu/:app_key', 'sys.Menu/getAddonMenu');
 
@@ -98,6 +94,16 @@ Route::group('sys', function() {
     Route::put('config/developer_token', 'sys.Config/setDeveloperToken');
     // 开发者key
     Route::get('config/developer_token', 'sys.Config/getDeveloperToken');
+
+    // 布局设置
+    Route::get('config/layout', 'sys.Config/getLayout');
+    // 布局设置
+    Route::put('config/layout', 'sys.Config/setLayout');
+
+    // 色调设置
+    Route::get('config/themecolor', 'sys.Config/getThemeColor');
+    // 色调设置
+    Route::put('config/themecolor', 'sys.Config/setThemeColor');
 
     /***************************************************** 图片上传 ****************************************************/
     //附件图片上传
@@ -342,6 +348,8 @@ Route::group('sys', function() {
     Route::get('web/website', 'sys.Config/getWebsite');
     // 获取版权信息
     Route::get('web/copyright', 'sys.Config/getCopyright');
+    // 查询布局设置
+    Route::get('web/layout', 'sys.Config/getLayout');
     // 获取install.php配置
     Route::get('install/config', 'sys.Config/getInstallConfig');
 });

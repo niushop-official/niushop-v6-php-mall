@@ -228,6 +228,21 @@ class Addon extends BaseAdminController
         return success(( new AddonService() )->getShowMarketingTools());
     }
 
+
+    /**
+     * 统一展示 安装的插件 应用 营销工具等。。
+     * @return Response
+     */
+    public function showCustomer()
+    {
+        return success((new AddonService())->showCustomer());
+    }
+    public function getSpecialMenuList()
+    {
+        return success('SUCCESS', (new AddonService())->getSpecialMenuList());
+
+    }
+
     /**
      * 获取首页应用标签
      * @description 获取首页应用标签

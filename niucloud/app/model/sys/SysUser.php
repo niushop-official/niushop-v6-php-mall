@@ -14,6 +14,7 @@ namespace app\model\sys;
 use app\dict\sys\UserDict;
 use core\base\BaseModel;
 use think\model\concern\SoftDelete;
+use think\model\relation\HasMany;
 
 /**
  * 系统用户模型
@@ -56,22 +57,11 @@ class SysUser extends BaseModel
      */
     protected $defaultSoftDelete = 0;
 
-    /**
-     * 状态字段转化
-     * @param $value
-     * @param $data
-     * @return mixed
-     */
-    public function getStatusNameAttr($value, $data)
-    {
-        if (empty($data[ 'status' ])) return '';
-        return UserDict::getStatus()[ $data[ 'status' ] ] ?? '';
-    }
 
 
     public function getCreateTimeAttr($value, $data)
     {
-        return $data[ 'create_time' ] ? get_date_by_time($data[ 'create_time' ]) : '';
+        return $data['create_time'] ? get_date_by_time($data['create_time']) : '';
     }
 
     /**
@@ -101,6 +91,18 @@ class SysUser extends BaseModel
     }
 
     /**
+     * 角色状态
+     * @param $value
+     * @param $data
+     * @return string
+     */
+    public function getStatusNameAttr($value, $data)
+    {
+        if (empty($data['status'])) return '';
+        return UserDict::getStatus()[$data['status']] ?? '';
+    }
+
+    /**
      * 是否删除搜索器
      * @param $query
      */
@@ -117,14 +119,14 @@ class SysUser extends BaseModel
      */
     public function searchCreateTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[ 0 ]) ? 0 : strtotime($value[ 0 ]);
-        $end_time = empty($value[ 1 ]) ? 0 : strtotime($value[ 1 ]);
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
         if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('sys_user.create_time', $start_time, $end_time);
         } else if ($start_time > 0 && $end_time == 0) {
-            $query->where([ [ 'sys_user.create_time', '>=', $start_time ] ]);
+            $query->where([['sys_user.create_time', '>=', $start_time]]);
         } else if ($start_time == 0 && $end_time > 0) {
-            $query->where([ [ 'sys_user.create_time', '<=', $end_time ] ]);
+            $query->where([['sys_user.create_time', '<=', $end_time]]);
         }
     }
 
@@ -136,14 +138,14 @@ class SysUser extends BaseModel
      */
     public function searchLastTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[ 0 ]) ? 0 : strtotime($value[ 0 ]);
-        $end_time = empty($value[ 1 ]) ? 0 : strtotime($value[ 1 ]);
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
         if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('sys_user.last_time', $start_time, $end_time);
         } else if ($start_time > 0 && $end_time == 0) {
-            $query->where([ [ 'sys_user.last_time', '>=', $start_time ] ]);
+            $query->where([['sys_user.last_time', '>=', $start_time]]);
         } else if ($start_time == 0 && $end_time > 0) {
-            $query->where([ [ 'sys_user.last_time', '<=', $end_time ] ]);
+            $query->where([['sys_user.last_time', '<=', $end_time]]);
         }
     }
 }

@@ -13,6 +13,20 @@ export const redirect = (redirect: any) => {
     if (useDiyStore().mode == 'decorate') return
 
     let { url, mode, param, success, fail, complete } = redirect
+    // 新增：判断是否为外部链接
+    if (url && (url.indexOf('https') != -1 || url.indexOf('http') != -1)) {
+
+        // #ifdef H5
+        window.location.href = url;
+        // #endif
+
+        // #ifdef MP
+        redirect({
+            url: '/app/pages/webview/index',
+            param: { src: encodeURIComponent(url) }
+        });
+        // #endif
+    }
     let originalUrl = url; // 原始地址
     let newLogin = false; // 是否需要登录
 
@@ -294,6 +308,26 @@ export function img(path: string): string {
     if (typeof imgDomain == 'string' && imgDomain.endsWith('/')) imgDomain = imgDomain.slice(0, -1)
 
     return isUrl(path) ? path : `${imgDomain}/${path}`
+}
+
+/**
+ * 路径输出
+ * @param path
+ * @returns
+ */
+export function getUrl(path : string) : string {
+	// #ifdef H5
+	let urlDomain = import.meta.env.VITE_IMG_DOMAIN || location.origin
+	// #endif
+
+	// #ifndef H5
+	let urlDomain = import.meta.env.VITE_IMG_DOMAIN
+	// #endif
+
+	if (typeof path == 'string' && path.startsWith('/')) path = path.replace(/^\//, '')
+	if (typeof urlDomain == 'string' && urlDomain.endsWith('/')) urlDomain = urlDomain.slice(0, -1)
+
+	return isUrl(path) ? path : `${urlDomain}/${path}`
 }
 
 /**
@@ -768,4 +802,13 @@ export function rgbaToHex (r, g, b, a) {
 
     let hex = "#" + componentToHex(rBlend) + componentToHex(gBlend) + componentToHex(bBlend)
     return hex.toUpperCase()
+}
+
+// 获取 topFixedStatus 缓存名称
+export function getTopFixedStatusName(data : any = {}) {
+	let name = 'topFixedStatus'
+	if (data.id) name += '_' + data.id
+	if (data.site_id) name += '_' + data.site_id
+	if (data.type) name += '_' + data.type
+	return name
 }

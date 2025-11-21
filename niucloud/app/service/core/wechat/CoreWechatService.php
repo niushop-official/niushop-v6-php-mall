@@ -33,13 +33,13 @@ class CoreWechatService extends BaseCoreService
         $core_wechat_service = new CoreWechatConfigService();
         $wechat_config = $core_wechat_service->getWechatConfig();
 
-        if (empty($wechat_config[ 'app_id' ]) || empty($wechat_config[ 'app_secret' ])) throw new WechatException('WECHAT_NOT_EXIST');//公众号未配置
+        if (empty($wechat_config['app_id']) || empty($wechat_config['app_secret'])) throw new WechatException('WECHAT_NOT_EXIST');//公众号未配置
 
         $config = array(
-            'app_id' => $wechat_config[ 'app_id' ],
-            'secret' => $wechat_config[ 'app_secret' ],
-            'token' => $wechat_config[ 'token' ],
-            'aes_key' => $wechat_config[ 'encryption_type' ] == 'not_encrypt' ? '' : $wechat_config[ 'encoding_aes_key' ],// 明文模式请勿填写 EncodingAESKey
+            'app_id' => $wechat_config['app_id'],
+            'secret' => $wechat_config['app_secret'],
+            'token' => $wechat_config['token'],
+            'aes_key' => $wechat_config['encryption_type'] == 'not_encrypt' ? '' : $wechat_config['encoding_aes_key'],// 明文模式请勿填写 EncodingAESKey
             'http' => [
                 'timeout' => 5.0,
                 'retry' => true, // 使用默认重试配置
@@ -62,7 +62,7 @@ class CoreWechatService extends BaseCoreService
     /**
      * 回复文本消息
      * @param string $content 文本内容
-     * @return
+     * @return string[]
      */
     public static function text($content)
     {
@@ -75,7 +75,7 @@ class CoreWechatService extends BaseCoreService
     /**
      * 回复图片消息
      * @param string $media_id 媒体资源 ID
-     * @return
+     * @return void
      */
     public static function image($media_id)
     {
@@ -90,11 +90,10 @@ class CoreWechatService extends BaseCoreService
 
     /**
      * 回复声音消息
-     * @return
+     * @return void
      */
     public static function music()
     {
-        return;
     }
 
     /**
@@ -110,14 +109,14 @@ class CoreWechatService extends BaseCoreService
             'MsgType' => 'MsgType',
         ];
         if (is_array($title)) {
-            if (isset($title[ 0 ]) && is_array($title[ 0 ])) {
+            if (isset($title[0]) && is_array($title[0])) {
                 $newsList = [];
                 foreach ($title as $news) {
                     $newsList[] = self::newsMessage($news);
                 }
                 return $newsList;
             } else {
-                $data = [ $title ];
+                $data = [$title];
             }
         } else {
             $data = [
@@ -129,8 +128,8 @@ class CoreWechatService extends BaseCoreService
                 ]
             ];
         }
-        $message[ 'MsgType' ] = count($data);
-        $message[ 'Articles' ] = $data;
+        $message['MsgType'] = count($data);
+        $message['Articles'] = $data;
         return $message;
     }
 }

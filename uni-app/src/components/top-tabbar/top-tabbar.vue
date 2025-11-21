@@ -3,7 +3,7 @@
         <view class="u-navbar z-100" :class="{'fixed': props.scrollBool != -1, 'absolute': props.scrollBool == -1}" :style="{ backgroundColor: bgColor}">
             <view class="navbar-inner" :style="{ width: '100%', height: placeholderHeight + 'px' }">
                 <view v-if="topStatusBarData.style == 'style-1'" class="content-wrap" :class="[topStatusBarData.textAlign]" :style="navbarInnerStyle">
-                    <view class="back-wrap -ml-[16rpx] text-[26px] nc-iconfont nc-icon-zuoV6xx" :class="{'!text-transparent': !isBackShow}" :style="{ color: titleTextColor }" @tap="goBack"></view>
+                    <view v-if="isBackShow" class="back-wrap -ml-[16rpx] text-[26px] nc-iconfont nc-icon-zuoV6xx" :class="{'!text-transparent': !isBackShow}" :style="{ color: titleTextColor }" @tap="goBack"></view>
                     <view class="title-wrap" :style="styleOneFontSize">{{ data.title }}</view>
                 </view>
                 <view v-if="topStatusBarData.style == 'style-2'" class="content-wrap" :style="navbarInnerStyle" @click="diyStore.toRedirect(topStatusBarData.link)">
@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, getCurrentInstance, nextTick } from 'vue';
-import { redirect, img } from '@/utils/common';
+import { redirect, img ,currRoute} from '@/utils/common';
 import useSystemStore from '@/stores/system';
 import useDiyStore from '@/app/stores/diy';
 import { useLocation } from '@/hooks/useLocation'
@@ -82,20 +82,13 @@ const props = defineProps({
     isFill: {
         type: Boolean,
         default: true
-    },
-    // 临时处理方法，强制显示
-    mustFill: {
-        type: Boolean,
-        default: false
     }
 })
 
 // 控制-定位后是否对导航栏进行填充
 const isFill = computed(() => {
     let bool = true;
-    if(props.mustFill){
-        return props.mustFill
-    }else if (diyStore.imageAdsSameScreen) {
+    if (diyStore.imageAdsSameScreen) {
         bool = false;
     } else {
         bool = props.isFill;
@@ -201,7 +194,9 @@ const isBackShow = computed(() => {
     let bool = false;
     if (props.isBack && pages.length > 1) {
         bool = true; 
-    } 
+    } else if (currRoute() == 'app/pages/auth/index') {
+        bool = true;
+    }
     return bool;
 })
 
@@ -212,7 +207,14 @@ const goBack = () => {
     if (typeof props.customBack === 'function') {
         props.customBack();
     } else {
-        uni.navigateBack();
+        if (getCurrentPages().length > 1) {
+            uni.navigateBack()
+        } else {
+            redirect({
+                url: '/addon/shop/pages/index',
+                mode: 'reLaunch'
+            });
+        }  
     }
 }
 /******************************* 返回按钮-end ***********************/

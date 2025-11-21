@@ -247,19 +247,19 @@ button[type='primary'],uni-button[type='primary']{
 			font-size: 28rpx;
 			&.class-select{
 				position: relative;
-				font-weight: 500;
+				font-weight: 700;
 				color: var(--primary-color);
-				&::before {
-					content: "";
-					position: absolute;
-					bottom: -14rpx;
-					height: 6rpx;
-					border-radius: 100rpx;
-					background-color: var(--primary-color);
-					width: 40rpx;
-					left: 50%;
-					transform: translateX(-50%);
-				}
+				// &::before {
+				// 	content: "";
+				// 	position: absolute;
+				// 	bottom: -14rpx;
+				// 	height: 6rpx;
+				// 	border-radius: 100rpx;
+				// 	background-color: var(--primary-color);
+				// 	width: 40rpx;
+				// 	left: 50%;
+				// 	transform: translateX(-50%);
+				// }
 			}
 		}
 	}
@@ -279,7 +279,8 @@ button[type='primary'],uni-button[type='primary']{
 }
 //普通tab切换样式
 .tab-style-2{
-	@apply box-border bg-white;
+	@apply box-border ;
+    background-color: #f6f6f6; /* 直接覆盖背景色 */
 	padding: 0 30rpx;
 	.tab-content{
 		@apply flex whitespace-nowrap justify-between;
@@ -290,28 +291,28 @@ button[type='primary'],uni-button[type='primary']{
 			font-size: 28rpx;
 			&.class-select{
 				position: relative;
-				font-weight: 500;
+				font-weight: 700;
 				color: var(--primary-color);
-				&::before{
-					content: "";
-					position: absolute;
-					bottom: 10rpx;
-					width: 40rpx;
-					height:6rpx;
-					border-radius: 4rpx;
-					background-color: var(--primary-color);
-					left: 50%;
-					transform: translateX(-50%);
-				}
+				// &::before{
+				// 	content: "";
+				// 	position: absolute;
+				// 	bottom: 10rpx;
+				// 	width: 40rpx;
+				// 	height:6rpx;
+				// 	border-radius: 4rpx;
+				// 	background-color: var(--primary-color);
+				// 	left: 50%;
+				// 	transform: translateX(-50%);
+				// }
 			}
 		}
 	}
 }
 //两个tab选项卡样式
 .tab-style-3{
-	@apply flex whitespace-nowrap justify-around box-border bg-white;
+	@apply flex whitespace-nowrap justify-around box-border ;
 	height: 88rpx;
-	
+    background-color: #f6f6f6; /* 直接覆盖背景色 */
 	.tab-items{
 		@apply flex-1;
 		line-height: 88rpx;
@@ -321,19 +322,19 @@ button[type='primary'],uni-button[type='primary']{
 		margin:0 var(--sidebar-m);
 		&.class-select{
 			position: relative;
-			font-weight: 500;
+			font-weight: 700;
 			color: var(--primary-color);
-			&::before{
-				content: "";
-				position: absolute;
-				bottom: 10rpx;
-				width: 40rpx;
-				height:6rpx;
-				border-radius: 4rpx;
-				background-color: var(--primary-color);
-				left: 50%;
-				transform: translateX(-50%);
-			}
+			// &::before{
+			// 	content: "";
+			// 	position: absolute;
+			// 	bottom: 10rpx;
+			// 	width: 40rpx;
+			// 	height:6rpx;
+			// 	border-radius: 4rpx;
+			// 	background-color: var(--primary-color);
+			// 	left: 50%;
+			// 	transform: translateX(-50%);
+			// }
 		}
 	}
 	

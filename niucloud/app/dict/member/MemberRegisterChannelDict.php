@@ -24,7 +24,6 @@ class MemberRegisterChannelDict extends ChannelDict
 
     public static function getType($type = '')
     {
-
         $data = ChannelDict::getType($type);
         $data[self::MANUAL] = get_lang('dict_member.register_manual');//手动添加
         if (empty($type)) {

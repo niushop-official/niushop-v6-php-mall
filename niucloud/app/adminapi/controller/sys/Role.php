@@ -95,6 +95,21 @@ class Role extends BaseAdminController
     }
 
     /**
+     * 修改状态
+     * @description 修改状态
+     * @return \think\Response
+     */
+    public function modifyStatus()
+    {
+        $data = $this->request->params([
+            [ 'role_id', '' ],
+            [ 'status', '' ],
+        ]);
+        ( new RoleService() )->modifyStatus($data);
+        return success('SUCCESS');
+    }
+
+    /**
      * 删除单个用户组
      * @description 删除单个用户组
      * @param $role_id
@@ -104,21 +119,6 @@ class Role extends BaseAdminController
     public function del($role_id)
     {
         (new RoleService())->del($role_id);
-        return success('DELETE_SUCCESS');
-    }
-
-    /**
-     * 设置角色状态
-     * @description 设置角色状态
-     * @param $role_id
-     * @return Response
-     */
-    public function modifyStatus($role_id)
-    {
-        $data = $this->request->params([
-            ['status', RoleStatusDict::ON],
-        ]);
-        (new RoleService())->modifyStatus($role_id, $data['status']);
         return success('DELETE_SUCCESS');
     }
 

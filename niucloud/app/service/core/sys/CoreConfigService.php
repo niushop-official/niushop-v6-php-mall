@@ -40,7 +40,7 @@ class CoreConfigService extends BaseCoreService
     {
         $cache_name = 'config_cache';
         $where = array(
-            [ 'config_key', '=', $key ]
+            [ 'config_key', '=', $key ],
         );
         // 缓存清理
         $info = cache_remember(
@@ -71,7 +71,7 @@ class CoreConfigService extends BaseCoreService
     public function setConfig(string $key, array $value)
     {
         $where = array(
-            [ 'config_key', '=', $key ]
+            ['config_key', '=', $key]
         );
         $data = array(
             'config_key' => $key,
@@ -86,7 +86,7 @@ class CoreConfigService extends BaseCoreService
             $res = $this->model->where($where)->save($data);
         }
 
-        Cache::tag(self::$cache_tag_name)->clear();
+        Cache::tag(self::$cache_tag_name )->clear();
         return $res;
     }
 
@@ -96,10 +96,10 @@ class CoreConfigService extends BaseCoreService
      * @param string $key
      * @return bool
      */
-    public function modifyStatus(int $status, string $key)
+    public function modifyStatus( int $status, string $key)
     {
         $where = array(
-            [ 'config_key', '=', $key ]
+            [ 'config_key', '=', $key ],
         );
         $data = array(
             'status' => $status,
@@ -112,12 +112,27 @@ class CoreConfigService extends BaseCoreService
      * @param string $key
      * @return array|mixed
      */
-    public function getConfigValue(string $key)
+    public function getConfigValue( string $key)
     {
-        $config_info = $this->getConfig($key);
+        $config_info = $this->getConfig( $key);
         if (empty($config_info)) {
             return [];
         }
         return $config_info[ 'value' ];
+    }
+
+    /**
+     * 清除配置
+     * @param string $key
+     * @param array $value
+     * @return SysConfig|bool|Model
+     */
+    public function clearConfig(string $key)
+    {
+        $where = array(
+            [ 'config_key', '=', $key ],
+        );
+        $this->model->where($where)->delete();
+        Cache::tag(self::$cache_tag_name)->clear();
     }
 }

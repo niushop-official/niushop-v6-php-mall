@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getInitInfo, getSiteInfo,getMemberMobileExist } from '@/app/api/system'
+import { getInitInfo, getSiteInfo, getMemberMobileExist, getNewVersion } from '@/app/api/system'
 import useConfigStore from '@/stores/config'
 import useMemberStore from '@/stores/member'
 import { isWeixinBrowser } from '@/utils/common'
@@ -24,7 +24,18 @@ interface System {
     topTabbarInfo: {
         height: number
         fullHeight: string
-    }
+    },
+    appConfig: {
+        wechat_app_id: string
+        weapp_original: string
+    },
+    shareOptions: {
+        wechatOptions: any
+        weappOptions: any
+    },
+    versionInfo: any,
+    updateVersionPopup: boolean,
+    copyright:any
 }
 
 const useSystemStore = defineStore('system', {
@@ -56,7 +67,18 @@ const useSystemStore = defineStore('system', {
             topTabbarInfo: {
                 height: 0,
                 fullHeight: ''
-            }
+            },
+            appConfig: {
+                wechat_app_id: '',
+                weapp_original: ''
+            },
+            shareOptions: {
+                wechatOptions: {},
+                weappOptions: {}
+            },
+            versionInfo: null,
+            updateVersionPopup: false,
+            copyright:null
         }
     },
     actions: {
@@ -76,7 +98,6 @@ const useSystemStore = defineStore('system', {
             }).then((res: any) => {
                 if (res.data) {
                     let data = res.data;
-
                     // 底部导航
                     const configStore = useConfigStore()
                     configStore.tabbarList = data.tabbar_list;
@@ -99,6 +120,9 @@ const useSystemStore = defineStore('system', {
                     this.siteApps = apps
                     this.siteAddons = addons
 
+                    // 版权设置
+                    this.copyright = data.copyright
+
                     // 会员等级
                     const memberStore = useMemberStore();
                     memberStore.levelList = data.member_level;
@@ -118,7 +142,8 @@ const useSystemStore = defineStore('system', {
 
                     // 如果会员已存在则小程序端快捷登录时不再弹出授权弹框
                     uni.setStorageSync('member_exist', data.member_exist)
-						
+
+                    data.app_config && (this.appConfig = data.app_config)
 
                     this.initStatus = 'finish'; // 初始化完成
 
@@ -131,14 +156,32 @@ const useSystemStore = defineStore('system', {
 
             this.getMenuButtonInfoFn();
         },
-		// 如果已有手机号，就不弹出绑定手机号弹框
-		getMemberMobileExistFn (){
-			getMemberMobileExist({
-				openid: uni.getStorageSync('openid')
-			}).then((res:any)=>{
-				uni.setStorageSync('member_mobile_exist', res.data.member_mobile_exist)
-			})
-		},
+        // 获取版本数据信息
+        getVersionInfoFn(callback: any = null) {
+            // #ifdef APP-PLUS
+            // 获取系统信息
+            const systemInfo = uni.getSystemInfoSync();
+            const platform = systemInfo.osName;
+            const version_code = systemInfo.appVersionCode
+            getNewVersion({
+                version_code,
+                platform
+            }).then((res: any) => {
+                if (res.data) {
+                    this.versionInfo = res.data
+                    if (callback) callback(res.data)
+                }
+            })
+            // #endif
+        },
+        // 如果已有手机号，就不弹出绑定手机号弹框
+        getMemberMobileExistFn() {
+            getMemberMobileExist({
+                openid: uni.getStorageSync('openid')
+            }).then((res: any) => {
+                uni.setStorageSync('member_mobile_exist', res.data.member_mobile_exist)
+            })
+        },
         getMenuButtonInfoFn() {
             // 如果是小程序，获取右上角胶囊的尺寸信息，避免导航栏右侧内容与胶囊重叠(支付宝小程序非本API，尚未兼容)
             // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
@@ -182,6 +225,9 @@ const useSystemStore = defineStore('system', {
             this.topTabbarInfo = Object.assign({}, this.topTabbarInfo, data);
             this.topTabbarInfo.height = this.topTabbarInfo.height || 0
             this.topTabbarInfo.fullHeight = this.topTabbarInfo.height ? this.topTabbarInfo.height+'px' : 0
+        },
+        showUpdateVersion() {
+            this.updateVersionPopup = true
         }
     }
 })

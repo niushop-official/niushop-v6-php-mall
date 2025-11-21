@@ -57,6 +57,7 @@ return [
 
     //用户管理
     'USER_NOT_EXIST' => '用户不存在',
+    'ADMIN_NOT_ALLOW_EDIT_ROLE' => '超级管理员不允许改动权限',
     'USERNAME_REPEAT' => '用户名重复',
 
 

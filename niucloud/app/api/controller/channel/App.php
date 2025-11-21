@@ -11,6 +11,7 @@
 
 namespace app\api\controller\channel;
 
+use app\service\api\channel\AppService;
 use app\service\api\login\LoginService;
 use app\service\api\wechat\WechatAppService;
 use core\base\BaseController;
@@ -53,10 +54,20 @@ class App extends BaseController
             'mobile' => 'mobile'
         ]);
 
-        // 校验手机验证码（电脑端扫码）
+        // 校验手机验证码
         ( new LoginService() )->checkMobileCode($data[ 'mobile' ]);
 
         $wechat_app_service = new WechatAppService();
         return success($wechat_app_service->register($data[ 'openid' ], $data[ 'mobile' ], $data[ 'nickname' ], $data[ 'avatar' ], $data[ 'avatar' ]));
+    }
+
+    public function getNewVersion()
+    {
+        $data = $this->request->params([
+            [ 'version_code', '' ], // 当前版本
+            [ 'platform', '' ], // 请求平台
+        ]);
+        $app_service = new AppService();
+        return success(data:$app_service->getNewVersion($data));
     }
 }

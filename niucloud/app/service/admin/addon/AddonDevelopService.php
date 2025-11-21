@@ -94,7 +94,7 @@ class AddonDevelopService extends BaseAdminService
     /**
      * 下载
      * @param string $key
-     * @return array|string|string[]|\think\response\File
+     * @return \think\response\File
      */
     public function download(string $key){
         return (new CoreAddonDevelopBuildService())->download($key);

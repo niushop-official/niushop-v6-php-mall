@@ -25,7 +25,7 @@
                 </view>
             </scroll-view>
             <view class="btn-wrap">
-                <button class="primary-btn-bg btn" hover-class="none" :loading="loading" @click="confirmPay">{{ t('pay.confirmPay') }}</button>
+                <button class="primary-btn-bg bg-[var(--primary-color)] btn" hover-class="none" :loading="loading" @click="confirmPay">{{ t('pay.confirmPay') }}</button>
             </view>
         </view>
     </u-popup>
@@ -145,6 +145,18 @@ const confirmPay = () => {
                     location.href = res.data.url
                 }
                 // #endif
+                // #ifndef H5
+                uni.requestPayment({
+                    provider: 'alipay',
+                    ...res.data,
+                    success: (res: any) => {
+                        toPayResult()
+                    },
+                    fail: (res: any) => {
+                        loading.value = false
+                    }
+                })
+                // #endif
                 break;
             default:
                 if (res.data.url) {
@@ -169,7 +181,7 @@ const confirmPay = () => {
 uni.$on('checkIsReturnAfterPayment', () => {
     const data = uni.getStorageSync('paymenting')
     if (uni.getStorageSync('paymenting')) {
-        
+
         redirect({
             url: '/app/pages/pay/result',
             param: {
@@ -236,7 +248,7 @@ const toPayResult = () => {
         })
         return
     }
-    
+
     redirect({
         url: '/app/pages/pay/result',
         param: { trade_type: payInfo.value?.trade_type, trade_id: payInfo.value?.trade_id },

@@ -12,7 +12,11 @@
 namespace app\adminapi\controller\auth;
 
 use app\service\admin\auth\AuthService;
+use app\service\admin\auth\AuthSiteService;
 use core\base\BaseAdminController;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\Response;
 
 
@@ -31,12 +35,7 @@ class Auth extends BaseAdminController
      */
     public function authMenuList()
     {
-        $data = $this->request->params([
-            [ 'status', 1 ],
-            [ 'is_tree', 1 ],
-            [ 'is_button', 1 ]
-        ]);
-        return success(( new AuthService() )->getAuthMenuList($data[ 'status' ], $data[ 'is_tree' ], $data[ 'is_button' ]));
+        return success((new AuthService())->getAuthMenuList(1, 1));
     }
 
     /**

@@ -29,9 +29,9 @@ Route::any('weapp/serve', 'weapp.Serve/serve')
     ->middleware(ApiCheckToken::class)
     ->middleware(ApiLog::class);
 
-Route::group(function() {
-    Route::post('niucloud/notify', function() {
-        return ( new CoreNotifyService() )->notify();
+Route::group(function () {
+    Route::post('niucloud/notify', function () {
+        return (new CoreNotifyService())->notify();
     });
 
 });
@@ -72,6 +72,9 @@ Route::group(function () {
 
     // app通过wx code登录
     Route::post('wxapp/login', 'channel.App/wechatLogin');
+
+    // 获取App新的版本
+    Route::get('app/newversion', 'channel.App/getNewVersion');
 
     //登录
     Route::get('login', 'login.Login/login');
@@ -153,6 +156,7 @@ Route::group(function () {
     Route::get('task/growth', 'sys.Task/growth');
     // 获取积分任务
     Route::get('task/point', 'sys.Task/point');
+
 })->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class)
     ->middleware(ApiLog::class);
@@ -169,4 +173,4 @@ Route::group(function () {
     ->middleware(ApiCheckToken::class, true)
     ->middleware(ApiLog::class);
 //加载插件路由
-( new DictLoader("Route") )->load([ 'app_type' => 'api' ]);
+(new DictLoader("Route"))->load(['app_type' => 'api']);

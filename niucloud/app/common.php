@@ -774,7 +774,7 @@ function project_path()
 /**
  * 图片转base64
  * @param string $path
- * @param $is_delete `转换后是否删除原图`
+ * @param $is_delete 转换后是否删除原图
  * @return string
  */
 function image_to_base64(string $path, $is_delete = false)
@@ -897,7 +897,7 @@ function file_copy(string $source_file, string $to_file)
 function qrcode($url, $page, $data, $dir = '', $channel = 'h5', $style = ['is_transparent' => true], $outfile = true)
 {
     if ($outfile) {
-        $dir = $dir ? : 'upload' . '/' . 'qrcode/';//二维码默认存储位置
+        $dir = $dir ?: 'upload' . '/' . 'qrcode' ;//二维码默认存储位置
         if (!is_dir($dir) && !mkdir($dir, 0777, true) && !is_dir($dir)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
         }
@@ -1051,9 +1051,9 @@ function get_last_time($time = null)
 
 /**
  * 检查目录及其子目录的权限
- * @param $dir `要检查的目录路径`
+ * @param $dir 要检查的目录路径
  * @param $data
- * @param $exclude_dir `排除排除无需检测的的文件夹`
+ * @param $exclude_dir 排除排除无需检测的的文件夹
  * @return array|array[]|mixed
  */
 function checkDirPermissions($dir, $data = [], $exclude_dir = [])
@@ -1116,8 +1116,8 @@ function checkDirPermissions($dir, $data = [], $exclude_dir = [])
 
 /**
  * 下载网络图片
- * @param $img_url `图片URL`
- * @param $file_name `本地保存位置`
+ * @param $img_url 图片URL
+ * @param $file_name 本地保存位置
  * @return bool
  */
 function downloadImage($img_url, $file_name)

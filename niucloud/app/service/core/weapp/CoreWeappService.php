@@ -11,6 +11,7 @@
 
 namespace app\service\core\weapp;
 
+use app\service\core\wxoplatform\CoreOplatformService;
 use core\base\BaseCoreService;
 use core\exception\CommonException;
 use core\exception\WechatException;
@@ -35,13 +36,13 @@ class CoreWeappService extends BaseCoreService
         $core_weapp_service = new CoreWeappConfigService();
         $weapp_config = $core_weapp_service->getWeappConfig();
 
-        if (empty($weapp_config[ 'app_id' ]) || empty($weapp_config[ 'app_secret' ])) throw new WechatException('WEAPP_NOT_EXIST');//公众号未配置
+        if (empty($weapp_config['app_id']) || empty($weapp_config['app_secret'])) throw new WechatException('WEAPP_NOT_EXIST');//公众号未配置
 
         $config = array(
-            'app_id' => $weapp_config[ 'app_id' ],
-            'secret' => $weapp_config[ 'app_secret' ],
-            'token' => $weapp_config[ 'token' ],
-            'aes_key' => $weapp_config[ 'encryption_type' ] == 'not_encrypt' ? '' : $weapp_config[ 'encoding_aes_key' ],// 明文模式请勿填写 EncodingAESKey
+            'app_id' => $weapp_config['app_id'],
+            'secret' => $weapp_config['app_secret'],
+            'token' => $weapp_config['token'],
+            'aes_key' => $weapp_config['encryption_type'] == 'not_encrypt' ? '' : $weapp_config['encoding_aes_key'],// 明文模式请勿填写 EncodingAESKey
             'http' => [
                 'throw' => true, // 状态码非 200、300 时是否抛出异常，默认为开启
                 'timeout' => 5.0,
@@ -49,6 +50,7 @@ class CoreWeappService extends BaseCoreService
             ],
         );
         return new Application($config);
+
     }
 
 
@@ -60,6 +62,21 @@ class CoreWeappService extends BaseCoreService
     public static function appApiClient()
     {
         return self::app()->getClient();
+    }
+
+    /**
+     * 刷新token
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public static function refreshToken()
+    {
+        $core_weapp_service = new CoreWeappConfigService();
+        $weapp_config = $core_weapp_service->getWeappConfig();
+
+        if (!$weapp_config['is_authorization']) {
+            self::app()->getAccessToken()->refresh();
+        }
     }
 
     /**
@@ -75,7 +92,7 @@ class CoreWeappService extends BaseCoreService
     {
         $scene = [];
         foreach ($data as $v) {
-            $scene[] = $v[ 'key' ] . '-' . $v[ 'value' ];
+            $scene[] = $v['key'] . '-' . $v['value'];
         }
         $response = self::appApiClient()->postJson('/wxa/getwxacodeunlimit', [
             'scene' => implode('&', $scene),
@@ -86,7 +103,7 @@ class CoreWeappService extends BaseCoreService
         ]);
         if ($response->isFailed()) {
             // 出错了，处理异常
-            throw new CommonException('微信小程序码生成失败：errcode:' . $response[ 'errcode' ] . 'errmsg:' . $response[ 'errmsg' ]);
+            throw new CommonException('微信小程序码生成失败：errcode:' . $response['errcode'] . 'errmsg:' . $response['errmsg']);
         }
         $response->saveAs($filepath);
         return $filepath;
@@ -94,7 +111,7 @@ class CoreWeappService extends BaseCoreService
 
     /**
      * 获取小程序体验码
-     * @return void
+     * @return string
      */
     public function getWeappPreviewImage()
     {

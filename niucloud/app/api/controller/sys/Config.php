@@ -29,7 +29,7 @@ class Config extends BaseApiController
      */
     public function getCopyright()
     {
-        return success(( new ConfigService() )->getCopyright());
+        return success((new ConfigService())->getCopyright());
     }
 
     /**
@@ -38,7 +38,7 @@ class Config extends BaseApiController
      */
     public function getSceneDomain()
     {
-        return success(( new ConfigService() )->getSceneDomain());
+        return success((new ConfigService())->getSceneDomain());
     }
 
     /**
@@ -47,7 +47,7 @@ class Config extends BaseApiController
      */
     public function site()
     {
-        return success(( new ConfigService() )->getWebSite());
+        return success((new ConfigService())->getWebSite());
     }
 
     /**
@@ -56,10 +56,10 @@ class Config extends BaseApiController
     public function getWapIndexList()
     {
         $data = $this->request->params([
-            [ 'title', '' ],
-            [ 'key', '' ] // 多个查询，逗号隔开
+            ['title', ''],
+            ['key', ''] // 多个查询，逗号隔开
         ]);
-        return success(( new ConfigService() )->getWapIndexList($data));
+        return success((new ConfigService())->getWapIndexList($data));
     }
 
     /**
@@ -68,7 +68,7 @@ class Config extends BaseApiController
      */
     public function getMap()
     {
-        return success(( new ConfigService() )->getMap());
+        return success((new ConfigService())->getMap());
     }
 
     /**
@@ -78,35 +78,39 @@ class Config extends BaseApiController
     public function init()
     {
         $data = $this->request->params([
-            [ 'url', '' ],
-            [ 'openid', '' ]
+            ['url', ''],
+            ['openid', '']
         ]);
+        $config_service = new ConfigService();
 
         $res = [];
-        $res[ 'tabbar_list' ] = ( new DiyConfigService() )->getBottomList();
-        $res[ 'map_config' ] = ( new ConfigService() )->getMap();
-        $res[ 'site_info' ] = ( new ConfigService() )->getWebSite();
-        $res[ 'member_level' ] = ( new MemberLevelService() )->getList();
-        $res[ 'login_config' ] = ( new MemberConfigService() )->getLoginConfig($data[ 'url' ]);
-        $res[ 'theme_list' ] = ( new DiyService() )->getDiyTheme();
-        $openid_field = match ( $this->request->getChannel() ) {
+        $res['tabbar_list'] = (new DiyConfigService())->getBottomList();
+        $res['map_config'] = $config_service->getMap();
+        $res['site_info'] = $config_service->getWebSite();
+        $res[ 'site_info' ]['wap_url'] = $config_service->getSceneDomain()['wap_url'];
+        $res['member_level'] = (new MemberLevelService())->getList();
+        $res['login_config'] = (new MemberConfigService())->getLoginConfig($data['url']);
+        $res['theme_list'] = (new DiyService())->getDiyTheme();
+        $res['app_config'] = $config_service->getAppConfig();
+        $res['copyright'] = $config_service->getCopyright();
+        $openid_field = match ($this->request->getChannel()) {
             'wechat' => 'wx_openid',
             'weapp' => 'weapp_openid',
             default => ''
         };
         // 根据来源查询是否已经存在用户, 如果存在则快捷登录时不再弹出授权弹框
         // 根据来源查询是否绑定手机号, 如果绑定并且开启强制绑定则快捷登录时不再弹出绑定手机弹窗
-        $res[ 'member_exist' ] = 0;
-        $res[ 'member_mobile_exist' ] = 0;
-        if (!empty($data[ 'openid' ])) {
-            if (!empty($openid_field)){
-                $res[ 'member_exist' ] = ( new MemberService() )->getCount([ [ $openid_field, '=', $data[ 'openid' ] ] ]) > 0 ? 1 : 0;
+        $res['member_exist'] = 0;
+        $res['member_mobile_exist'] = 0;
+        if (!empty($data['openid'])) {
+            if (!empty($openid_field)) {
+                $res['member_exist'] = (new MemberService())->getCount([[$openid_field, '=', $data['openid']]]) > 0 ? 1 : 0;
 
-                $res[ 'member_mobile_exist' ] = ( new MemberService() )->getCount([ [ $openid_field, '=', $data[ 'openid' ] ], [ 'mobile', '<>', '' ] ]) > 0 ? 1 : 0;
+                $res['member_mobile_exist'] = (new MemberService())->getCount([[$openid_field, '=', $data['openid']], ['mobile', '<>', '']]) > 0 ? 1 : 0;
             }
         }
 
-        ( new MemberService() )->initMemberData();
+        (new MemberService())->initMemberData();
 
         event('initWap');
         return success($res);
@@ -119,20 +123,20 @@ class Config extends BaseApiController
     public function getMemberMobileExist()
     {
         $data = $this->request->params([
-            [ 'openid', '' ]
+            ['openid', '']
         ]);
 
-        $openid_field = match ( $this->request->getChannel() ) {
+        $openid_field = match ($this->request->getChannel()) {
             'wechat' => 'wx_openid',
             'weapp' => 'weapp_openid',
             default => ''
         };
 
         // 根据来源查询是否绑定手机号, 如果绑定并且开启强制绑定则快捷登录时不再弹出绑定手机弹窗
-        $res[ 'member_mobile_exist' ] = 0;
-        if (!empty($data[ 'openid' ])) {
+        $res['member_mobile_exist'] = 0;
+        if (!empty($data['openid'])) {
             if (!empty($openid_field)) {
-                $res['member_mobile_exist'] = (new MemberService())->getCount([ [ $openid_field, '=', $data['openid'] ], ['mobile', '<>', ''] ]) > 0 ? 1 : 0;
+                $res['member_mobile_exist'] = (new MemberService())->getCount([[$openid_field, '=', $data['openid']], ['mobile', '<>', '']]) > 0 ? 1 : 0;
             }
         }
 

@@ -48,7 +48,7 @@ class UserService extends BaseAdminService
         $field = 'uid,username,head_img,real_name,last_ip,last_time,login_count,status, role_ids, is_admin';
         $search = [
             'username' => $where[ 'username' ],
-            'realname' => $where[ 'realname' ],
+            'real_name' => $where[ 'realname' ],
             'create_time' => $where[ 'create_time' ]
         ];
         if (!empty($where[ 'role' ])) {
@@ -99,30 +99,11 @@ class UserService extends BaseAdminService
             'real_name' => $data[ 'real_name' ],
             'password' => create_password($data[ 'password' ]),
 
-            'is_admin' => $data[ 'is_admin' ],
+            'is_admin' => $data[ 'is_admin' ]??0,
             'role_ids' => $data[ 'role_ids' ],
         ];
         $user = ( new SysUser() )->create($user_data);
         return $user?->uid;
-    }
-
-    /**
-     * 添加对应站点用户(添加站点，同时添加站点用户,用于添加站点以及站点添加站点用户)
-     * @param $data
-     * @return bool
-     */
-    public function addUser($data)
-    {
-        $role_ids = $data[ 'role_ids' ] ?? [];
-        $is_admin = $data[ 'is_admin' ] ?? 0;
-
-        $data[ 'is_admin' ] = $is_admin;
-        if (!$is_admin) {
-            $data[ 'role_ids' ] = $role_ids;
-        }
-        //添加用户
-        $uid = $this->add($data);
-        return $uid;
     }
 
     /**
