@@ -60,11 +60,22 @@ NIUCLOUD-ADMIN是一款快速开发通用管理后台框架，整体功能架构
 
 ![输入图片说明](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/v6_kj2.png)
 
-|![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/v6_shop1.jpg)| ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop9.jpg) |
-| :---: | :---: |
-| ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop7.jpg) | ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop6.jpg) |
-| ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop10.jpg) | ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop11.jpg) |
-| ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop12.jpg) | ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop13.jpg) |
+<table>
+    <tbody>
+    <tr>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop3.jpg"></td>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop7.jpg"></td>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop9.jpg"></td>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop11.jpg"></td>
+    </tr>
+    <tr>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop6.jpg"></td>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop10.jpg"></td>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop12.jpg"></td>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop13.jpg"></td>
+    </tr>	 
+</tbody></table>
+
 
 
 ### 操作指南
