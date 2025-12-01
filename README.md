@@ -1,4 +1,4 @@
-![输入图片说明](https://media.niucloud.com/1712133019020249f332e83457a01a6799472e0495_aliyun.png)
+![输入图片说明](https://media.niucloud.com/1712133019020249f332e83457a01a6799472e0495_aliyun.png)   
 
 
  :fa-quote-left:  如果对您有帮助，您可以点右上角 ⭐“Star” 收藏一下 ，获取第一时间更新，谢谢！ :fa-quote-right: 
@@ -54,17 +54,28 @@ NIUCLOUD-ADMIN是一款快速开发通用管理后台框架，整体功能架构
 
   
 ### 界面截图  :point_right: 
-![输入图片说明](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/v6_kj3.png)
+![输入图片说明](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas/ae551d6323f00956b4d20e15670980d7.png)
 
 ![输入图片说明](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/v6_kj4.png)
 
 ![输入图片说明](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/v6_kj2.png)
 
-|![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/v6_shop1.jpg)| ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop9.jpg) |
-| :---: | :---: |
-| ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop7.jpg) | ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop6.jpg) |
-| ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop10.jpg) | ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop11.jpg) |
-| ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop12.jpg) | ![](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop13.jpg) |
+<table>
+    <tbody>
+    <tr>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop3.jpg"></td>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop7.jpg"></td>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop9.jpg"></td>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop11.jpg"></td>
+    </tr>
+    <tr>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop6.jpg"></td>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop10.jpg"></td>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop12.jpg"></td>
+        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop13.jpg"></td>
+    </tr>	 
+</tbody></table>
+
 
 
 ### 操作指南
@@ -124,17 +135,19 @@ NIUCLOUD-ADMIN是一款快速开发通用管理后台框架，整体功能架构
 
 ### 开源使用须知
 
-1.允许用于个人学习、毕业设计、教学案例、公益事业、商业使用;
+1.本开源软件支持免费商用，必须保留版权信息。开源版不支持升级，无售后服务；
 
-2.本框架应用源代码所有权和著作权归niucloud官方所有，基于niucloud-admin框架开发的应用，所有权和著作权归应用开发商所有。但必须明确声明是基于niucloud-admin框架开发，请自觉遵守，否则产生的一切任何后果责任由侵权者自负;
+2.允许用于个人学习、毕业设计、教学案例、公益事业、商业使用;
 
-3.禁止修改框架代码并再次发布框架衍生版等与niucloud-admin框架产生恶意竞争或对抗的行为;
+3.本框架应用源代码所有权和著作权归niucloud官方所有，基于niucloud-admin框架开发的应用，所有权和著作权归应用开发商所有。但必须明确声明是基于niucloud-admin框架开发，请自觉遵守，否则产生的一切任何后果责任由侵权者自负;
 
-4.本框架源码全部开源;包括前端，后端，无任何加密;
+4.禁止修改框架代码并再次发布框架衍生版等与niucloud-admin框架产生恶意竞争或对抗的行为;
 
-5.商用请仔细审查代码和漏洞，不得用于任一国家许可范围之外的商业应用，产生的一切任何后果责任自负;
+5.本框架源码全部开源;包括前端，后端，无任何加密;
 
-6.一切事物有个人喜好的标准，本开源代码意在分享，不喜勿喷。
+6.商用请仔细审查代码和漏洞，不得用于任一国家许可范围之外的商业应用，产生的一切任何后果责任自负;
+
+7.一切事物有个人喜好的标准，本开源代码意在分享，不喜勿喷。
 
 
 ### 版权信息
