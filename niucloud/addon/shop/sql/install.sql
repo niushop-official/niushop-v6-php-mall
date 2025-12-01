@@ -867,6 +867,7 @@ DROP TABLE IF EXISTS `{{prefix}}shop_order_refund`;
 CREATE TABLE `{{prefix}}shop_order_refund`
 (
     `refund_id`          int(11) NOT NULL AUTO_INCREMENT,
+    `order_id`           int(11) NOT NULL DEFAULT '0' COMMENT '订单id',
     `order_goods_id`     int(11) NOT NULL DEFAULT '0' COMMENT '订单项id',
     `order_refund_no`    varchar(255)   NOT NULL DEFAULT '0' COMMENT '退款单号',
     `refund_type`        varchar(255)   NOT NULL DEFAULT '0' COMMENT '退款方式 ',
