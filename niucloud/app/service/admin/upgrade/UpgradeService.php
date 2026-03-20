@@ -12,6 +12,7 @@
 namespace app\service\admin\upgrade;
 
 use app\dict\addon\AddonDict;
+use app\dict\sys\AppTypeDict;
 use app\dict\sys\BackupDict;
 use app\dict\sys\UpgradeDict;
 use app\model\addon\Addon;
@@ -854,14 +855,21 @@ class UpgradeService extends BaseAdminService
         } else {
             $addons = array_filter(explode(',', $addon));
             foreach ($addons as $key) {
-                $info = ( new Addon() )->where([ [ 'key', '=', $key ] ])->field('version,type')->find();
-                $upgrade[ 'app_key' ] = $key;
-                $upgrade[ 'version' ] = $info['version'];
-                if ($info['type'] == 'app') {
-                    array_unshift($apps, $upgrade);
-                } else {
-                    array_push($apps, $upgrade);
+                if ($key != AddonDict::FRAMEWORK_KEY) {
+                    $info = ( new Addon() )->where([ [ 'key', '=', $key ] ])->field('version,type')->find();
+                    $upgrade[ 'app_key' ] = $key;
+                    $upgrade[ 'version' ] = $info['version'];
+                    if ($info['type'] == 'app') {
+                        array_unshift($apps, $upgrade);
+                    } else {
+                        array_push($apps, $upgrade);
+                    }
                 }
+            }
+            if (in_array(AddonDict::FRAMEWORK_KEY, $addons)) {
+                $upgrade[ 'app_key' ] = AddonDict::FRAMEWORK_KEY;
+                $upgrade[ 'version' ] = config('version.version');
+                array_unshift($apps, $upgrade);
             }
         }
 
