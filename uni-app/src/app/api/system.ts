@@ -46,7 +46,7 @@ export function sendSms(data: AnyObject) {
  * 获取微信jssdk config
  */
 export function getWechatSdkConfig(data: AnyObject) {
-    return request.get('wechat/jssdkconfig', data, { showErrorMessage: false })
+    return request.get('wechat/jssdkconfig', data, { showErrorMessage: true })
 }
 
 /**
@@ -76,6 +76,15 @@ export function fetchBase64Image(data: AnyObject) {
 export function uploadVideo(data: AnyObject) {
     return request.upload('file/video', data, { showErrorMessage: true })
 }
+
+
+/**
+ * 获取上传配置
+ */
+export function uploadConfig() {
+    return request.get('file/config')
+}
+
 /**
  * 获取站点信息
  */

@@ -1,6 +1,6 @@
 import { language } from '@/locale'
 import { checkNeedLogin } from '@/utils/auth'
-import { redirect, getToken,currRoute, setThemeColor } from '@/utils/common'
+import { redirect, getToken, currRoute, setThemeColor } from '@/utils/common'
 import { memberLog } from '@/app/api/auth'
 import { useShare } from '@/hooks/useShare'
 
@@ -14,7 +14,10 @@ export const redirectInterceptor = (route: { path: string, query: object }) => {
     setThemeColor(route.path)
 
     // #ifdef MP
-    route.path.indexOf('addon') != -1 && language.loadAllLocaleMessages('addon', uni.getLocale())
+    try {
+        language.loadAllLocaleMessages('addon', uni.getLocale())
+    } catch (e) {
+    }
     // #endif
 
     // 校验是否需要登录

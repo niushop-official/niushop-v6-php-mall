@@ -148,7 +148,7 @@ const confirmPay = () => {
                 // #ifndef H5
                 uni.requestPayment({
                     provider: 'alipay',
-                    ...res.data,
+                    orderInfo: res.data,
                     success: (res: any) => {
                         toPayResult()
                     },

@@ -6,9 +6,6 @@
     "versionCode": "100",
     "transformPx": false,
     "app-plus": {
-        "compatible" : {
-            "ignoreVersion" : true
-        },
         "usingComponents": true,
         "nvueStyleCompiler": "uni-app",
         "compilerVersion": 3,
@@ -18,16 +15,7 @@
             "autoclose": true,
             "delay": 0
         },
-        "modules" : {
-            "Camera" : {},
-            "Barcode" : {},
-            "Contacts" : {},
-            "Geolocation" : {},
-            "Payment" : {},
-            "VideoPlayer" : {},
-            "Maps" : {},
-            "Share" : {}
-        },
+        "modules": {},
         "distribute": {
             "android": {
                 "permissions": [
@@ -48,16 +36,8 @@
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
                 ]
             },
-            "ios" : {
-                "dSYMs" : false
-            },
-            "sdkConfigs" : {
-                "maps" : {
-                    "tencent" : {
-                        "key" : "6ZDBZ-CLSLX-66747-7MVM4-HLK47-XMBXU"
-                    }
-                }
-            }
+            "ios": {},
+            "sdkConfigs": {}
         }
     },
     "quickapp": {},

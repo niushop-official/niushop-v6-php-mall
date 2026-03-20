@@ -194,7 +194,7 @@ const isBackShow = computed(() => {
     let bool = false;
     if (props.isBack && pages.length > 1) {
         bool = true; 
-    } else if (currRoute() == 'app/pages/auth/index') {
+    } else if (currRoute() == 'app/pages/auth/index' || currRoute() == 'app/pages/auth/login') {
         bool = true;
     }
     return bool;
