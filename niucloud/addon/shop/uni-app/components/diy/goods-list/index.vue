@@ -6,7 +6,7 @@
                 <template v-if="diyComponent.style == 'style-1'">
                     <view class="bg-white w-full flex p-[20rpx] overflow-hidden" :class="{ 'mt-[20rpx]': index > 0 }"
                           :style="itemCss" v-for="(item,index) in goodsList" :key="item.goods_id" @click="toLink(item)">
-                        <up-image :radius="imageRounded.val" width="200rpx" height="200rpx" :src="img(item.goods_cover_thumb_mid || '')" model="aspectFill">
+                        <up-image :radius="imageRounded.val" class="w-[200rpx] h-[200rpx]" width="200rpx" height="200rpx" :src="img(item.goods_cover_thumb_mid || '')" :mode="diyComponent.mode">
                             <template #error>
                                 <image class="w-[200rpx] h-[200rpx] overflow-hidden" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                             </template>
@@ -42,7 +42,7 @@
 										<image v-else-if="diyGoods.priceType(item) == 'discount_price'" class="max-w-[80rpx] h-[28rpx] ml-[6rpx]" :src="img('addon/shop/discount.png')" mode="heightFix" />
                                     </view>
                                     <text v-if="diyComponent.saleStyle.control"
-                                          class="mt-[8rpx] text-[22rpx] text-[var(--text-color-light9)]"
+                                          class="mt-[8rpx] text-[20rpx] text-[var(--text-color-light9)]"
                                           :style="{ color : diyComponent.saleStyle.color }">
                                         已售{{ item.sale_num }}{{ item.unit || '件' }}
                                     </text>
@@ -71,7 +71,7 @@
                         <template v-for="(item,index) in goodsList">
                             <view v-if="(index%2) == 0" class="flex flex-col bg-[#fff] box-border overflow-hidden"
                                   :class="{'mt-[24rpx]': index > 1}" :style="itemCss" @click="toLink(item)">
-                                <up-image :radius="imageRounded.val" :width="style2Width" :height="style2Width" :src="img(item.goods_cover_thumb_mid || '')" model="aspectFill">
+                                <up-image :radius="imageRounded.val" :width="style2Width" :height="style2Width" :src="img(item.goods_cover_thumb_mid || '')" :mode="diyComponent.mode">
                                     <template #error>
                                         <image :style="{'width': style2Width,'height': style2Width, 'border-radius': imageRounded.val}" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                     </template>
@@ -108,7 +108,7 @@
 												<image v-else-if="diyGoods.priceType(item) == 'discount_price'" class="max-w-[80rpx] h-[28rpx] ml-[6rpx]" :src="img('addon/shop/discount.png')" mode="heightFix" />
                                             </view>
                                             <text v-if="diyComponent.saleStyle.control"
-                                                  class="text-[22rpx] mt-[8rpx] text-[var(--text-color-light9)]"
+                                                  class="text-[20rpx] mt-[8rpx] text-[var(--text-color-light9)]"
                                                   :style="{ color : diyComponent.saleStyle.color }">
                                                 已售{{ item.sale_num }}{{ item.unit || '件' }}
                                             </text>
@@ -135,7 +135,7 @@
                     <view>
                         <template v-for="(item,index) in goodsList">
                             <view v-if="(index%2) == 1" class="flex flex-col bg-[#fff] box-border overflow-hidden" :class="{'mt-[24rpx]': index > 1}" :style="itemCss" @click="toLink(item)">
-                                <up-image :width="style2Width" :height="style2Width" :radius="imageRounded.val" :src="img(item.goods_cover_thumb_mid || '')" model="aspectFill">
+                                <up-image :width="style2Width" :height="style2Width" :radius="imageRounded.val" :src="img(item.goods_cover_thumb_mid || '')" :mode="diyComponent.mode">
                                     <template #error>
                                         <image :style="{'width': style2Width,'height': style2Width, 'border-radius': imageRounded.val}" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                     </template>
@@ -170,7 +170,7 @@
 												<image v-else-if="diyGoods.priceType(item) == 'discount_price'" class="max-w-[80rpx] h-[28rpx] ml-[6rpx]" :src="img('addon/shop/discount.png')" mode="heightFix" />
                                             </view>
                                             <text v-if="diyComponent.saleStyle.control"
-                                                  class="text-[22rpx] mt-[8rpx] text-[var(--text-color-light9)]"
+                                                  class="text-[20rpx] mt-[8rpx] text-[var(--text-color-light9)]"
                                                   :style="{ color : diyComponent.saleStyle.color }">
                                                 已售{{ item.sale_num }}{{ item.unit || '件' }}
                                             </text>
@@ -202,7 +202,7 @@
                                   class="w-[214rpx] mb-[6rpx] inline-block bg-[#fff] box-border overflow-hidden"
                                   :class="{'!mr-[0rpx]' : index == (goodsList.length-1)}" :style="itemCss+itemStyle3"
                                   v-for="(item,index) in goodsList" :key="item.goods_id" @click="toLink(item)">
-                                <up-image width="214rpx" height="160rpx" :radius="imageRounded.val" :src="img(item.goods_cover_thumb_mid || '')" model="aspectFill">
+                                <up-image width="214rpx" height="160rpx" :radius="imageRounded.val" :src="img(item.goods_cover_thumb_mid || '')" :mode="diyComponent.mode">
                                     <template #error>
                                         <image class="w-[214rpx] h-[160rpx]" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                     </template>

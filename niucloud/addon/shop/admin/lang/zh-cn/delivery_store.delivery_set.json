@@ -1,0 +1,12 @@
+{
+  "deliveryServiceName": "服务商",
+  "openService": "开通",
+  "editService": "修改品类",
+  "business": "门店品类",
+  "businessPlaceholder": "请选择门店品类",
+  "openStatus": "开通状态",
+  "editStatus": "门店信息变更状态",
+  "reason": "备注",
+  "pass": "通过",
+  "notPass": "未通过"
+}

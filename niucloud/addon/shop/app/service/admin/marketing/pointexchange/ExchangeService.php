@@ -49,7 +49,7 @@ class ExchangeService extends BaseAdminService
     {
         $field = 'total_exchange_num,stock,id,type,names,title,image,status,product_detail,point,price,limit_num,content,sort,total_point_num,total_price_num,total_order_num,total_member_num,update_time,create_time';
         $order = 'id desc';
-        $search_model = $this->model->where([ [ 'id', '>', 0 ] ])->withSearch([ 'names', 'status', 'create_time' ], $where)->append([ 'type_name', 'status_name', 'goods_cover_thumb_small' ])->field($field)->order($order);
+        $search_model = $this->model->where([ [ 'id', '>', 0 ] ])->withSearch([ 'names', 'status', 'create_time', 'active_id' ], $where)->append([ 'type_name', 'status_name', 'goods_cover_thumb_small' ])->field($field)->order($order);
         $list = $this->pageQuery($search_model);
         return $list;
     }

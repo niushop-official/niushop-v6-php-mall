@@ -214,6 +214,8 @@ class VirtualGoodsService extends BaseAdminService
                 'goods_type' => $data[ 'goods_type' ],
                 'goods_cover' => $data[ 'goods_cover' ],
                 'goods_image' => $data[ 'goods_image' ],
+                'goods_image_width' => $data[ 'goods_image_width' ],
+                'goods_image_height' => $data[ 'goods_image_height' ],
                 'goods_video' => $data[ 'goods_video' ],
                 'goods_category' => array_map(function ($item) {
                     return (string) $item;
@@ -375,6 +377,9 @@ class VirtualGoodsService extends BaseAdminService
                 'goods_type' => $data[ 'goods_type' ],
                 'goods_cover' => $data[ 'goods_cover' ],
                 'goods_image' => $data[ 'goods_image' ],
+                'goods_image_width' => $data[ 'goods_image_width' ],
+                'goods_image_height' => $data[ 'goods_image_height' ],
+
                 'goods_video' => $data[ 'goods_video' ],
                 'goods_category' => array_map(function ($item) {
                     return (string) $item;

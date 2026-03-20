@@ -85,7 +85,7 @@ export function useDiyGoodsDetail(params: any = {}) {
 
             goodsDetailParameter.goods_id = option.goods_id || '';
             goodsDetailParameter.sku_id = option.sku_id || '';
-            goodsDetailParameter.type = option.type || '';
+            goodsDetailParameter.type = option.type == 'nd' ? 'newcomer_discount' : option.type || ''; 
 
             id.value = option.id || '';
             if (name.value == '') name.value = option.name || '';
@@ -119,8 +119,8 @@ export function useDiyGoodsDetail(params: any = {}) {
                     name: name.value
                 }).then((res: any) => {
                     Object.assign(requestData, res.data);
-                    handleComponentDataFn()
                     diyStore.mode = 'decorate';
+                    handleComponentDataFn()
                     diyStore.value = diyData.value;
                     diyStore.global = diyData.global;
 
@@ -150,7 +150,7 @@ export function useDiyGoodsDetail(params: any = {}) {
                     diyData.global.goodsParameter = {}
                     diyData.global.goodsParameter.goods_id = goodsDetailParameter.goods_id
                     diyData.global.goodsParameter.sku_id = goodsDetailParameter.sku_id
-                    diyData.global.goodsParameter.type = goodsDetailParameter.type
+                    diyData.global.goodsParameter.type = goodsDetailParameter.type == 'newcomer_discount' ? 'nd' : goodsDetailParameter.type
                     // 组装商品组件数据
                     assembleGoodsDetailData(diyData, res.data)
 
@@ -185,8 +185,10 @@ export function useDiyGoodsDetail(params: any = {}) {
             
             diyData.value = sources.value;
             diyData.value.forEach((item: any, index) => {
-
-                const detailComponent = ['ShopGoodsDetailBottom','ShopGoodsDetailDesc','ShopGoodsDetailAttr','ShopGoodsDetailEvaluate','ShopGoodsDetailSow','ShopGoodsDetailPurchaseService','ShopGoodsDetailBasicInfo']
+                let detailComponent:any = []
+                if(diyStore.mode != 'decorate'){
+                    detailComponent = ['ShopGoodsDetailBottom','ShopGoodsDetailDesc','ShopGoodsDetailAttr','ShopGoodsDetailEvaluate','ShopGoodsDetailSow','ShopGoodsDetailPurchaseService','ShopGoodsDetailBasicInfo']
+                }
                 if(detailComponent.indexOf(item.componentName) > -1){
                     item.componentIsShow = false // 是否显示
                 }else{

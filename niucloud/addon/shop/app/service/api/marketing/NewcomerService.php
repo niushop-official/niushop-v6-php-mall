@@ -138,7 +138,7 @@ class NewcomerService extends BaseApiService
             ];
             $order = 'goods_sku.sale_num desc,goods_sku.stock desc';
 
-            $list = ( new GoodsSku() )->field($field)->withJoin([ 'goods' => [ 'goods_name' ] ])->where($sku_where)->limit($limit)->order($order)->select()->toArray();
+            $list = ( new GoodsSku() )->field($field)->withJoin([ 'goods' => [ 'goods_name','goods_cover' ] ])->where($sku_where)->limit($limit)->order($order)->select()->toArray();
             foreach ($list as &$item) {
                 $active_goods_value = json_decode($active_goods[ $item[ 'sku_id' ] ][ 'active_goods_value' ], true);
                 $item[ 'newcomer_price' ] = $active_goods_value[ 'newcomer_price' ] ?? 0;

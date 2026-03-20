@@ -16,7 +16,7 @@
                             </view>
                             <view class="mt-[-71rpx] h-[278rpx] w-full px-[20rpx] pt-[18rpx] box-border bg-white" :style="itemCss">
                                 <view class="flex items-center justify-center w-[184rpx] h-[184rpx]">
-                                    <up-image width="184rpx" height="184rpx" :radius="imageRounded.val" :src="img(item.info.goods_cover_thumb_mid || '')" model="aspectFill">
+                                    <up-image width="184rpx" height="184rpx" :radius="imageRounded.val" :src="img(item.info.goods_cover_thumb_mid || '')" :mode="diyComponent.mode">
                                         <template #error>
                                             <image class="w-[184rpx] h-[184rpx]" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                         </template>

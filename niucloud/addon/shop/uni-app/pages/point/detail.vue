@@ -20,13 +20,25 @@
                 <view @touchmove.stop.prevent class="media-mode absolute top-0 left-0 w-full h-full transition-transform duration-300 ease-linear transform"
                 :class="{'translate-x-0':switchMedia === 'video','-translate-x-full':switchMedia != 'video'}" :style="{background: 'url(' + img(goodsDetail.goods.goods_cover_thumb_mid) + ') left bottom / cover no-repeat'}">
                   <view class="goods-video-height">
-                        <video id="goodsVideo" class="w-full h-full" :src="img(goodsDetail.goods.goods_video)" :poster="img(goodsDetail.goods.goods_cover_thumb_mid)" objectFit="cover" play-btn-position="center"></video>
+                      <video
+                          id="goodsVideo"
+                          class="w-full h-full"
+                          :src="currentVideoSrc"
+                          :poster="currentVideoPoster"
+                          objectFit="cover"
+                          play-btn-position="center"
+                          :show-play-btn="true"
+                          :enable-play-gesture="true"
+                          :autoplay="false"
+                          :loop="false"
+                          :show-center-play-btn="true"
+                      ></video>
                     </view>
                 </view>
                 <!-- 切换视频、图片 -->
                 <view class="media-mode bg-[rgb(0,0,0,.5)] rounded-[50rpx] p-[4rpx] absolute bottom-[130rpx] right-[20rpx] text-center leading-[46rpx]" v-if="goodsDetail.goods.goods_video != ''">
-                    <text class="tab-item" :class="{ '!bg-[#fff] !text-[#666]': switchMedia == 'video' }" @click="switchMedia = 'video'">视频</text>
-                    <view class="tab-item flex items-center" :class="{ '!bg-[#fff] !text-[#666]': switchMedia == 'img' }" @click="(switchMedia = 'img'), videoContext.pause()">
+                    <text class="tab-item" :class="{ '!bg-[#fff] !text-[#666]': switchMedia == 'video' }" @click="switchToVideo">视频</text>
+                    <view class="tab-item flex items-center" :class="{ '!bg-[#fff] !text-[#666]': switchMedia == 'img' }" @click="switchToImage">
                         <text class="mr-[4rpx]">图片</text>
                         <text v-if="switchMedia == 'img' && goodsDetail?.goods?.goods_image?.length > 1">{{swiperCurrentIndex}}/{{goodsDetail?.goods?.goods_image?.length}}</text>
                     </view>
@@ -263,6 +275,8 @@ const { setShare } = useShare()
 const swiperCurrentIndex = ref(1); // 轮播图当前索引
 const switchMedia: any = ref('img');
 const videoContext: any = ref(null)
+const currentVideoSrc = ref('')
+const currentVideoPoster = ref('')
 
 // 会员信息
 const memberStore = useMemberStore()
@@ -322,6 +336,9 @@ onLoad((option: any) => {
         if (goodsDetail.value.goods.goods_video != '') {
             switchMedia.value = 'video'
             videoContext.value = uni.createVideoContext('goodsVideo');
+            // 设置视频源
+            currentVideoSrc.value = img(goodsDetail.value.goods.goods_video);
+            currentVideoPoster.value = img(goodsDetail.value.goods.goods_cover_thumb_mid)
         }
         sendMessageTitle.value = goodsDetail.value.goods.goods_name
         sendMessagePath.value = '/addon/shop/pages/point/detail?sku_id=' + goodsDetail.value.sku_id;
@@ -609,6 +626,30 @@ onUnload(() => {
 // 图片轮播change事件
 const swiperChangeFn = (e: any) => {
     swiperCurrentIndex.value = e.current + 1;
+}
+
+// 切换到视频
+const switchToVideo = () => {
+    // 重新加载视频源
+    currentVideoSrc.value = img(goodsDetail.value.goods.goods_video);
+    currentVideoPoster.value = img(goodsDetail.value.goods.goods_cover_thumb_mid)
+    // 切换状态
+    switchMedia.value = 'video';
+}
+
+// 切换到图片
+const switchToImage = () => {
+    // 切换状态
+    switchMedia.value = 'img';
+
+    // 暂停视频
+    videoContext.value.pause();
+
+    // #ifndef H5
+    // 通过清空视频 src 来强制停止视频
+    currentVideoSrc.value = '';
+    currentVideoPoster.value = ''
+    // #endif
 }
 </script>
 <style lang="scss" scoped>

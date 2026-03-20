@@ -479,71 +479,7 @@ const previewEvent = (data: any) => {
 }
 
 const activeclick = (data: any) => {
-    if (data.list[0].join_type == 'impulse_buy') {
-        const routeUrl = router.resolve({
-            path: '/shop_impulse_buy/list',
-            query: {
-                active_id: data.list[0].join_id
-            }
-        })
-        window.open(routeUrl.href, '_blank')
-    } else if (data.list[0].join_type == 'discount') {
-        const routeUrl = router.resolve({
-            path: '/shop/marketing/discount/list',
-            query: {
-                active_id: data.list[0].join_id
-            }
-        })
-        window.open(routeUrl.href, '_blank')
-    } else if (data.list[0].join_type == 'gift_card') {
-        const routeUrl = router.resolve({
-            path: '/shop_giftcard/giftcard/list',
-            query: {
-                active_id: data.list[0].join_id
-            }
-        })
-        window.open(routeUrl.href, '_blank')
-    } else if (data.list[0].join_type == 'active_exchange') {
-        const routeUrl = router.resolve({
-            path: '/shop/marketing/exchange/goods_list',
-            query: {
-                active_id: data.list[0].join_id
-            }
-        })
-        window.open(routeUrl.href, '_blank')
-    } else if (data.list[0].join_type == 'active_newcomer_discount') {
-        const routeUrl = router.resolve({
-            path: '/shop/marketing/newcomer/config'
-            // query: {
-            //     active_id: data.list[0].join_id
-            // }
-        })
-        window.open(routeUrl.href, '_blank')
-    } else if (data.list[0].join_type == 'manjian') {
-        const routeUrl = router.resolve({
-            path: '/shop/marketing/manjian/list',
-            query: {
-                active_id: data.list[0].join_id
-            }
-        })
-        window.open(routeUrl.href, '_blank')
-    } else if (data.list[0].join_type == 'seckill') {
-        const routeUrl = router.resolve({
-            path: '/seckill/active/list',
-            // query: {
-            //     active_id: data.list[0].join_id
-            // }
-        })
-        window.open(routeUrl.href, '_blank')
-    }else if (data.list[0].join_type == 'pintuan') {
-        const routeUrl = router.resolve({
-            path: '/pintuan/active/list',
-            // query: {
-            //     active_id: data.list[0].join_id
-            // }
-        })
-        window.open(routeUrl.href, '_blank')
-    }
+    window.open(data.jump_url, '_blank')
 }
 
 // 监听排序
@@ -783,7 +719,7 @@ loadGoodsList(getTablePageStorage(goodsTable.searchParam).page)
  * 添加商品
  */
 const addEvent = () => {
-    router.push('/shop/goods/real_edit')
+    router.push('/shop/goods/real_add')
     // let url = router.resolve({
     //     path: '/shop/goods/real_edit',
     // });
@@ -865,6 +801,10 @@ const copyEvent = (data: any) => {
                 loadGoodsList(getTablePageStorage(goodsTable.searchParam).page)
             }
             repeat.value = false
+            ElMessage({
+                type: 'success',
+                message: '商品复制成功，可以在仓库中商品查询'
+            })
         }).catch(() => {
             repeat.value = false
         })

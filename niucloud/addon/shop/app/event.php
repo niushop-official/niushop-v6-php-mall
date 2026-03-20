@@ -188,6 +188,21 @@ return [
 
         //获取商品配送费用
         'ThirdAddonOrderDelivery' => ['addon\shop\app\listener\third_addon\order\OrderDeliveryServiceListener'],
+
+        /***************************************************** 同城配送 start *****************************************************/
+        //配送方式
+        'LocalDeliveryType' => ['addon\shop\app\listener\local_delivery\dada\local_delivery_type\LocalDeliveryTypeListener'],
+        //订单取消原因
+        'OrderCancelReason' => ['addon\shop\app\listener\local_delivery\dada\order\OrderCancelReasonListener'],
+        //配送订单操作前置状态
+        'DeliveryOrderPreStatus' => [
+            'addon\shop\app\listener\local_delivery\dada\order\OrderPreStatusListener',
+            'addon\shop\app\listener\shop_delivery\OrderPreStatusListener'
+        ],
+        //获取同城配送轨迹
+        'GetLocalDeliveryTrack' => ['addon\shop\app\listener\local_delivery\dada\order\GetLocalDeliveryTrack'],
+
+        /***************************************************** 同城配送 end *****************************************************/
     ],
     'subscribe' => [
     ],

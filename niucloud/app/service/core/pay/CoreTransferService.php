@@ -14,8 +14,6 @@ namespace app\service\core\pay;
 use app\dict\pay\TransferDict;
 use app\model\pay\Pay;
 use app\model\pay\Transfer;
-use app\model\pay\TransferScene;
-use app\service\core\sys\CoreConfigService;
 use core\base\BaseCoreService;
 use core\exception\PayException;
 use Exception;

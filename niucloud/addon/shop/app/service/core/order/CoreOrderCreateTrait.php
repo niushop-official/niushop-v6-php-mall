@@ -14,17 +14,20 @@ namespace addon\shop\app\service\core\order;
 
 use addon\shop\app\dict\active\ActiveDict;
 use addon\shop\app\dict\coupon\CouponDict;
+use addon\shop\app\dict\delivery\DeliveryDict;
 use addon\shop\app\dict\goods\GoodsDict;
 use addon\shop\app\dict\order\OrderDeliveryDict;
 use addon\shop\app\dict\order\OrderDiscountDict;
 use addon\shop\app\dict\order\OrderLogDict;
+use addon\shop\app\model\delivery\Store;
 use addon\shop\app\model\goods\GoodsSku;
 use addon\shop\app\model\order\Order;
 use addon\shop\app\model\order\OrderGoods;
 use addon\shop\app\service\core\coupon\CoreCouponMemberService;
+use addon\shop\app\service\core\delivery\CoreConfigService;
 use addon\shop\app\service\core\delivery\CoreDeliveryService;
 use addon\shop\app\service\core\delivery\CoreExpressService;
-use addon\shop\app\service\core\delivery\CoreLocalDeliveryService;
+use addon\shop\app\service\core\local_delivery\CoreLocalDeliveryService;
 use addon\shop\app\service\core\delivery\CoreStoreService;
 use addon\shop\app\service\core\goods\CoreGoodsLimitBuyService;
 use addon\shop\app\service\core\marketing\CoreManjianService;
@@ -33,6 +36,8 @@ use app\service\core\diy_form\CoreDiyFormRecordsService;
 use app\service\core\member\CoreMemberAddressService;
 use core\exception\CommonException;
 use Exception;
+use Location\Coordinate;
+use Location\Distance\Vincenty;
 use think\facade\Cache;
 use think\facade\Db;
 
@@ -71,6 +76,7 @@ trait CoreOrderCreateTrait
 
     public $order_key;
     public $error = [];
+    public $join_manjian = true;
 
     public function createOrder(array $data)
     {
@@ -109,7 +115,7 @@ trait CoreOrderCreateTrait
             $order_data[ 'order_id' ] = $this->order_id;
 
             // 订单创建后事件
-            CoreOrderEventService::orderCreate(['order_id' => $this->order_id, 'order_data' => $order_data, 'order_goods_data' => $order_goods_data, 'cart_ids' => $this->cart_ids, 'basic' => get_object_vars($this), 'main_type' => $main_type, 'main_id' => $main_id, 'time' => time() ]);
+            CoreOrderEventService::orderCreate([ 'order_id' => $this->order_id, 'order_data' => $order_data, 'order_goods_data' => $order_goods_data, 'cart_ids' => $this->cart_ids, 'basic' => get_object_vars($this), 'main_type' => $main_type, 'main_id' => $main_id, 'time' => time() ]);
 
             Db::commit();
 
@@ -122,7 +128,7 @@ trait CoreOrderCreateTrait
 
             // 订单金额为0的话,要直接支付
             if ($order_data[ 'order_money' ] == 0) {
-                ( new CoreOrderPayService() )->pay(['trade_id' => $this->order_id, 'main_type' => $main_type, 'main_id' => $main_id ]);
+                ( new CoreOrderPayService() )->pay([ 'trade_id' => $this->order_id, 'main_type' => $main_type, 'main_id' => $main_id ]);
             }
 
             return [
@@ -132,7 +138,7 @@ trait CoreOrderCreateTrait
 
         } catch (Exception $e) {
             Db::rollback();
-            throw new CommonException($e->getMessage().$e->getFile().$e->getLine());
+            throw new CommonException($e->getMessage());
         }
     }
 
@@ -217,6 +223,8 @@ trait CoreOrderCreateTrait
                 case 'invoice':
                     $config = ( new CoreOrderConfigService() )->invoice() ?? [];
                     break;
+                case 'local_delivery':
+                    $config = (new CoreConfigService())->getLocalDeliveryConfig() ?? [];
             }
             $this->config[ $key ] = $config;
         }
@@ -419,7 +427,9 @@ trait CoreOrderCreateTrait
         //查询积分优惠
 //        $this->getPoint();
         //满减送优惠计算
+        if($this->join_manjian){
             $this->calculateManjian();
+        }
         //查询可用优惠券
         $this->calculateCoupon();
     }
@@ -636,6 +646,7 @@ trait CoreOrderCreateTrait
 //            $delivery_type_list = array_column($delivery_type_list, null, 'key');
             $this->delivery[ 'delivery_type_list' ] = $delivery_type_list;
         }
+        $this->config('local_delivery');
         return true;
     }
 
@@ -674,7 +685,8 @@ trait CoreOrderCreateTrait
 
             //选中收货地址
             $this->selectTakeAddress();
-
+            //选择配送/自提门店
+            $this->selectTakeStore($delivery_type);
             switch ($delivery_type) {
                 case OrderDeliveryDict::EXPRESS://物流
                     CoreExpressService::calculate($this);
@@ -728,6 +740,71 @@ trait CoreOrderCreateTrait
                 }
             }
 
+        }
+        return true;
+    }
+
+    /**
+     * 选中配送/自提门店
+     * @param $delivery_type
+     * @return true
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function selectTakeStore($delivery_type)
+    {
+        $delivery = $this->param[ 'delivery' ] ?? [];
+        $position = $this->param[ 'position' ] ?? [];
+        $this->delivery['take_store'] = [];
+        if (in_array($delivery_type, [DeliveryDict::LOCAL_DELIVERY, DeliveryDict::STORE])) {
+            $store_list = (new Store())->where([['status', '=', 1]])->withSearch(['pick_up_type'], ['pick_up_type' => $delivery_type])->select()->toArray();
+            if (empty($store_list)) {
+                if ($delivery_type == DeliveryDict::LOCAL_DELIVERY) {
+                    $this->delivery['error'] = empty($this->delivery['error']) ? get_lang('SHOP_NOT_SET_LOCAL_DELIVERY_STORE') : $this->delivery['error'];
+                } else {
+                    $this->delivery['error'] = empty($this->delivery['error']) ? get_lang('SHOP_NOT_SET_PICK_UP_STORE') : $this->delivery['error'];
+                }
+            }
+            if (!empty($store_list) && !empty($position) && !empty($position[ 'latitude' ]) && !empty($position[ 'longitude' ])) {
+                $location = new Coordinate($position[ 'latitude' ], $position[ 'longitude' ]);
+                $store_list = array_map(function($item) use ($location) {
+                    $distance = ( new Vincenty() )->getDistance($location, new Coordinate((float) $item[ 'latitude' ], (float) $item[ 'longitude' ]));
+                    $item[ 'distance' ] = round($distance/1000, 3);
+                    return $item;
+                }, $store_list);
+                array_multisort(array_column($store_list, 'distance'), SORT_ASC, $store_list);
+            }
+            $this->delivery['take_store_list'] = $store_list;
+            if (empty($delivery['take_store_id'])) {
+                if (!empty($store_list)) {
+                    $this->delivery['take_store'] = $store_list[0] ?? [];
+                }
+            } else {
+                $store_column_list = array_column($store_list, null, 'store_id');
+                $store = (new Store())->where([['store_id', '=', $delivery['take_store_id']]])->findOrEmpty()->toArray();
+                if (empty($store)) {
+                    $this->delivery['error'] = empty($this->delivery['error']) ? get_lang('DELIVERY_STORE_NOT_EXIST') : $this->delivery['error'];
+                } else {
+                    switch ($delivery_type) {
+                        case DeliveryDict::LOCAL_DELIVERY://同城配送
+                            if (!$store[ 'support_local_delivery' ]) {
+                                $this->delivery['error'] = empty($this->delivery['error']) ? get_lang('STORE_NOT_SUPPORT_LOCAL_DELIVERY') : $this->delivery['error'];
+                            }
+                            break;
+                        case DeliveryDict::STORE://门店自提
+                            if (!$store[ 'support_store' ]) {
+                                $this->delivery['error'] = empty($this->delivery['error']) ? get_lang('STORE_NOT_SUPPORT_PICK_UP') : $this->delivery['error'];
+                            }
+                            break;
+                    }
+                }
+                $store['distance'] = $store_column_list[$delivery['take_store_id']]['distance'] ?? 0;
+                $this->delivery['take_store'] = $store;
+            }
+        }
+        if (!empty($this->delivery['error'])) {
+            $this->setError($this->delivery['error']);
         }
         return true;
     }
@@ -910,7 +987,7 @@ trait CoreOrderCreateTrait
             $goods_form = $this->form_data[ 'goods' ] ?? [];
             if (!empty($goods_form)) {
                 $order_goods_model = new OrderGoods();
-                $order_goods_list = $data = $order_goods_model->where([  [ 'order_id', '=', $order_id ] ])
+                $order_goods_list = $data = $order_goods_model->where([ [ 'order_id', '=', $order_id ] ])
                     ->field('order_goods_id,sku_id')->select()->toArray();
                 foreach ($goods_form as $k => $v) {
                     foreach ($order_goods_list as $ck => $cv) {

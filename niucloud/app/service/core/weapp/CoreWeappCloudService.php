@@ -65,7 +65,7 @@ class CoreWeappCloudService extends CoreCloudBaseService
 
         // 如果不存在编译版小程序
         if ($compile_addon->isEmpty()) {
-            dir_copy($this->root_path . 'uni-app', $uni_dir, exclude_dirs: [ 'node_modules', 'unpackage', 'dist' ]);
+            dir_copy($this->root_path . 'uni-app', $uni_dir, exclude_dirs: [ 'node_modules', 'unpackage', 'dist', '.git' ]);
 //            $this->handleTabbar($uni_dir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR);
             // 替换env文件
             $this->weappEnvReplace($uni_dir . DIRECTORY_SEPARATOR . '.env.production');
@@ -90,7 +90,7 @@ class CoreWeappCloudService extends CoreCloudBaseService
             'do' => 1,
             'timestamp' => time()
         ];
-        $response = ( new CloudService() )->httpPost('cloud/weapp?' . http_build_query($query), [
+        $response = ( new CloudService(true) )->httpPost('cloud/weapp?' . http_build_query($query), [
             'multipart' => [
                 [
                     'name' => 'file',
@@ -189,7 +189,7 @@ class CoreWeappCloudService extends CoreCloudBaseService
         $query = [
             'authorize_code' => $this->auth_code,
         ];
-        $preview_url = ( new CloudService() )->getUrl('cloud/get_weapp_preview?' . http_build_query($query));
+        $preview_url = ( new CloudService(true) )->getUrl('cloud/get_weapp_preview?' . http_build_query($query));
 
         try {
             $path = runtime_path() . uniqid() . '.jpg';
@@ -211,7 +211,7 @@ class CoreWeappCloudService extends CoreCloudBaseService
             'authorize_code' => $this->auth_code,
             'timestamp' => $timestamp
         ];
-        $build_log = ( new CloudService() )->httpGet('cloud/get_weapp_logs?' . http_build_query($query));
+        $build_log = ( new CloudService(true) )->httpGet('cloud/get_weapp_logs?' . http_build_query($query));
 
         if (isset($build_log[ 'data' ]) && isset($build_log[ 'data' ][ 0 ]) && is_array($build_log[ 'data' ][ 0 ])) {
             $last = end($build_log[ 'data' ][ 0 ]);

@@ -82,8 +82,6 @@ Route::group('sys', function() {
 
     //地图设置
     Route::put('config/map', 'sys.Config/setMap');
-    //地图设置
-    Route::get('config/map', 'sys.Config/getMap');
 
     //登录注册设置
     Route::get('config/login', 'login.Config/getConfig');
@@ -340,6 +338,15 @@ Route::group('sys', function() {
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,
+    AdminLog::class
+]);
+
+//系统环境（不效验登录状态）
+Route::group('sys', function() {
+    //地图设置
+    Route::get('config/map', 'sys.Config/getMap');
+})->middleware([
+    AdminCheckToken::class,
     AdminLog::class
 ]);
 

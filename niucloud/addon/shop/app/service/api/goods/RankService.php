@@ -273,7 +273,7 @@ class RankService extends BaseApiService
                     $item[ 'goodsSku' ] = $this->getGoodsSku($item);
                     if (!empty($item[ 'goodsSku' ])) {
                         $item[ 'goodsSku' ][ 'member_discount' ] = $item[ 'member_discount' ];
-                        $show_price = $goods_active_price_service->getShowPrice($item[ 'goodsSku' ],$this->member_id);
+                        $show_price = $goods_active_price_service->getShowPrice($item[ 'goodsSku' ], $this->member_id);
                         $item[ 'goodsSku' ][ 'show_price' ] = $show_price[ 'show_price' ];
                         $item[ 'goodsSku' ][ 'show_type' ] = $show_price[ 'show_type' ];
                     }

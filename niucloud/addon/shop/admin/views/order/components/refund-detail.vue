@@ -484,7 +484,7 @@ const deliveryRefuseEvent = () => {
 
 const transferEvent = () => {
     const routeUrl = router.resolve({
-        path: '/member/refund/detail',
+        path: '/finance/refund/detail',
         query: { refund_no: formData.value.refund_no }
     })
     window.open(routeUrl.href, '_blank')

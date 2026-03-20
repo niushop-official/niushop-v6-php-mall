@@ -17,9 +17,9 @@
                                     <text class="text-[32rpx] font-bold price-font">￥</text>
                                     <text class="text-[48rpx] price-font">{{ parseFloat(goodsPrice).toFixed(2).split('.')[0] }}</text>
                                     <text class="text-[32rpx] mr-[6rpx] price-font">.{{ parseFloat(goodsPrice).toFixed(2).split('.')[1] }}</text>
-                                    <image class="h-[24rpx] ml-[6rpx] max-w-[60rpx]" v-if="priceType() == 'newcomer_price'" :src="img('addon/shop/newcomer.png')" mode="heightFix" />
-                                    <image class="h-[24rpx] ml-[6rpx] max-w-[44rpx]" v-if="priceType() == 'member_price'" :src="img('addon/shop/VIP.png')" mode="heightFix" />
-                                    <image class="h-[24rpx] ml-[6rpx] max-w-[80rpx]" v-if="priceType() == 'discount_price'" :src="img('addon/shop/discount.png')" mode="heightFix" />
+                                    <image class="h-[24rpx] ml-[6rpx] max-w-[60rpx]" v-if="priceType == 'newcomer_price'" :src="img('addon/shop/newcomer.png')" mode="heightFix" />
+                                    <image class="h-[24rpx] ml-[6rpx] max-w-[44rpx]" v-if="priceType == 'member_price'" :src="img('addon/shop/VIP.png')" mode="heightFix" />
+                                    <image class="h-[24rpx] ml-[6rpx] max-w-[80rpx]" v-if="priceType == 'discount_price'" :src="img('addon/shop/discount.png')" mode="heightFix" />
                                 </view>
                                 <view class="text-[26rpx] leading-[32rpx] text-[var(--text-color-light6)] mt-[12rpx]">库存{{ goodsDetail.detail.stock }}{{ goodsDetail.goods.unit }}</view>
                             </view>
@@ -137,7 +137,7 @@ const goodsPrice = computed(() => {
 })
 
 // 价格类型
-const priceType = () => {
+const priceType = computed(() => {
     let type = "";
 	if(goodsDetail.value.detail.type == 'newcomer_discount' && goodsDetail.value.detail.newcomer_price){
 		type='newcomer_price'
@@ -145,7 +145,7 @@ const priceType = () => {
 		type = goodsDetail.value.detail.show_type
 	}
     return type;
-}
+})
 
 // 会员信息
 const memberStore = useMemberStore()

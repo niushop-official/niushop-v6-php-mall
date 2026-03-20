@@ -13,6 +13,7 @@ namespace addon\shop\app\model\order;
 
 use addon\shop\app\dict\delivery\DeliveryLocalDict;
 use addon\shop\app\model\delivery\Company;
+use addon\shop\app\model\local_delivery\LocalDeliveryOrder;
 use core\base\BaseModel;
 
 /**
@@ -55,5 +56,10 @@ class OrderDelivery extends BaseModel
     public function getThirdDeliveryNameAttr($value, $data)
     {
         return DeliveryLocalDict::getType($data['third_delivery'])['name']  ?? "";
+    }
+
+    public function localDeliveryOrder()
+    {
+        return $this->hasOne(LocalDeliveryOrder::class, 'delivery_no', 'local_delivery_order_id')->append(['status_name','delivery_service_name'])->bind(['local_delivery_status' => 'status','local_delivery_status_name' => 'status_name','delivery_service','delivery_service_name','rider_name','rider_mobile']);
     }
 }

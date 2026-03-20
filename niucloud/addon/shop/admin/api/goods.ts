@@ -129,7 +129,7 @@ export function editGoodsStatus(params: Record<string, any>) {
  * @param params
  */
 export function copyGoods(params: Record<string, any>) {
-    return request.put(`shop/goods/copy/${ params.goods_id }`, params, { showSuccessMessage: true })
+    return request.put(`shop/goods/copy/${ params.goods_id }`, params)
 }
 
 /**

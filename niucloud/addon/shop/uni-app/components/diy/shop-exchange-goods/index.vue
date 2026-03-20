@@ -6,7 +6,7 @@
                 <view class="overflow-hidden bg-[#fff] flex flex-col box-border w-[calc(50%-10rpx)]"
                       :class="{'mt-[20rpx]': index > 1}" :style="itemCss" v-for="(item,index) in goodsList"
                       :key="item.goods_id" @click="toLink(item)">
-                    <up-image :width="style2Width" :height="style2Width" :radius="imageRounded.val" :src="img(item.goods_cover_thumb_mid || '')" model="aspectFill">
+                    <up-image :width="style2Width" :height="style2Width" :radius="imageRounded.val" :src="img(item.goods_cover_thumb_mid || '')" :mode="diyComponent.mode">
                         <template #error>
                             <image class="overflow-hidden" :style="{'width': style2Width,'height': style2Width, 'border-radius': imageRounded.val}" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                         </template>
@@ -29,7 +29,7 @@
 						    </template>
 						</view>
                         <view class="text-[22rpx] leading-[28rpx] mt-[10rpx] text-[var(--text-color-light9)]" :style="{ color : diyComponent.saleStyle.color }">已兑{{ item.total_exchange_num }}人</view>
-                        <view class="flex justify-between flex-wrap items-center mt-[16rpx]">
+                        <!-- <view class="flex justify-between flex-wrap items-center mt-[16rpx]">
                             <view class="flex flex-col">
                                 <view :style="{ color : diyComponent.priceStyle.mainColor }" class="text-[var(--price-text-color)] price-font ml-[2rpx] flex items-baseline">
                                     <text class="text-[32rpx]">{{ item.point }}</text>
@@ -41,6 +41,17 @@
                                 </view>
                             </view>
                             <view class="w-[120rpx] h-[54rpx] text-[22rpx] flex-center !text-[#fff] m-0 rounded-full primary-btn-bg remove-border text-center" shape="circle">去兑换</view>
+                        </view> -->
+                        <view class="flex items-baseline mt-[14rpx]">
+                            <image class="h-[22rpx] w-[22rpx] mr-[4rpx]" :style="imageStyle2"  :src="img('addon/shop/diy/point/nav_point.png')" mode="aspectFit" />
+                            <view class="inline-block price-font text-[24rpx] leading-[1]" :style="{ color : diyComponent.priceStyle.mainColor }">
+                                <text class="text-[38rpx] price-font font-500">{{ parseInt(item.point) }}</text>
+                                <template v-if="item.price && item.price > 0">
+                                    <text class="mx-[2rpx]">+</text>
+                                    <text class="font-500">{{ parseFloat(item.price).toFixed(2) }}</text>
+                                    <text>元</text>
+                                </template>
+                            </view>
                         </view>
                     </view>
                 </view>
@@ -112,6 +123,14 @@ const imageRounded = computed(() => {
         obj.style += 'border-radius:' + diyComponent.value.imgElementRounded * 2 + 'rpx;';
     }
     return obj;
+})
+
+const imageStyle2 = computed(() => {
+    let style = '';
+    // #ifdef MP
+    style += 'position:relative; top:2rpx;';
+    // #endif
+    return style;
 })
 
 // 背景图加遮罩层

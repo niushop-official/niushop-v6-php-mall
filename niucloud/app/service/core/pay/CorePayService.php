@@ -150,6 +150,7 @@ class CorePayService extends BaseCoreService
      * @param string $trade_type
      * @param string $trade_id
      * @param string $channel
+     * @param string $scene
      * @return array
      * @throws DataNotFoundException
      * @throws DbException
@@ -203,6 +204,8 @@ class CorePayService extends BaseCoreService
      * @param string $return_url
      * @param string $quit_url
      * @param string $buyer_id
+     * @param string $voucher
+     * @param int $member_id
      * @return mixed
      * @throws DataNotFoundException
      * @throws DbException
@@ -263,7 +266,7 @@ class CorePayService extends BaseCoreService
                 ]
             );
             if (env('queue.state', true)) {
-                PayReturnTo::dispatch([ 'out_trade_no' => $out_trade_no ], secs: 60);
+                PayReturnTo::dispatch([ 'out_trade_no' => $out_trade_no ], secs: 300);
             }
         }
         return $pay_result;
@@ -461,13 +464,10 @@ class CorePayService extends BaseCoreService
                 switch ($action) {
                     case 'pay'://支付结果通知
                         return $this->payNotify($out_trade_no, $type, $params);
-                        break;
                     case 'refund':
                         return ( new CoreRefundService() )->refundNotify($out_trade_no, $type, $params);
-                        break;
                     case 'transfer':
                         return ( new CoreTransferService() )->transferNotify($out_trade_no, $params);
-                        break;
                 }
                 //找不到对应的业务
                 return true;
@@ -563,7 +563,6 @@ class CorePayService extends BaseCoreService
             Db::rollback();
             throw new PayException($e->getMessage() . $e->getFile() . $e->getLine());
         }
-        return true;
     }
 
     /**

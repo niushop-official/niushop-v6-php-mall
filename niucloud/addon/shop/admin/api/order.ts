@@ -279,3 +279,19 @@ export function getOrderBatchDeliveryType() {
 export function closeRefund(order_refund_no: number) {
     return request.put(`shop/order/refund/close/${order_refund_no}`)
 }
+
+/**
+ * 获取已选订单项总重量
+ * @return
+ */
+export function getSelectOrderGoodsWeight(params: Record<string, any>) {
+    return request.get(`shop/order/select/weight`, {params})
+}
+
+/**
+ * 获取已选订单项配送费用
+ * @return
+ */
+export function getDeliveryFee(params: Record<string, any>) {
+    return request.get(`shop/order/delivery/fee`, {params})
+}

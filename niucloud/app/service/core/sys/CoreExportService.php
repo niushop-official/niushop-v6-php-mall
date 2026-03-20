@@ -14,8 +14,10 @@ namespace app\service\core\sys;
 use app\dict\sys\ExportDict;
 use app\model\sys\SysExport;
 use core\base\BaseCoreService;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use think\facade\Log;
 
@@ -111,7 +113,7 @@ class CoreExportService extends BaseCoreService
         $data_list = [];
         foreach ($data_array as $v)
         {
-            $data_list = empty($data_list) ? $v : array_merge($data_list, $v);
+            $data_list = array_merge($data_list, $v );
         }
         return $data_list;
     }
@@ -195,9 +197,17 @@ class CoreExportService extends BaseCoreService
         foreach ($data as $item) {
             foreach ($data_column as $k => $v)
             {
-                $sheet->setCellValue($v['excel_column_name'] . $row, $item[$k]);
-                // 将样式应用到单元格
-                $sheet->getStyle($v['excel_column_name'] . $row)->applyFromArray($style_array);
+                $cell_value = $item[$k] ?? '';
+                $cell_coordinate = $v['excel_column_name'] . $row;
+                // 步骤1：获取单元格对象
+                $cell = $sheet->getCell($cell_coordinate);
+                // 步骤2：强制单元格格式为纯文本（核心）
+                $cell->getStyle()->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+                // 步骤3：显式赋值为字符串类型，避免解析为公式（核心）
+                $cell->setValueExplicit($cell_value, DataType::TYPE_STRING);
+
+                // 将样式应用到单元格（原有逻辑保留）
+                $sheet->getStyle($cell_coordinate)->applyFromArray($style_array);
 
                 // todo 合并行
                 if (isset($v['merge_type']) && $v['merge_type'] == 'column') {

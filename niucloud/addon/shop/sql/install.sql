@@ -144,7 +144,7 @@ CREATE TABLE `{{prefix}}shop_delivery_company`
     `kd100_express_no`                  VARCHAR(255)  NOT NULL DEFAULT '' COMMENT '快递100:物流公司编号(用于物流跟踪)',
     `kd100_express_no_electronic_sheet` VARCHAR(255)  NOT NULL DEFAULT '' COMMENT '快递100:物流公司编号(用于电子面单)',
     PRIMARY KEY (`company_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='站点快递表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='物流公司表';
 
 
 DROP TABLE IF EXISTS `{{prefix}}shop_delivery_deliver`;
@@ -308,6 +308,8 @@ CREATE TABLE `{{prefix}}shop_goods`
     `sub_title`             varchar(255)   NOT NULL DEFAULT '' COMMENT '副标题',
     `goods_cover`           varchar(2000)  NOT NULL DEFAULT '' COMMENT '商品封面',
     `goods_image`           text COMMENT '商品图片',
+    `goods_image_width`     INT(11) NOT NULL DEFAULT 800 COMMENT '商品详情首图宽',
+    `goods_image_height`    INT(11) NOT NULL DEFAULT 800 COMMENT '商品详情首图高',
     `goods_video`           VARCHAR(555)            DEFAULT '' COMMENT '商品视频',
     `goods_category`        varchar(255)   NOT NULL DEFAULT '' COMMENT '商品分类',
     `goods_desc`            text COMMENT '商品介绍',
@@ -431,7 +433,7 @@ CREATE TABLE `{{prefix}}shop_goods_evaluate`
     `goods_id`       int(11) NOT NULL DEFAULT '0' COMMENT '商品ID',
     `member_id`      int(11) NOT NULL DEFAULT '0' COMMENT '会员ID',
     `member_head`    varchar(255)  NOT NULL DEFAULT '' COMMENT '会员头像',
-    `member_name`    varchar(100)  NOT NULL DEFAULT '' COMMENT '会员名称',
+    `member_name`    varchar(255)  NOT NULL DEFAULT '' COMMENT '会员名称',
     `content`        varchar(3000) NOT NULL DEFAULT '' COMMENT '评价内容',
     `images`         varchar(3000) NOT NULL DEFAULT '' COMMENT '评价图片',
     `is_anonymous`   tinyint(4) NOT NULL DEFAULT '1' COMMENT '1匿名  2不匿名',
@@ -579,7 +581,7 @@ CREATE TABLE `{{prefix}}shop_invoice`
     `id`               int(11) NOT NULL AUTO_INCREMENT COMMENT '发票id',
     `member_id`        int(11) NOT NULL DEFAULT '0' COMMENT '会员id',
     `trade_type`       varchar(10)    NOT NULL DEFAULT 'order' COMMENT '开票分类 order:订单',
-    `trade_id`         int(11) NOT NULL DEFAULT '0' COMMENT '业务id',
+    `trade_id`         VARCHAR(1000)  NOT NULL DEFAULT '' COMMENT '业务id集',
     `header_type`      tinyint(4) NOT NULL DEFAULT '1' COMMENT '抬头类型',
     `header_name`      varchar(100)   NOT NULL DEFAULT '' COMMENT '名称（发票抬头）',
     `type`             tinyint(4) NOT NULL DEFAULT '1' COMMENT '发票类型',
@@ -599,9 +601,9 @@ CREATE TABLE `{{prefix}}shop_invoice`
     `create_time`      int(11) NOT NULL DEFAULT '0' COMMENT '申请时间',
     `invoice_time`     int(11) NOT NULL DEFAULT '0' COMMENT '开票时间',
     `status`           int(11) NOT NULL DEFAULT '0' COMMENT '是否生效',
+    `pay_voucher`      TEXT                    DEFAULT NULL COMMENT '支付凭证',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='发票表';
-
 
 DROP TABLE IF EXISTS `{{prefix}}shop_manjian`;
 CREATE TABLE `{{prefix}}shop_manjian`
@@ -760,18 +762,19 @@ CREATE TABLE `{{prefix}}shop_order_batch_delivery`
 DROP TABLE IF EXISTS `{{prefix}}shop_order_delivery`;
 CREATE TABLE `{{prefix}}shop_order_delivery`
 (
-    `id`                 int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-    `order_id`           int(11) NOT NULL DEFAULT '0',
-    `name`               varchar(50)   NOT NULL DEFAULT '' COMMENT '包裹名称',
-    `delivery_type`      varchar(50)   NOT NULL DEFAULT '' COMMENT '配送方式',
-    `sub_delivery_type`  varchar(50)   NOT NULL DEFAULT '' COMMENT '详细配送方式',
-    `express_company_id` int(11) NOT NULL DEFAULT '0' COMMENT '快递公司id',
-    `express_number`     varchar(50)   NOT NULL DEFAULT '' COMMENT '配送单号',
-    `local_deliver_id`   int(11) NOT NULL DEFAULT '0' COMMENT '同城配送员',
-    `status`             int(11) NOT NULL DEFAULT '0' COMMENT '配送状态',
-    `third_delivery`     VARCHAR(50)   NOT NULL DEFAULT '' COMMENT '配送方（三方配送）',
-    `remark`             VARCHAR(1000) NOT NULL DEFAULT '' COMMENT '备注',
-    `create_time`        int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
+    `id`                      int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `order_id`                int(11) NOT NULL DEFAULT '0',
+    `name`                    varchar(50)   NOT NULL DEFAULT '' COMMENT '包裹名称',
+    `delivery_type`           varchar(50)   NOT NULL DEFAULT '' COMMENT '配送方式',
+    `sub_delivery_type`       varchar(50)   NOT NULL DEFAULT '' COMMENT '详细配送方式',
+    `express_company_id`      int(11) NOT NULL DEFAULT '0' COMMENT '快递公司id',
+    `express_number`          varchar(50)   NOT NULL DEFAULT '' COMMENT '配送单号',
+    `local_deliver_id`        int(11) NOT NULL DEFAULT '0' COMMENT '同城配送员',
+    `status`                  int(11) NOT NULL DEFAULT '0' COMMENT '配送状态',
+    `third_delivery`          VARCHAR(50)   NOT NULL DEFAULT '' COMMENT '配送方（三方配送）',
+    `remark`                  VARCHAR(1000) NOT NULL DEFAULT '' COMMENT '备注',
+    `create_time`             int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
+    `local_delivery_order_id` VARCHAR(255)  NOT NULL DEFAULT '' COMMENT '同城配送单号',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='订单发货表';
 
@@ -979,24 +982,33 @@ CREATE TABLE `{{prefix}}shop_stat`
 DROP TABLE IF EXISTS `{{prefix}}shop_store`;
 CREATE TABLE `{{prefix}}shop_store`
 (
-    `store_id`        int(11) NOT NULL AUTO_INCREMENT,
-    `store_name`      varchar(255)  NOT NULL DEFAULT '' COMMENT '门店名称',
-    `store_desc`      varchar(3000) NOT NULL DEFAULT '' COMMENT '简介',
-    `store_logo`      varchar(255)  NOT NULL DEFAULT '' COMMENT '门店logo',
-    `store_mobile`    varchar(255)  NOT NULL DEFAULT '' COMMENT '手机号',
-    `province_id`     int(11) NOT NULL DEFAULT '0' COMMENT '省id',
-    `city_id`         int(11) NOT NULL DEFAULT '0' COMMENT '市',
-    `district_id`     int(11) NOT NULL DEFAULT '0' COMMENT '县（区）',
-    `address`         varchar(255)  NOT NULL DEFAULT '' COMMENT '详细地址',
-    `full_address`    varchar(255)  NOT NULL DEFAULT '' COMMENT '完整地址',
-    `longitude`       varchar(255)  NOT NULL DEFAULT '' COMMENT '经度',
-    `latitude`        varchar(255)  NOT NULL DEFAULT '' COMMENT '纬度',
-    `trade_time`      varchar(255)  NOT NULL DEFAULT '' COMMENT '营业时间(文本展示使用)',
-    `time_week`       TEXT                   DEFAULT NULL COMMENT '自定义的营业时间["0","1","2","3","4","5","6"]周日-周六',
-    `trade_time_json` TEXT                   DEFAULT NULL COMMENT '营业时间',
-    `time_interval`   INT(11) NOT NULL DEFAULT 0 COMMENT '时段设置（分钟）',
-    `create_time`     int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
-    `update_time`     int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+    `store_id`               int(11) NOT NULL AUTO_INCREMENT,
+    `store_no`               VARCHAR(255)  NOT NULL DEFAULT '' COMMENT '门店编号',
+    `store_name`             varchar(255)  NOT NULL DEFAULT '' COMMENT '门店名称',
+    `store_desc`             varchar(3000) NOT NULL DEFAULT '' COMMENT '简介',
+    `store_logo`             varchar(255)  NOT NULL DEFAULT '' COMMENT '门店logo',
+    `store_mobile`           varchar(255)  NOT NULL DEFAULT '' COMMENT '手机号',
+    `contact_name`           VARCHAR(255)  NOT NULL DEFAULT '' COMMENT '联系人',
+    `province_id`            int(11) NOT NULL DEFAULT '0' COMMENT '省id',
+    `city_id`                int(11) NOT NULL DEFAULT '0' COMMENT '市',
+    `district_id`            int(11) NOT NULL DEFAULT '0' COMMENT '县（区）',
+    `address`                varchar(255)  NOT NULL DEFAULT '' COMMENT '详细地址',
+    `full_address`           varchar(255)  NOT NULL DEFAULT '' COMMENT '完整地址',
+    `longitude`              varchar(255)  NOT NULL DEFAULT '' COMMENT '经度',
+    `latitude`               varchar(255)  NOT NULL DEFAULT '' COMMENT '纬度',
+    `trade_time`             varchar(255)  NOT NULL DEFAULT '' COMMENT '营业时间(文本展示使用)',
+    `time_week`              TEXT                   DEFAULT NULL COMMENT '自定义的营业时间["0","1","2","3","4","5","6"]周日-周六',
+    `trade_time_json`        TEXT                   DEFAULT NULL COMMENT '营业时间',
+    `time_interval`          INT(11) NOT NULL DEFAULT 0 COMMENT '时段设置（分钟）',
+    `create_time`            int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `update_time`            int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+    `support_delivery`       TEXT                   DEFAULT NULL COMMENT '支持的配送服务商',
+    `extend_data`            TEXT                   DEFAULT NULL COMMENT '配送服务商扩展数据',
+    `time_is_open`           TINYINT(4) NOT NULL DEFAULT 0 COMMENT '配送时间设置 0 关闭1 开启',
+    `support_local_delivery` TINYINT(4) NOT NULL DEFAULT 0 COMMENT '支持同城配送',
+    `support_store`          TINYINT(4) NOT NULL DEFAULT 0 COMMENT '支持门店自提',
+    `status`                 TINYINT(4) NOT NULL DEFAULT 0 COMMENT '开启状态（1开启，0关闭）',
+    `area`                   LONGTEXT               DEFAULT NULL COMMENT '配送区域',
     PRIMARY KEY (`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='自提门店表';
 
@@ -1066,8 +1078,136 @@ CREATE TABLE `{{prefix}}shop_goods_browse`
 
 
 
-ALTER TABLE `{{prefix}}shop_invoice`
-    CHANGE COLUMN trade_id trade_id VARCHAR (1000) NOT NULL DEFAULT '' COMMENT '业务id集';
+DROP TABLE IF EXISTS `{{prefix}}shop_delivery_shop_delivery_order_log`;
+CREATE TABLE `{{prefix}}shop_delivery_shop_delivery_order_log`
+(
+    `id`           INT          NOT NULL AUTO_INCREMENT,
+    `order_id`     INT          NOT NULL DEFAULT 0 COMMENT '订单id',
+    `main_id`      INT          NOT NULL DEFAULT 0 COMMENT '操作人id',
+    `main_type`    VARCHAR(255) NOT NULL DEFAULT '' COMMENT '操作人类型',
+    `main_name`    VARCHAR(255) NOT NULL DEFAULT '' COMMENT '操作人名称',
+    `operate`      VARCHAR(255) NOT NULL DEFAULT '' COMMENT '操作类型',
+    `operate_desc` VARCHAR(500) NOT NULL DEFAULT '' COMMENT '操作描述',
+    `status`       VARCHAR(255) NOT NULL DEFAULT '' COMMENT '操作后配送状态',
+    `create_time`  INT          NOT NULL DEFAULT 0 COMMENT '配送时间',
+    `remark`       VARCHAR(255) NOT NULL DEFAULT '' COMMENT '备注',
+    PRIMARY KEY (`id`)
+) ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '商家配送服务订单操作表';
 
-ALTER TABLE `{{prefix}}shop_invoice`
-    ADD COLUMN pay_voucher TEXT DEFAULT NULL COMMENT '支付凭证';
+DROP TABLE IF EXISTS `{{prefix}}shop_delivery_shop_delivery_order`;
+CREATE TABLE `{{prefix}}shop_delivery_shop_delivery_order`
+(
+    `id`                         INT            NOT NULL AUTO_INCREMENT,
+    `delivery_no`                VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送单号',
+    `out_delivery_no`            VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '三方配送单号',
+    `trade_type`                 VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '交易类型，mall商城 supply供货商',
+    `trade_no`                   VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '交易单号',
+    `trade_id`                   INT            NOT NULL DEFAULT 0 COMMENT '交易id',
+    `delivery_money`             DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '配送费用',
+    `delivery_start`             VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送起点（发货点）',
+    `delivery_start_province_id` INT            NOT NULL DEFAULT 0 COMMENT '配送起点省',
+    `delivery_start_city_id`     INT            NOT NULL DEFAULT 0 COMMENT '配送起点市',
+    `delivery_start_district_id` INT            NOT NULL DEFAULT 0 COMMENT '配送起点区',
+    `delivery_start_lng`         VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送起点经度',
+    `delivery_start_lat`         VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送起点纬度',
+    `delivery_end`               VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送终点（收货点）',
+    `delivery_end_province_id`   INT            NOT NULL DEFAULT 0 COMMENT '配送终点省',
+    `delivery_end_city_id`       INT            NOT NULL DEFAULT 0 COMMENT '配送终点市',
+    `delivery_end_district_id`   INT            NOT NULL DEFAULT 0 COMMENT '配送终点区',
+    `delivery_end_lng`           VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送终点经度',
+    `delivery_end_lat`           VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送终点纬度',
+    `delivery_distance`          DECIMAL(10, 4) NOT NULL DEFAULT 0.0000 COMMENT '配送距离',
+    `deliver_id`                 INT            NOT NULL DEFAULT 0 COMMENT '配送员id',
+    `deliver_name`               VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送员姓名',
+    `deliver_mobile`             VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送员手机号',
+    `status`                     VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送状态',
+    `create_time`                INT            NOT NULL DEFAULT 0 COMMENT '配送时间',
+    `finish_time`                INT            NOT NULL DEFAULT 0 COMMENT '送达时间',
+    `cancel_time`                INT            NOT NULL DEFAULT 0 COMMENT '取消时间',
+    `remark`                     VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '备注',
+    `body`                       VARCHAR(1000)  NOT NULL DEFAULT '' COMMENT '商品信息',
+    PRIMARY KEY (`id`)
+) ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '商家配送服务订单表';
+
+DROP TABLE IF EXISTS `{{prefix}}shop_delivery_local_delivery_service`;
+CREATE TABLE `{{prefix}}shop_delivery_local_delivery_service`
+(
+    `id`          INT          NOT NULL AUTO_INCREMENT,
+    `key`         VARCHAR(255) NOT NULL DEFAULT '' COMMENT '三方配送key',
+    `name`        VARCHAR(255) NOT NULL DEFAULT '' COMMENT '三方配送名称',
+    `config`      TEXT                  DEFAULT NULL COMMENT '三方配送接入参数',
+    `is_merchant` TINYINT      NOT NULL DEFAULT 0 COMMENT '是否商家自配送',
+    `is_use`      TINYINT      NOT NULL DEFAULT 0 COMMENT '是否启用（0否，1是）',
+    PRIMARY KEY (`id`)
+) ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '同城配送服务商表';
+
+
+DROP TABLE IF EXISTS `{{prefix}}shop_delivery_local_delivery_order_log`;
+CREATE TABLE `{{prefix}}shop_delivery_local_delivery_order_log`
+(
+    `id`           INT          NOT NULL AUTO_INCREMENT,
+    `order_id`     INT          NOT NULL DEFAULT 0 COMMENT '订单id',
+    `main_id`      INT          NOT NULL DEFAULT 0 COMMENT '操作人id',
+    `main_type`    VARCHAR(255) NOT NULL DEFAULT '' COMMENT '操作人类型',
+    `main_name`    VARCHAR(255) NOT NULL DEFAULT '' COMMENT '操作人名称',
+    `operate`      VARCHAR(255) NOT NULL DEFAULT '' COMMENT '操作类型',
+    `operate_desc` VARCHAR(500) NOT NULL DEFAULT '' COMMENT '操作描述',
+    `status`       VARCHAR(255) NOT NULL DEFAULT '' COMMENT '操作后配送状态',
+    `create_time`  INT          NOT NULL DEFAULT 0 COMMENT '配送时间',
+    `remark`       VARCHAR(255) NOT NULL DEFAULT '' COMMENT '备注',
+    PRIMARY KEY (`id`)
+) ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '同城配送服务订单操作表';
+
+
+DROP TABLE IF EXISTS `{{prefix}}shop_delivery_local_delivery_order`;
+CREATE TABLE `{{prefix}}shop_delivery_local_delivery_order`
+(
+    `id`                         INT            NOT NULL AUTO_INCREMENT,
+    `delivery_service`           VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送方标识',
+    `delivery_no`                VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送单号',
+    `out_delivery_no`            VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '三方配送单号',
+    `trade_type`                 VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '交易类型，mall商城',
+    `trade_no`                   VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '交易单号',
+    `trade_id`                   INT            NOT NULL DEFAULT 0 COMMENT '交易id',
+    `delivery_money`             DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '配送费用',
+    `delivery_start`             VARCHAR(1000)  NOT NULL DEFAULT '' COMMENT '配送起点（发货点）',
+    `delivery_start_province_id` INT            NOT NULL DEFAULT 0 COMMENT '配送起点省',
+    `delivery_start_city_id`     INT            NOT NULL DEFAULT 0 COMMENT '配送起点市',
+    `delivery_start_district_id` INT            NOT NULL DEFAULT 0 COMMENT '配送起点区',
+    `delivery_start_lng`         VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送起点经度',
+    `delivery_start_lat`         VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送起点纬度',
+    `delivery_end`               VARCHAR(1000)  NOT NULL DEFAULT '' COMMENT '配送终点（收货点）',
+    `delivery_end_province_id`   INT            NOT NULL DEFAULT 0 COMMENT '配送终点省',
+    `delivery_end_city_id`       INT            NOT NULL DEFAULT 0 COMMENT '配送终点市',
+    `delivery_end_district_id`   INT            NOT NULL DEFAULT 0 COMMENT '配送终点区',
+    `delivery_end_lng`           VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送终点经度',
+    `delivery_end_lat`           VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送终点纬度',
+    `delivery_distance`          DECIMAL(10, 4) NOT NULL DEFAULT 0.0000 COMMENT '配送距离',
+    `status`                     VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送状态',
+    `out_status`                 VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '三方配送状态',
+    `create_time`                INT            NOT NULL DEFAULT 0 COMMENT '配送时间',
+    `finish_time`                INT            NOT NULL DEFAULT 0 COMMENT '送达时间',
+    `cancel_time`                INT            NOT NULL DEFAULT 0 COMMENT '取消时间',
+    `rider_name`                 VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '骑手姓名',
+    `rider_mobile`               VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '骑手电话',
+    `deduct_money`               DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '违约金',
+    `remark`                     VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '备注',
+    `body`                       VARCHAR(255)   NOT NULL DEFAULT '' COMMENT '配送产品信息',
+    `actual_money`               DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '实际消费费用(订单取消或完成后实际定义)',
+    PRIMARY KEY (`id`)
+) ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '同城配送服务订单表';

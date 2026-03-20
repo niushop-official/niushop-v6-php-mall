@@ -28,7 +28,7 @@ class CoreConfigService extends BaseCoreService
      */
     public function setDeliverySearchConfig($data)
     {
-        return ( new ConfigService() )->setConfig( 'DELIVERY_INTERFACE', $data);
+        return ( new ConfigService() )->setConfig('DELIVERY_INTERFACE', $data);
     }
 
     /**
@@ -37,7 +37,7 @@ class CoreConfigService extends BaseCoreService
      */
     public function getDeliverySearchConfig()
     {
-        $info = ( new ConfigService() )->getConfig( 'DELIVERY_INTERFACE');
+        $info = ( new ConfigService() )->getConfig('DELIVERY_INTERFACE');
         if (empty($info)) {
             $info = [];
             $info[ 'value' ] = [
@@ -61,7 +61,7 @@ class CoreConfigService extends BaseCoreService
      */
     public function getDeliveryElectronSheeticConfig()
     {
-        $info = ( new ConfigService() )->getConfig( 'ELECTRONIC_SHEET_CONFIG');
+        $info = ( new ConfigService() )->getConfig('ELECTRONIC_SHEET_CONFIG');
         if (empty($info)) {
             $info = [];
             $info[ 'value' ] = [
@@ -74,5 +74,34 @@ class CoreConfigService extends BaseCoreService
             ];
         }
         return $info[ 'value' ];
+    }
+
+    /**
+     * 设置同城配送配置
+     * @param $data
+     * @return SysConfig|bool|Model
+     */
+    public function setLocalDeliveryConfig($data)
+    {
+        return (new ConfigService())->setConfig('LOCAL_DELIVERY_CONFIG', $data);
+    }
+
+    /**
+     * 获取同城配送配置
+     * @return array
+     */
+    public function getLocalDeliveryConfig()
+    {
+        $value = (new ConfigService())->getConfigValue('LOCAL_DELIVERY_CONFIG');
+        if (empty($value)) {
+            $value = [
+                'is_show_polyline' => 0,
+                'is_local_delivery_store_select' => 0
+            ];
+        } else {
+            $value[ 'is_show_polyline' ] = intval($value[ 'is_show_polyline' ] ?? 0);
+            $value[ 'is_local_delivery_store_select' ] = intval($value[ 'is_local_delivery_store_select' ] ?? 0);
+        }
+        return $value;
     }
 }

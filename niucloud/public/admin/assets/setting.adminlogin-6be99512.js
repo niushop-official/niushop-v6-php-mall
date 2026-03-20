@@ -1,1 +1,0 @@
-const i="是否启用验证码",g="登录页广告图",t="平台端",n="建议上传尺寸为450*400px",s="建议上传尺寸为620*980px",a={isCaptcha:i,bgImg:g,admin:t,adminBgImgTip:n,siteBgImgTip:s};export{t as admin,n as adminBgImgTip,g as bgImg,a as default,i as isCaptcha,s as siteBgImgTip};

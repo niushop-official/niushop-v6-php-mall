@@ -16,7 +16,11 @@ use addon\shop\app\dict\order\OrderLogDict;
 use addon\shop\app\model\order\OrderDelivery;
 use addon\shop\app\service\core\order\CoreOrderDeliveryService;
 use addon\shop\app\service\core\order\CoreOrderService;
+use app\model\sys\SysUser;
 use core\base\BaseAdminService;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 
 /**
  *  订单配送服务层
@@ -38,6 +42,7 @@ class OrderDeliveryService extends BaseAdminService
     {
         $data[ 'main_type' ] = OrderLogDict::STORE;
         $data[ 'main_id' ] = $this->uid;
+        $data[ 'main_name' ] = (new SysUser())->where('uid', $this->uid)->value('username') ?? '';
         ( new CoreOrderDeliveryService() )->delivery($data);
         return true;
     }
@@ -85,5 +90,18 @@ class OrderDeliveryService extends BaseAdminService
             $info = ( new CoreOrderService() )->deliverySearch($info);
         }
         return $info;
+    }
+
+    /**
+     * 配送费用计算
+     * @param $data
+     * @return array|mixed
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    public function getDeliveryFee($data)
+    {
+        return ( new CoreOrderDeliveryService() )->getDeliveryFee($data);
     }
 }

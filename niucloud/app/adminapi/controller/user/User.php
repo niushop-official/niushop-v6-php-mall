@@ -36,6 +36,8 @@ class User extends BaseAdminController
             ['realname', ''],
             ['role', ''],
             ['create_time', []],
+            ['real_name', ''],
+            ['last_time', []]
         ]);
 
         $list = (new UserService())->getPage($data);
@@ -129,6 +131,7 @@ class User extends BaseAdminController
             ['mobile', ''],
             ['real_name', ''],
             ['head_img', ''],
+            ['role_ids', []],
         ]);
         (new UserService())->edit($uid, $data);
         return success();
@@ -143,68 +146,5 @@ class User extends BaseAdminController
     public function del($uid) {
         (new UserService())->del($uid);
         return success("DELETE_SUCCESS");
-    }
-
-    /**
-     * 获取用户站点创建限制
-     * @description 获取用户站点创建限制
-     * @param $uid
-     * @return Response
-     */
-    public function getUserCreateSiteLimit($uid){
-        return success(data:(new UserService())->getUserCreateSiteLimit($uid));
-    }
-
-    /**
-     * 获取用户站点创建限制
-     * @description 获取用户站点创建限制
-     * @param $id
-     * @return Response
-     */
-    public function getUserCreateSiteLimitInfo($id){
-        return success(data:(new UserService())->getUserCreateSiteLimitInfo($id));
-    }
-
-    /**
-     * 添加用户站点创建限制
-     * @description 添加用户站点创建限制
-     * @param $uid
-     * @return Response
-     */
-    public function addUserCreateSiteLimit($uid){
-        $data = $this->request->params([
-            ['uid', 0],
-            ['group_id', 0],
-            ['num', 1],
-            ['month', 1],
-        ]);
-        (new UserService())->addUserCreateSiteLimit($data);
-        return success('SUCCESS');
-    }
-
-    /**
-     * 编辑用户站点创建限制
-     * @description 编辑用户站点创建限制
-     * @param $id
-     * @return Response
-     */
-    public function editUserCreateSiteLimit($id){
-        $data = $this->request->params([
-            ['num', 1],
-            ['month', 1],
-        ]);
-        (new UserService())->editUserCreateSiteLimit($id, $data);
-        return success('SUCCESS');
-    }
-
-    /**
-     * 删除用户站点创建限制
-     * @description 删除用户站点创建限制
-     * @param $id
-     * @return Response
-     */
-    public function delUserCreateSiteLimit($id){
-        (new UserService())->delUserCreateSiteLimit($id);
-        return success('SUCCESS');
     }
 }

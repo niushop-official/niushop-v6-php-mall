@@ -2,7 +2,7 @@
     <div class="main-container">
 
         <el-card class="box-card !border-none" shadow="never">
-            <el-page-header :content="pageName" :icon="ArrowLeft" @back="router.push('/shop/order/delivery')" />
+            <el-page-header :content="pageName" :icon="ArrowLeft" @back="router.push('/shop/delivery/config')" />
         </el-card>
 
         <el-card class="box-card mt-[15px] !border-none" shadow="never">
@@ -118,7 +118,7 @@ loadCompanyList(getTablePageStorage(companyTable.searchParam).page);
  * 添加物流公司
  */
 const addEvent = () => {
-    router.push('/shop/order/delivery/company_add')
+    router.push('/shop/delivery/company_add')
 }
 
 /**
@@ -126,7 +126,7 @@ const addEvent = () => {
  * @param data
  */
 const editEvent = (data: any) => {
-    router.push('/shop/order/delivery/company_edit?company_id=' + data.company_id)
+    router.push('/shop/delivery/company_edit?company_id=' + data.company_id)
 }
 
 /**

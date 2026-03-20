@@ -12,7 +12,7 @@
 namespace addon\shop\app\service\api\order;
 
 use addon\shop\app\dict\order\OrderLogDict;
-use addon\shop\app\model\delivery\Local;
+use addon\shop\app\model\local_delivery\Local;
 use addon\shop\app\model\order\Order;
 use addon\shop\app\service\core\delivery\CoreStoreService;
 use addon\shop\app\service\core\order\CoreOrderCreateService;

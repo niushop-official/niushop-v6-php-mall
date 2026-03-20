@@ -25,8 +25,7 @@ class MemberLoginListener
     public function handle(object $member)
     {
         // 新人专享活动
-        event("MemberLoginAfter", [ 'member_id' => $member[ 'member_id' ] ]);
-        return;
+        event("MemberLoginAfter", ['member_id' => $member['member_id']]);
 
     }
 }

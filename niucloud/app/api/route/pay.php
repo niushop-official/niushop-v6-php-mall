@@ -17,7 +17,6 @@ use think\facade\Route;
 //支付异步回调
 Route::any('pay/notify/:channel/:type/:action', 'pay.Pay/notify')
     ->middleware(ApiChannel::class)
-    ->middleware(ApiCheckToken::class)
     ->middleware(ApiLog::class);
 /**
  * 路由

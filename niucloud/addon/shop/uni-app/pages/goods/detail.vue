@@ -83,7 +83,8 @@ diy.onShow((data: any) => {
         },
         weapp: {
             ...share
-        }
+        },
+        isStop:true
     });
     diyGroupRef.value?.refresh();
 

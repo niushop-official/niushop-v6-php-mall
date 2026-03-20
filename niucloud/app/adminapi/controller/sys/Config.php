@@ -58,9 +58,9 @@ class Config extends BaseAdminController
             [ "front_end_logo", "" ],
             [ "front_end_icon", "" ],
             [ "icon", "" ],
-            [ "meta_title", "" ],
-            [ "meta_desc", "" ],
-            [ "meta_keyword", "" ],
+            [ "meta_title", "" ], // Meta 标题
+            [ "meta_desc", "" ], // Meta 描述
+            [ "meta_keyword", "" ], // Meta 关键字
         ]);
         ( new ConfigService() )->setWebSite($data);
 

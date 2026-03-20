@@ -64,7 +64,7 @@ class CoreDiyService extends BaseCoreService
             $addon_theme = array_values(array_filter(event('ThemeColor', [ 'key' => $value[ 'key' ] ])))[ 0 ] ?? [];
             if (empty($addon_theme)) continue;
 
-            foreach ($addon_theme[ 'theme_color' ] as $k => $v) {
+            foreach ($addon_theme[ 'theme_color' ] ?? [] as $k => $v) {
                 $data[] = [
                     'type' => 'app',
                     'addon' => $value[ 'key' ],

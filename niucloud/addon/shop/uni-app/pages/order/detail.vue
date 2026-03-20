@@ -1,8 +1,14 @@
 <template>
     <view :style="themeColor()">
-        <view class="bg-[var(--page-bg-color)] min-h-screen overflow-hidden" v-if="!loading">
+        <view class="bg-[var(--page-bg-color)] min-h-screen" v-if="!loading">
             <view v-if="!loading" class="pb-20rpx">
-                <view v-if="detail.status_name" class="pl-[40rpx] pr-[35rpx] bg-linear pb-[100rpx]">
+                <view style="min-height: calc(50vh  + 150rpx);" v-if="isShowLocalDelivery">
+                    <!-- #ifdef MP-WEIXIN -->
+                    <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()" />
+                    <!-- #endif -->
+                    <map-show ref="mapShowRef"  :tradeNo="detail.order_no" @comfirm="handleComfirm"  v-if="detail.order_no" />
+                </view>
+                <view v-if="detail.status_name  && !isShowLocalDelivery" class="pl-[40rpx] pr-[35rpx] bg-linear pb-[100rpx]">
                     <!-- #ifdef MP-WEIXIN || APP-PLUS -->
                     <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()" />
                     <!-- #endif -->
@@ -27,7 +33,30 @@
                         </view>
                     </view>
                 </view>
-                <view class="sidebar-margin mt-[-86rpx] card-template" v-if="detail.delivery_type != 'virtual'&& detail.taker_name">
+                <view class="sidebar-margin card-template mt-[-86rpx] relative" v-if="detail.delivery_type == 'local_delivery' && isShowLocalDelivery">
+                    <view class="flex items-center" @click="localeDeliveryFn">
+                        <view class="flex-1">
+                            <view class="mb-[20rpx] flex items-baseline leading-[40rpx] min-h-[46rpx]">
+                                <text class="text-[26rpx] font-500 mr-[10rpx]">预计</text>
+                                <text class="text-[46rpx] font-600">{{ expectedFinishTime }}</text>
+                            </view>
+                            
+                            <view class="flex">
+                                <text class="text-[26rpx] font-500 mr-[10rpx] flex-shrink-0">送至</text>
+                                <view class="flex flex-col">
+                                    <text class="text-[26rpx] mb-[12rpx] leading-[26rpx]">{{ detail.taker_full_address }}</text>
+                                    <view class="flex leading-[38rpx] overflow-hidden">
+                                        <text class="text-[26rpx]">{{ detail.taker_name }}</text>
+                                        <text class="text-[26rpx] ml-[15rpx]">{{ detail.taker_mobile }}</text>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                        <text class="nc-iconfont nc-icon-youV6xx ml-[10rpx]" v-if="detail.delivery_type == 'local_delivery' && ['3','5'].indexOf(detail.status) != -1"></text>
+                    </view>
+                    
+                </view>
+                <view class="sidebar-margin mt-[-86rpx] card-template" v-if="detail.delivery_type != 'virtual'&& detail.taker_name && !isShowLocalDelivery">
                     <view v-if="detail.delivery_type == 'express'">
                         <view class="text-[#303133] flex">
                             <text class="nc-iconfont nc-icon-dizhiguanliV6xx text-[40rpx] pt-[12rpx] mr-[20rpx]"></text>
@@ -424,6 +453,7 @@
             <view class="tab-bar-placeholder"></view>
             <pay ref="payRef" @close="payClose"></pay>
             <logistics-tracking ref="materialRef"></logistics-tracking>
+            <delivery-record ref="deliveryRecordRef"></delivery-record>
             <!-- 满减 -->
             <ns-goods-manjian ref="manjianShowRef"></ns-goods-manjian>
         </view>
@@ -446,17 +476,20 @@ import { getShopOrderDetail, orderClose, orderFinish } from '@/addon/shop/api/or
 import { getEvaluateConfig } from '@/addon/shop/api/shop';
 import { getVerifyCode } from '@/app/api/verify';
 import logisticsTracking from '@/addon/shop/pages/order/components/logistics-tracking/logistics-tracking.vue'
+import deliveryRecord from '@/addon/shop/pages/order/components/delivery-record/delivery-record.vue'
 import useConfigStore from "@/stores/config";
 import nsGoodsManjian from '@/addon/shop/components/ns-goods-manjian/ns-goods-manjian.vue';
 import { topTabar } from '@/utils/topTabbar';
 import { cloneDeep } from 'lodash-es';
 import diyFormDetail from '@/addon/components/diy-form-detail/index.vue'
+import mapShow from '@/addon/shop/pages/order/components/map-show/map-show.vue'
 
 /********* 自定义头部 - start ***********/
 const topTabarObj = topTabar()
 let topTabbarData = topTabarObj.setTopTabbarParam({ title: '订单详情' })
 /********* 自定义头部 - end ***********/
 
+const isShowLocalDelivery = ref(false)
 const detail: any = ref<Object>({});
 const loading = ref<boolean>(true);
 const type = ref('')
@@ -497,6 +530,10 @@ const orderDetailFn = (id: any) => {
     loading.value = true;
     getShopOrderDetail(id).then((res: any) => {
         detail.value = res.data;
+        isShowLocalDelivery.value = detail.value.show_local_delivery_info
+        if(isShowLocalDelivery.value){
+           topTabbarData = topTabarObj.setTopTabbarParam({ title: '订单详情', topStatusBar: { textColor: '#333' }})
+        }
         if (res.data.order_goods && res.data.order_goods.length && isShowVerify.value) {
             let obj: any = {};
             obj.order_goods_id = res.data.order_goods[0].order_goods_id
@@ -675,6 +712,18 @@ const orderBtnFn = (type = '') => {
     }
 }
 
+// 是否展示地图
+let expectedFinishTime = ref()
+const handleComfirm = (val: any) => {
+    if(val){
+        isShowLocalDelivery.value = true
+    } else {
+        isShowLocalDelivery.value = false
+    }
+    expectedFinishTime.value = val?.expected_finish_time
+
+}
+
 const dateFormat = (res: any, type: any) => {
     let data;
     if (res.indexOf('/') != -1) {
@@ -785,6 +834,14 @@ const getGoodsDiyFormDetailCallback = (data: any) => {
 const orderDiyFormData = ref([]);
 const getOrderDiyFormDetailCallback = (data: any) => {
     orderDiyFormData.value = data;
+}
+
+// 配送记录
+const deliveryRecordRef = ref(null)
+const localeDeliveryFn = () => {
+    if(detail.value.delivery_type == 'local_delivery' && ['3','5'].indexOf(detail.value.status) != -1){
+        deliveryRecordRef.value?.open(detail.value.local_delivery_order_log);
+    }
 }
 </script>
 <style lang="scss" scoped>

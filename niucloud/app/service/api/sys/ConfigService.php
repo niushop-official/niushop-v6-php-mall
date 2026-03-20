@@ -39,15 +39,16 @@ class ConfigService extends BaseApiService
      */
     public function getCopyright()
     {
-       return (new CoreSysConfigService())->getCopyright();
+        return ( new CoreSysConfigService() )->getCopyright();
     }
 
     /**
      * 获取前端域名
      * @return array|string[]
      */
-    public function getSceneDomain(){
-        return (new CoreSysConfigService())->getSceneDomain();
+    public function getSceneDomain()
+    {
+        return ( new CoreSysConfigService() )->getSceneDomain();
     }
 
     /**
@@ -80,21 +81,26 @@ class ConfigService extends BaseApiService
                 'front_end_name' => '',
                 'front_end_logo' => '',
                 'icon' => '',
+                'meta_title' => '',
+                'meta_desc' => '',
+                'meta_keyword' => '',
             ];
         }
-        $info['site_addons'] = (new CoreAddonService())->getInstallAddonList();
+        $info[ 'site_addons' ] = ( new CoreAddonService() )->getInstallAddonList();
         return $info;
     }
 
-    public function getMap(){
-        return (new CoreSysConfigService())->getMap();
+    public function getMap()
+    {
+        return ( new CoreSysConfigService() )->getMap();
     }
 
-    public function getAppConfig() {
-        $config = (new CoreAppService())->getConfig();
-        if (!empty($config) && isset($config['wechat_app_secret'])) unset($config['wechat_app_secret']);
-        $weapp_config = (new CoreWeappConfigService())->getWeappConfig();
-        $config['weapp_original'] = $weapp_config['weapp_original'];
+    public function getAppConfig()
+    {
+        $config = ( new CoreAppService() )->getConfig();
+        if (!empty($config) && isset($config[ 'wechat_app_secret' ])) unset($config[ 'wechat_app_secret' ]);
+        $weapp_config = ( new CoreWeappConfigService() )->getWeappConfig();
+        $config[ 'weapp_original' ] = $weapp_config[ 'weapp_original' ];
         return $config;
     }
 

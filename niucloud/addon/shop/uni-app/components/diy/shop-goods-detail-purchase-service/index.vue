@@ -102,7 +102,7 @@
                         </view>
                     </scroll-view>
                     <view class="btn-wrap">
-                        <button class="primary-btn-bg btn" @click="couponListShow = false">确定</button>
+                        <!-- <button class="primary-btn-bg btn" @click="couponListShow = false">确定</button> -->
                     </view>
                 </view>
             </u-popup>

@@ -1,7 +1,7 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <el-page-header :content="pageName" :icon="ArrowLeft" @back="router.push('/shop/order/delivery')" />
+            <el-page-header :content="pageName" :icon="ArrowLeft" @back="router.push('/shop/delivery/config')" />
         </el-card>
 
         <el-card class="box-card mt-[15px] !border-none" shadow="never">
@@ -104,7 +104,7 @@ loadTemplateList(getTablePageStorage(templateTable.searchParam).page);
  * 添加运费模板
  */
 const addEvent = () => {
-    router.push({ path: '/shop/order/shipping/template_edit' })
+    router.push({ path: '/shop/shipping/template_edit' })
 }
 
 /**
@@ -112,7 +112,7 @@ const addEvent = () => {
  * @param data
  */
 const editEvent = (data: any) => {
-    router.push({ path: '/shop/order/shipping/template_edit', query: { id: data.template_id } })
+    router.push({ path: '/shop/shipping/template_edit', query: { id: data.template_id } })
 }
 
 /**

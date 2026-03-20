@@ -32,13 +32,17 @@ class AfterShopOrderClose
             $order_discount_where = array(
                 ['order_id', '=', $order_data['order_id']]
             );
+
             $order_discount = (new OrderDiscounts())->where($order_discount_where)->select();
+
             if (!$order_discount->isEmpty()) {
                 $recover_list = [];
                 foreach ($order_discount as $v) {
                     $item_discount_type = $v['discount_type'];
                     $recover_list[$item_discount_type][] = $v['discount_type_id'];
+
                 }
+
                 foreach ($recover_list as $item_discount_type => $discount_type_ids) {
                     switch ($item_discount_type) {
                         case 'coupon'://优惠券
@@ -52,6 +56,7 @@ class AfterShopOrderClose
                 ['is_gift', '=', 0],
             );
             $order_goods_data = (new OrderGoods())->where($order_goods_where)->select()->toArray();
+
             //返还商品库存
             $core_goods_stock_service = new CoreGoodsStockService();
             $inc_data = [];

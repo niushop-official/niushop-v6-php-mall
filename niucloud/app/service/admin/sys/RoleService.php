@@ -249,8 +249,10 @@ class RoleService extends BaseAdminService
     /**
      * 角色状态修改
      */
-    public function modifyStatus(int $id, int $status)
+    public function modifyStatus($data)
     {
+        $id = $data[ 'role_id' ];
+        $status = $data[ 'status' ];
         $this->model->where([ [ 'role_id', '=', $id ] ])->update([ 'status' => $status ]);
         return true;
     }

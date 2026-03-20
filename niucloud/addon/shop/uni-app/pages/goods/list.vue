@@ -39,7 +39,7 @@
             </view>
         </view>
         <u-popup :show="labelPopup" mode="top" @close="labelPopup = false">
-            <view @touchmove.prevent.stop class="h-[50vh] overflow-auto mt-[30rpx]">
+            <scroll-view scroll-y class="h-[50vh] overflow-auto mt-[30rpx]">
 				<view v-for="(item, index) in categoryList" :key="index">
 					<view class="text-[28rpx] px-[20rpx] mt-[10rpx]">{{item.category_name}}</view>
 					<view class="flex flex-wrap pl-[20rpx] pt-[20rpx]">
@@ -57,7 +57,7 @@
 					    </text>
 					</view>
 				</view>
-            </view>
+            </scroll-view>
         </u-popup>
 
         <mescroll-body ref="mescrollRef" top="176rpx" bottom="60px" @init="mescrollInit" :down="{ use: false }" @up="getAllAppListFn">

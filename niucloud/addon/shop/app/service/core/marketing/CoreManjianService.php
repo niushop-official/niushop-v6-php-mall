@@ -807,8 +807,9 @@ class CoreManjianService extends BaseCoreService
                     if (!empty($value['goods_json'])) {
                         foreach ($value['goods_json'] as $goods) {
                             if (!empty($gift) && !empty($gift['goods'])) {
-                                if ($goods['num'] > $gift['goods']['num']) {
-                                    $goods['num'] -= $gift['goods']['num'];
+                                $gift_goods = array_column($gift['goods'], null, 'sku_id');
+                                if ($goods['num'] > $gift_goods[$goods['sku_id']]['num']) {
+                                    $goods['num'] -= $gift_goods[$goods['sku_id']]['num'];
                                     $refund_gift_list[$value['manjian_id']]['goods'][] = $goods;
                                 }
                             }

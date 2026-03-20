@@ -20,7 +20,6 @@ use app\service\core\sys\CoreConfigService;
 use core\base\BaseAdminService;
 use core\exception\AuthException;
 use core\util\TokenAuth;
-use Exception;
 use Throwable;
 
 /**
@@ -41,7 +40,6 @@ class LoginService extends BaseAdminService
      * 用户登录
      * @param string $username
      * @param string $password
-     * @param string $app_type
      * @return array|bool
      */
     public function login(string $username, string $password)
@@ -88,8 +86,8 @@ class LoginService extends BaseAdminService
 
         //查询权限以及菜单
         $data = [
-            'token' => $token_info['token'],
-            'expires_time' => $token_info['params']['exp'],
+            'token' => $token_info[ 'token' ],
+            'expires_time' => $token_info[ 'params' ][ 'exp' ],
             'userinfo' => [
                 'uid' => $userinfo->uid,
                 'username' => $userinfo->username,
@@ -127,7 +125,6 @@ class LoginService extends BaseAdminService
     /**
      * 清理token
      * @param int $uid
-     * @param string|null $type
      * @param string|null $token
      */
     public static function clearToken(int $uid, ?string $token = '')
@@ -151,7 +148,6 @@ class LoginService extends BaseAdminService
             $token_info = TokenAuth::parseToken($token, AppTypeDict::ADMIN);
         } catch (Throwable $e) {
             throw new AuthException('LOGIN_EXPIRE', 401);
-
         }
         if (!$token_info) {
             throw new AuthException('MUST_LOGIN', 401);

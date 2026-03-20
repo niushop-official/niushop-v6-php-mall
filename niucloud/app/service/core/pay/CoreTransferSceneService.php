@@ -13,17 +13,10 @@ namespace app\service\core\pay;
 
 use app\dict\pay\TransferDict;
 use app\dict\sys\ConfigKeyDict;
-use app\model\pay\Pay;
-use app\model\pay\Transfer;
 use app\model\pay\TransferScene;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseCoreService;
-use core\exception\PayException;
-use Exception;
-use think\facade\Db;
-use think\facade\Log;
 use think\Model;
-use Throwable;
 
 /**
  * 转账场景服务层
@@ -41,7 +34,6 @@ class CoreTransferSceneService extends BaseCoreService
 
     /**
      * 获取底部导航配置
-     * @param string $key
      * @return array
      */
     public function getWechatTransferSceneConfig()
@@ -53,7 +45,6 @@ class CoreTransferSceneService extends BaseCoreService
     /**
      * 设置微信转账场景导航
      * @param array $data
-     * @param string $key
      * @return SysConfig|bool|Model
      */
     public function setWechatTransferSceneConfig(array $data)
@@ -96,6 +87,7 @@ class CoreTransferSceneService extends BaseCoreService
 
     /**
      * 通过业务设置转账场景的配置信息
+     * @param $type
      * @param $data
      * @return void
      */

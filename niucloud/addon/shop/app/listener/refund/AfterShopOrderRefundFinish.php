@@ -35,7 +35,7 @@ class AfterShopOrderRefundFinish
             if ($order[ 'status' ] == OrderDict::WAIT_DELIVERY) {
                 //校验一下订单项是否全部发货
                 ( new CoreOrderDeliveryService() )->checkFinish(
-                    [ 'order_id' => $refund_data[ 'order_id' ]]
+                    [ 'order_id' => $refund_data[ 'order_id' ] ]
                 );
             }
             //校验一下是否全部退款
@@ -58,7 +58,8 @@ class AfterShopOrderRefundFinish
             'main_type' => $main_type,
             'main_id' => $main_id,
             'type' => OrderRefundDict::FINISH_ACTION,
-            'content' => ''
+            'content' => '',
+            'create_time'=>time()+1
         ]);
         //消息发送
 

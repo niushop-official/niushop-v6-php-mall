@@ -1,7 +1,7 @@
 <template>
     <div class="main-container">
         <el-card class="card !border-none mb-[15px]" shadow="never">
-            <el-page-header :content="pageName" :icon="ArrowLeft" @back="router.push({ path: '/shop/order/delivery' })" />
+            <el-page-header :content="pageName" :icon="ArrowLeft" @back="router.push({ path: '/shop/delivery/config' })" />
         </el-card>
         <el-form :model="formData" label-width="150px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">

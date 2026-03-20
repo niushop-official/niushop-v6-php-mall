@@ -13,7 +13,9 @@ namespace addon\shop\app\listener\order_export;
 
 use addon\shop\app\model\order\Order;
 use addon\shop\app\model\order\OrderGoods;
+use app\dict\pay\PayDict;
 use think\db\Query;
+use think\facade\Db;
 
 /**
  * 订单项导出数据源查询
@@ -31,16 +33,36 @@ class ShopOrderGoodsExportDataListener
             $orderGoodsModel = new OrderGoods();
             $order = 'order.create_time desc';
             $pay_where = [];
-            if($param['where'][ 'pay_type' ]){
-                $pay_where[] = ['pay.type', '=',  $param['where'][ 'pay_type' ] ];
+
+            if ($param[ 'where' ]['pay_type']) {
+                if ($param[ 'where' ]['pay_type'] == PayDict::FRIENDSPAY) {
+                    $pay_where = [
+                        ['pay.main_id', '<>', Db::raw("pay.from_main_id")],
+                        ['pay.from_main_id', '>', 0],
+                        ['pay.status', '=', PayDict::STATUS_FINISH]
+                    ];
+                } else {
+                    $pay_where[] = ['pay.type', '=', $param[ 'where' ]['pay_type']];
+                }
+            }
+            $member_where = [];
+            if ($param['where']['keyword'] != '') {
+                $member_where = [
+                    ['member.member_no|member.nickname|member.username|member.mobile', 'like', "%" . $param[ 'where' ]['keyword'] . "%"],
+                ];
             }
             //查询导出订单项数据
-            $order_ids = $model->where([[ 'order.order_id', '>', 0 ]])->withSearch([ 'search_type', 'order_from', 'join_status', 'create_time', 'join_pay_time' ], $param['where'])
+            $order_ids = $model->where([ [ 'order.order_id', '>', 0 ] ])
+                ->withSearch([ 'search_type', 'order_from', 'join_status', 'create_time', 'join_pay_time' ], $param[ 'where' ])
                 ->withJoin([
-                    'pay' => function(Query $query) use($pay_where){
+                    'pay' => function(Query $query) use ($pay_where) {
                         $query->where($pay_where);
-                    }], 'left')
-                ->field('order_id')->order($order)->column('order_id');
+                    },
+                    'member' => function (Query $query) use ($member_where) {
+                        $query->where($member_where);
+                    },
+                ], 'left')
+                ->field('order_id')->order('order.create_time desc')->column('order_id');
 
             $order_goods_field = 'order_goods_id,order_id,member_id,delivery_id,goods_name,sku_name,price,num,goods_money,discount_money,order_refund_no,order_goods_money,goods_type,delivery_status,status';
             $order_field = 'order_id,order_no,order_from,taker_name,taker_mobile,taker_full_address,create_time,pay_time,delivery_money,delivery_type,delivery_time,finish_time,member_remark,shop_remark,out_trade_no,status';

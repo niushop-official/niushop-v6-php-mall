@@ -71,8 +71,8 @@ class CoreOrderCreateService extends BaseCoreService
             'has_goods_types' => $this->basic[ 'has_goods_types' ],//包含的商品形式
             //收发货相关
             'delivery_type' => $this->delivery[ 'delivery_type' ] ?? '',
-            'taker_name' => $this->delivery[ 'take_address' ][ 'name' ] ?? $data['delivery'][ 'taker_name' ] ?? '',
-            'taker_mobile' => $this->delivery[ 'take_address' ][ 'mobile' ] ?? $data['delivery'][ 'taker_mobile' ] ?? '',
+            'taker_name' => $this->delivery[ 'take_address' ][ 'name' ] ??  $data[ 'delivery' ]['taker_name']??'',
+            'taker_mobile' => $this->delivery[ 'take_address' ][ 'mobile' ] ?? $data[ 'delivery' ]['taker_mobile']?? '',
             'taker_province' => $this->delivery[ 'take_address' ][ 'province_id' ] ?? 0,
             'taker_city' => $this->delivery[ 'take_address' ][ 'city_id' ] ?? 0,
             'taker_district' => $this->delivery[ 'take_address' ][ 'district_id' ] ?? 0,

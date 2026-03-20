@@ -148,7 +148,7 @@ class WeappAuthService extends BaseApiService
                     } else {
                         return [ 'openid' => $openid, 'unionid' => $unionid ]; // 将重要信息返回给前端保存
                     }
-                } else if($is_mobile) {
+                } else if ($is_mobile) {
                     if (!empty($data[ 'mobile' ]) || !empty($data[ 'mobile_code' ])) {
                         return $this->register($openid, $data[ 'mobile' ], $data[ 'mobile_code' ], $unionid);
                     } else {
@@ -175,6 +175,7 @@ class WeappAuthService extends BaseApiService
 //                    }
                 }
             }
+            if (empty($member_info->wx_unionid) && !empty($unionid)) $member_info->wx_unionid = $unionid;
             return $login_service->login($member_info, MemberLoginTypeDict::WEAPP);
         }
     }

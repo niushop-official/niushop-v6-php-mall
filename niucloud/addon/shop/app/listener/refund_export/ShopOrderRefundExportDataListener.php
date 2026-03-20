@@ -47,7 +47,7 @@ class ShopOrderRefundExportDataListener
                 $data = $search_model->select()->toArray();
             }
             foreach ($data as $key => $val) {
-                $data[$key]['nickname'] = $val['member']['nickname'];
+                $data[$key]['nickname'] = $val['member']['nickname'] ?? "";
             }
             foreach ($data as $key => $val) {
                 $data[$key]['order_refund_no'] = $val['order_refund_no']."\t";

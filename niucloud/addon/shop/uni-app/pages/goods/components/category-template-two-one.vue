@@ -1,13 +1,15 @@
 <template>
     <view class=" bg-[var(--page-bg-color)] overflow-hidden min-h-screen">
         <view class="mescroll-box" v-if="tabsData.length">
-            <view v-if="config.search.control" class="search-box box-border z-10 fixed top-0 left-0 right-0  h-[100rpx] bg-[#f6f6f6]" :style="{'top': systemStore.topTabbarInfo.fullHeight || 0}">
-                <view class="flex-1 search-input bg-[#fff]">
-                    <text @click.stop="searchNameFn" class="nc-iconfont nc-icon-sousuo-duanV6xx1 btn"></text>
-                    <input class="input" type="text" v-model.trim="searchName" :placeholder="config.search.title" placeholderClass="text-[var(--text-color-light9)]" @confirm="searchNameFn">
-                    <text v-if="searchName" class="nc-iconfont nc-icon-cuohaoV6xx1 clear" @click="searchName=''"></text>
+            <view v-if="config.search.control" class="search-box z-10 bg-[#f6f6f6] fixed top-0 left-0 right-0 box-border">
+                <view class="h-[100rpx] flex-1 flex items-center justify-between" :style="navbarInnerStyle">
+                    <view class="flex-1 search-input bg-[#fff]">
+                        <text @click.stop="searchNameFn" class="nc-iconfont nc-icon-sousuo-duanV6xx1 btn"></text>
+                        <input class="input" type="text" v-model.trim="searchName" :placeholder="config.search.title" @confirm="searchNameFn" placeholderClass="text-[var(--text-color-light9)]">
+                        <text v-if="searchName" class="nc-iconfont nc-icon-cuohaoV6xx1 clear" @click="searchName=''"></text>
+                    </view>
                 </view>
-            </view>
+            </view>    
             <view class="tabs-box z-2 fixed left-0 bg-[#fff] bottom-[50px] top-0" :style="tabsBoxCss">
                 <scroll-view :scroll-y="true" class="scroll-height">
                     <view class="bg-[var(--temp-bg)]">
@@ -20,7 +22,7 @@
                 </scroll-view>
             </view>
             <scroll-view class="h-[100vh]" :scroll-y="true">
-                <view class="pl-[188rpx] scroll-ios pt-[20rpx] pr-[20rpx]" :class="{ '!pt-[120rpx]': config.search.control }">
+                <view class="pl-[188rpx] scroll-ios pr-[20rpx]" :style="listBoxCss">
                     <view class="bg-[#fff] grid grid-cols-3 gap-x-[50rpx] gap-y-[32rpx] py-[32rpx] px-[24rpx] rounded-[var(--rounded-big)]"
                         v-if="tabsData[tabActive]?.child_list && !loading">
                         <template v-for="(item, index) in tabsData[tabActive]?.child_list" :key="item.category_id">
@@ -39,7 +41,6 @@
                 </view>
             </scroll-view>
         </view>
-        <tabbar />
         <mescroll-empty v-if="!tabsData.length && !loading" :option="{tip : '暂无商品分类'}"></mescroll-empty>
         <loading-page :loading="loading"></loading-page>
     </view>
@@ -54,6 +55,18 @@ import { t } from '@/locale';
 import useSystemStore from '@/stores/system';
 const systemStore = useSystemStore()
 
+const navbarInnerStyle = ref('')
+// #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
+let rightButtonWidth = systemStore.menuButtonInfo.width ? systemStore.menuButtonInfo.width * 2 + 'rpx' : '70rpx';
+navbarInnerStyle.value += 'padding-right:calc(' + rightButtonWidth + ' + 30rpx);';
+navbarInnerStyle.value += 'padding-top:' + systemStore.menuButtonInfo.top + 'px;';
+navbarInnerStyle.value += 'padding-bottom: 8px;';
+navbarInnerStyle.value+= 'height:' + systemStore.menuButtonInfo.height + 'px;';
+// #endif
+
+// #ifdef APP-PLUS
+navbarInnerStyle.value += 'padding-top:' + systemStore.systemInfo.statusBarHeight + 'px;';
+// #endif
 const prop = defineProps({
     config: {
         type: Object,
@@ -78,9 +91,29 @@ onMounted(() => {
 const tabsBoxCss = computed(() => {
     let style = ''
     if(config.search.control){
+        // #ifdef H5
         style += `top: calc(${ systemStore.topTabbarInfo.height || 0 }px + 100rpx);`
+        // #endif
+        // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
+         style += `top: calc(${ systemStore.topTabbarInfo.height || 0 }px + 0rpx);`
+        // #endif
     }else{
         style += `top: ${ systemStore.topTabbarInfo.height || 0 }px;`
+    }
+    return style
+})
+
+const listBoxCss = computed(() => {
+    let style = ''
+    if(config.search.control){
+        // #ifdef H5
+        style += `padding-top: calc(${ systemStore.menuButtonInfo.top || 0 }px + 100rpx);`
+        // #endif
+        // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
+        style += `padding-top: calc(${ systemStore.topTabbarInfo.height || 0 }px + 0rpx);`
+        // #endif
+    }else{
+        style += `padding-top:0rpx`
     }
     return style
 })
@@ -226,7 +259,7 @@ const searchNameFn = () => {
     position: relative;
     color: var(--primary-color);
     font-weight: bold;
-    // background-color: var(--temp-bg);
+    background-color: #f6f6f6;
 
     &::before {
         display: inline-block;

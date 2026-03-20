@@ -17,23 +17,57 @@
                     </view>
                     <view class="min-h-[140rpx] flex items-center px-[30rpx]">
                         <!-- 收货地址 -->
-                        <view class="w-full" v-if="['express', 'local_delivery'].includes(createData.delivery.delivery_type)" @click="toSelectAddress">
-                            <view v-if="!$u.test.isEmpty(orderData.delivery.take_address)" class="pt-[20rpx] pb-[30rpx] flex items-center">
-                                <image class="w-[60rpx] h-[60rpx] mr-[20rpx] flex-shrink-0" :src="img('addon/shop/payment/position_01.png')" mode="aspectFit"/>
-                                <view class="flex flex-col overflow-hidden">
-                                    <text class="text-[26rpx] text-[var(--text-color-light9)] mt-[16rpx] truncate max-w-[536rpx]">{{ orderData.delivery.take_address.full_address.substring(0, orderData.delivery.take_address.full_address.lastIndexOf(orderData.delivery.take_address.address)) }}</text>
-                                    <text class="font-500 text-[30rpx] mt-[14rpx] text-[#333] truncate max-w-[536rpx]">{{ orderData.delivery.take_address.address }}</text>
-                                    <view class="flex items-center text-[26rpx] text-[var(--text-color-light6)] mt-[16rpx]">
-                                        <text class="mr-[16rpx]">{{ orderData.delivery.take_address.name }}</text>
-                                        <text>{{ mobileHide(orderData.delivery.take_address.mobile) }}</text>
+                        <view class="w-full" v-if="['express', 'local_delivery'].includes(createData.delivery.delivery_type)">
+                            <view @click="toSelectAddress">
+                                <view v-if="!$u.test.isEmpty(orderData.delivery.take_address)" class="pt-[20rpx] pb-[30rpx] flex items-center">
+                                    <image class="w-[60rpx] h-[60rpx] mr-[20rpx] flex-shrink-0" :src="img('addon/shop/payment/position_01.png')" mode="aspectFit"/>
+                                    <view class="flex flex-col overflow-hidden">
+                                        <text class="text-[26rpx] text-[var(--text-color-light9)] mt-[16rpx] truncate max-w-[536rpx]">{{ orderData.delivery.take_address.full_address.substring(0, orderData.delivery.take_address.full_address.lastIndexOf(orderData.delivery.take_address.address)) }}</text>
+                                        <text class="font-500 text-[30rpx] mt-[14rpx] text-[#333] truncate max-w-[536rpx]">{{ orderData.delivery.take_address.address }}</text>
+                                        <view class="flex items-center text-[26rpx] text-[var(--text-color-light6)] mt-[16rpx]">
+                                            <text class="mr-[16rpx]">{{ orderData.delivery.take_address.name }}</text>
+                                            <text>{{ mobileHide(orderData.delivery.take_address.mobile) }}</text>
+                                        </view>
+                                        <view v-if="orderData.delivery.error" class="text-[24rpx] text-primary mt-[16rpx]">
+                                            <text class="nc-iconfont nc-icon-tanhaoV6xx text-primary text-[24rpx]"></text>
+                                            {{ orderData.delivery.error }}
+                                        </view>
+                                    </view>
+                                    <text class="ml-auto nc-iconfont nc-icon-youV6xx text-[26rpx] text-[var(--text-color-light9)]"></text>
+                                </view>
+                                <view v-else class="flex items-center min-h-[140rpx]">
+                                    <image class="w-[26rpx] h-[30rpx] mr-[10rpx]" :src="img('addon/shop/payment/position_02.png')" mode="aspectFit"/>
+                                    <text class="text-[28rpx]">添加收货地址</text>
+                                    <text class="nc-iconfont nc-icon-youV6xx text-[26rpx] text-[var(--text-color-light9)] ml-auto"></text>
+                                </view>
+                            </view>
+                            <view class="pt-[22rpx] border-0 border-t-[1rpx] border-solid border-[#F2F2F2]" v-if="createData.delivery.delivery_type == 'local_delivery' && (orderData.delivery.take_store.time_is_open || orderData.config.local_delivery.is_local_delivery_store_select)">
+                                <view v-if="orderData.delivery.take_store.time_is_open && !$u.test.isEmpty(orderData.delivery.take_store)">
+                                    <view class="flex justify-between items-center mb-[40rpx]"
+                                    @click="handleTime">
+                                        <view class="text-color text-[26rpx] flex items-center">
+                                            <image class="w-[30rpx] h-[30rpx] mr-[12rpx]" :src="img('addon/shop/payment/time.png')" mode="aspectFit"/>
+                                            <text>{{createData.delivery.local_delivery_type =='subscribe' ? '预约配送' : '配送时间'}}</text>
+                                        </view>
+
+                                        <view class="flex items-center">
+                                            <view v-if="createData.delivery.local_delivery_type =='subscribe'" class="text-[26rpx] ml-2 text-right" :class="{'text-[#63676D]': !createData.delivery.buyer_ask_delivery_time }">{{ createData.delivery.buyer_ask_delivery_time ? showGetDate : '选择时间' }}</view>
+                                            <view v-else class="text-[26rpx] ml-2 text-right" >{{ isDelivery ? '立即配送' : '当前时间不支持配送'}}</view>
+                                            <text class="text-[26rpx] text-[var(--text-color-light6)] nc-iconfont nc-icon-youV6xx"></text>
+                                        </view>
                                     </view>
                                 </view>
-                                <text class="ml-auto nc-iconfont nc-icon-youV6xx text-[26rpx] text-[var(--text-color-light9)]"></text>
-                            </view>
-                            <view v-else class="flex items-center">
-                                <image class="w-[26rpx] h-[30rpx] mr-[10rpx]" :src="img('addon/shop/payment/position_02.png')" mode="aspectFit"/>
-                                <text class="text-[28rpx]">添加收货地址</text>
-                                <text class="nc-iconfont nc-icon-youV6xx text-[26rpx] text-[var(--text-color-light9)] ml-auto"></text>
+                                <view class="flex justify-between items-center mb-[38rpx] " @click="openSelectStore()" v-if="orderData.config.local_delivery.is_local_delivery_store_select">
+                                    <view class="text-color text-[26rpx] flex items-center">
+                                        <image class="w-[30rpx] h-[30rpx] mr-[12rpx]" :src="img('addon/shop/payment/store.png')" mode="aspectFit"/>
+                                        <text>配送门店</text>
+                                    </view>
+                                    <view class="flex items-center ">
+                                        <text class="text-[26rpx] font-500 text-[#333] max-w-[300rpx] truncate">{{ orderData.delivery.take_store.store_name || '请选择配送门店' }}</text>
+                                        <text class="px-[4rpx] h-[28rpx] leading-[28rpx] text-[20rpx] bg-[#F2F2F2] text-[#999] rounded-[4rpx] mx-[6rpx]" v-if="orderData.delivery.take_store.distance">{{ distanceFn(orderData.delivery.take_store.distance) }}</text>
+                                        <text class="text-[26rpx] text-[var(--text-color-light6)] nc-iconfont nc-icon-youV6xx"></text>
+                                    </view>
+                                </view>
                             </view>
                         </view>
 
@@ -64,41 +98,33 @@
                             </view>
                         </view>
                     </view>
-                    <view v-if="createData.delivery.delivery_type == 'store'">
+                    <view v-if="createData.delivery.delivery_type == 'store'" class="pb-[10rpx]">
                         <!-- 姓名 -->
                         <view class="px-[20rpx] py-[14rpx]">
-                            <view class="flex justify-between items-center">
+                            <view class="flex justify-between items-center h-[30rpx]">
                                 <view class="text-color text-[26rpx]" @click="handleTime">姓名</view>
                                 <input class="text-right" maxlength="20" placeholder-style="color:#B1B3B5;font-size:26rpx" placeholder="请输入" v-model="createData.delivery.taker_name" />
                             </view>
                         </view>
                         <!-- 预留手机 -->
                         <view class="px-[20rpx] py-[14rpx]">
-                            <view class="flex justify-between items-center">
+                            <view class="flex justify-between items-center h-[30rpx]">
                                 <view class="text-color text-[26rpx]">预留手机</view>
                                 <input class="text-right" maxlength="11" placeholder-style="color:#B1B3B5;font-size:26rpx" placeholder="请输入" v-model="createData.delivery.taker_mobile" />
                             </view>
                         </view>
                         <!-- 提货时间 -->
-                        <view class="flex justify-between items-center px-[20rpx] pt-[14rpx] pb-[24rpx]">
-                            <view class="text-color text-[26rpx]">提货时间</view>
-                            <view class="flex" @click="handleTime">
-                                <view class="text-[26rpx] ml-2 text-right" :class="{'text-[#63676D]': !createData.delivery.buyer_ask_delivery_time }">{{ createData.delivery.buyer_ask_delivery_time ? showGetDate : '选择提货时间' }}</view>
-                                <text class="text-[26rpx] text-[var(--text-color-light6)] nc-iconfont nc-icon-youV6xx"></text>
+                        <view class="px-[20rpx] py-[14rpx]">
+                            <view class="flex justify-between items-center h-[30rpx]">
+                                <view class="text-color text-[26rpx]">提货时间</view>
+                                <view class="flex" @click="handleTime">
+                                    <view class="text-[26rpx] ml-2 text-right" :class="{'text-[#63676D]': !createData.delivery.buyer_ask_delivery_time }">{{ createData.delivery.buyer_ask_delivery_time ? showGetDate : '选择提货时间' }}</view>
+                                    <text class="text-[26rpx] text-[var(--text-color-light6)] nc-iconfont nc-icon-youV6xx"></text>
+                                </view>
                             </view>
+
                         </view>
                     </view>
-					<view v-if="createData.delivery.delivery_type == 'local_delivery' && localConfig.time_is_open" >
-						<view class="flex justify-between items-center  px-[20rpx] pt-[14rpx] pb-[24rpx]"
-                        @click="handleTime">
-						    <view class="text-color text-[26rpx]">{{createData.delivery.local_delivery_type =='subscribe' ?'预约配送':''}}</view>
-						    <view class="flex items-center">
-						        <view v-if="createData.delivery.local_delivery_type =='subscribe'" class="text-[26rpx] ml-2 text-right" :class="{'text-[#63676D]': !createData.delivery.buyer_ask_delivery_time }">{{ createData.delivery.buyer_ask_delivery_time ? showGetDate : '选择时间' }}</view>
-								 <view v-else class="text-[26rpx] ml-2 text-right" >{{isDelivery?'立即配送':'当前时间不支持配送'}}</view>
-						        <text class="text-[26rpx] text-[var(--text-color-light6)] nc-iconfont nc-icon-youV6xx"></text>
-						    </view>
-						</view>
-					</view>
                 </view>
                 <view v-if="orderData.basic.has_goods_types.includes('real') && !delivery_type_list.length" class="mb-[var(--top-m)] card-template h-[100rpx] flex items-center">
                     <p class="text-[28rpx] text-[var(--primary-color)]">商家尚未配置配送方式</p>
@@ -267,7 +293,7 @@
         <ns-goods-manjian ref="manjianShowRef" />
         <pay ref="payRef" @close="payClose"/>
 
-        <ns-select-time ref="selectTime" :rules="service_time" v-if="Object.keys(service_time).length" :isQuantum="true" :isOpen="localConfig.time_is_open" @change="getTime" @getStamp="getStamp" @getDate="getDate"></ns-select-time>
+        <ns-select-time ref="selectTime" :rules="service_time" v-if="Object.keys(service_time).length" :isQuantum="true" :isOpen="orderData.delivery.take_store.time_is_open" @change="getTime" @getStamp="getStamp" @getDate="getDate"></ns-select-time>
         <message-open ref="messageOpenRef" @submit="confirmMessage" :default-message="createData.member_remark" />
 
     </view>
@@ -293,6 +319,11 @@ import { cloneDeep } from 'lodash-es'
 import { topTabar } from '@/utils/topTabbar'
 import diyForm from '@/addon/components/diy-form/index.vue'
 import useMemberStore from '@/stores/member'
+import { useLocation } from '@/hooks/useLocation'
+
+/************** 定位-start ****************/
+const locationVal = useLocation(true);
+/************** 定位-end ****************/
 
 const memberStore = useMemberStore()
 const info = computed(() => memberStore.info)
@@ -333,6 +364,13 @@ const diyFormGoodsRef: any = ref(null)
 const storeClickNum = ref(0) // 记录门店自提点击次数
 const service_time = ref({}) //获取配置时间
 const selectTime = ref(null)
+
+onShow(() => { 
+    // 刷新定位
+	locationVal.refresh();
+    createData.value.position = systemStore.diyAddressInfo
+})
+
 const handleTime = () => {
     if (selectTime.value) {
         selectTime.value.show = true;
@@ -372,27 +410,21 @@ const getDate = (e) => {
 		showGetDate.value = e
 	}
 }
-const localConfig = ref({})
-onShow(async () => {
-	const res = await getLocal();
-	localConfig.value = res.data;
+
+onShow(() => {
     // 解决在创建订单时，使用优惠券并在切换页面后，提示优惠券已失效的问题
     if(!payRef.value?.payInfo){
-        calculate(); // 确保在 localConfig 赋值后执行
+        createData.value.order_key = ''
+        calculate(); 
     }
 })
 
 const openSelectStore = () => {
-    if (storeRef.value) {
-        if (!createData.value.delivery.take_store_id) {
-            storeRef.value.getData((data: any) => {
-                if (data.length) {
-                    createData.value.delivery.take_store_id = ((data[0] && data[0].store_id) ? data[0].store_id : 0)
-                }
-            });
-        }
+    let obj = {
+        take_store: cloneDeep(orderData.value.delivery.take_store),
+        store_list: cloneDeep(orderData.value.delivery.take_store_list),
     }
-    storeRef.value.open()
+    storeRef.value.open(obj)
 }
 
 // 选择地址之后跳转回来
@@ -481,23 +513,41 @@ const calculate = (params: any = {}) => {
         }
         if(orderData.value.delivery.delivery_type == 'local_delivery'){
             service_time.value = {
-                time_interval: localConfig.value.time_interval,
-                time_week: formatTimeWeek(localConfig.value.time_type, localConfig.value.time_week),
-                trade_time_json: localConfig.value.delivery_time,
-                most_day: localConfig.value.most_day,
-                advance_day: localConfig.value.advance_day,
+                time_interval: orderData.value.delivery.take_store.time_interval,
+                time_week: formatTimeWeek(0, orderData.value.delivery.take_store.time_week),
+                trade_time_json: orderData.value.delivery.take_store.trade_time_json,
+                most_day:  7,
+                advance_day: 0,
 				type:"subscribe"
             }
         }
 
         createData.value.order_key = data.order_key
         if (orderData.value.delivery.delivery_type_list) {
-            delivery_type_list.value = cloneDeep(Object.values(orderData.value.delivery.delivery_type_list))
+            // 订单中只有一个商品时，该商品不支持的配送方式将不展示
+            if(orderData.value.goods.length == 1){
+                let deliveryTypeArr = orderData.value.goods[0].goods.delivery_type
+                let deliveryTypeListArr = Object.keys(orderData.value.delivery.delivery_type_list)
+                let deliveryTypeListObj = cloneDeep(orderData.value.delivery.delivery_type_list)
+                deliveryTypeListArr.forEach((item, index)=>{
+                    if(deliveryTypeArr.indexOf(item) == -1){
+                        delete deliveryTypeListObj[item]
+                    }
+                })
+                delivery_type_list.value = Object.values(deliveryTypeListObj)
+                if(deliveryTypeArr.indexOf('express') == -1 && !calculateData.delivery.delivery_type){
+                    createData.value.delivery.delivery_type = delivery_type_list.value[0].key
+                    calculate()
+                    return false
+                }
+            }else{
+                delivery_type_list.value = cloneDeep(Object.values(orderData.value.delivery.delivery_type_list))
+            }
         }
         if (orderData.value.discount && orderData.value.discount.manjian) {
             orderData.value.manjian = orderData.value.discount.manjian
         }
-        if (orderData.value.delivery.take_store) {
+        if (orderData.value.delivery.take_store && orderData.value.delivery.delivery_type == 'store') {
             service_time.value = {
                 time_interval: orderData.value.delivery.take_store.time_interval,
                 time_week: orderData.value.delivery.take_store.time_week,
@@ -674,7 +724,7 @@ const verify = () => {
             return false
         }
     }
-	if(data.delivery.delivery_type == 'local_delivery' && !isDelivery.value && localConfig.value.time_is_open){
+	if(data.delivery.delivery_type == 'local_delivery' && !isDelivery.value && orderData.value.delivery.take_store.time_is_open){
 		uni.showToast({ title: '当前时间不支持配送', icon: 'none' })
 		return false
 	}
@@ -717,17 +767,17 @@ const confirmSelectCoupon = (coupon: any) => {
  */
 const confirmSelectStore = (store: any) => {
     createData.value.delivery.take_store_id = ((store && store.store_id) ? store.store_id : 0)
-    if (store) {
-        service_time.value = {
-            time_interval: store.time_interval,
-            time_week: store.time_week,
-            trade_time_json: store.trade_time_json
-        };
-    }else{
-        service_time.value = {}
-        createData.value.delivery.buyer_ask_delivery_time = ''
+    // if (store) {
+    //     service_time.value = {
+    //         time_interval: store.time_interval,
+    //         time_week: store.time_week,
+    //         trade_time_json: store.trade_time_json
+    //     };
+    // }else{
+    //     service_time.value = {}
+    //     createData.value.delivery.buyer_ask_delivery_time = ''
 
-    }
+    // }
     calculate()
 }
 
@@ -748,6 +798,13 @@ const toLeaveMessage = () => {
 const confirmMessage = (message: string) => {
     console.log(message)
   createData.value.member_remark = message
+}
+
+
+const distanceFn = (distance: string | number) => {
+	const dist = typeof distance === 'string' ? parseFloat(distance) : distance;
+	if (isNaN(dist)) return distance.toString();
+	return dist < 1 ? parseInt((dist * 1000).toString()) + 'm' : dist.toFixed(1) + 'km'
 }
 </script>
 

@@ -49,6 +49,7 @@ class OrderCreate extends BaseApiController
 //            ['invoice', []],//发票
             ['extend_data', []],// 扩展数据
             ['impulse_buy_goods', []], // 顺买商品信息
+            ['position', []],//用户位置信息
         ]);
 
         return success('SUCCESS', ( new OrderCreateService() )->calculate($data));

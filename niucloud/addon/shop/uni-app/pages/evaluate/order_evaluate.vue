@@ -60,7 +60,7 @@ import { getShopOrderDetail } from '@/addon/shop/api/order';
 import { setOrderEvaluate } from '@/addon/shop/api/evaluate';
 import { onLoad } from '@dcloudio/uni-app';
 import { img, redirect, goback } from '@/utils/common';
-// import uploadImg from '@/addon/shop/pages/evaluate/components/upload-img'
+import uploadImg from '@/addon/shop/pages/evaluate/components/upload-img'
 
 const info = ref<Array<any>>([])
 const form = ref<Array<any>>([])

@@ -87,5 +87,6 @@
   "notLessThanZero": "不能小于0",
   "mustBeGreaterThanZero": "必须大于0",
   "thridRequire": "请选择一个三方配送服务",
-  "thridSeting": "请填写完整的三方配送配置"
+  "thridSeting": "请填写完整的三方配送配置",
+  "deliveryArea": "配送区域"
 }

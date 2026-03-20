@@ -43,7 +43,7 @@
 
             <view class="w-[340rpx] h-[504rpx] flex flex-col bg-[#fff] box-border overflow-hidden" :style="goodsTempCss" @click="toLink(goodsList[0])">
                 <view :style="goodsImgCss" class="w-[346rpx] h-[350rpx] overflow-hidden">
-                    <up-image width="346rpx" height="350rpx" :src="img(goodsList[0].goods_cover_thumb_mid || '')" model="aspectFill">
+                    <up-image width="346rpx" height="350rpx" :src="img(goodsList[0].goods_cover_thumb_mid || '')" :mode="diyComponent.mode">
                         <template #error>
                             <image class="w-[346rpx] h-[350rpx]" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                         </template>

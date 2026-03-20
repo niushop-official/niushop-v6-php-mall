@@ -12,9 +12,7 @@
 namespace app\service\admin\weapp;
 
 use app\dict\sys\CloudDict;
-use app\service\core\site\CoreSiteService;
 use app\service\core\weapp\CoreWeappCloudService;
-use app\service\core\weapp\CoreWeappConfigService;
 use app\service\core\weapp\CoreWeappService;
 use core\base\BaseAdminService;
 use app\model\weapp\WeappVersion;

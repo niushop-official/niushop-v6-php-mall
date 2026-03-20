@@ -199,6 +199,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { t } from '@/lang'
+import { ElMessage, ElNotification } from 'element-plus'
 import {
     getShopCountList,
     getShopTodayCountList,
@@ -207,6 +208,7 @@ import {
     getShopOrderStat,
     getShopGoodsStat
 } from '@/addon/shop/api/shop'
+import { checkJobStatus } from '@/app/api/sys'
 import * as echarts from 'echarts'
 import { useRouter } from 'vue-router'
 
@@ -370,6 +372,27 @@ const nowTime = () => {
     time.value = year + '-' + month + '-' + day + ' ' + hh + ':' + mm + ':' + ss
 }
 nowTime()
+
+/**
+ * 校验消息队列
+ */
+let notification = null
+const checkJob = () => {
+    checkJobStatus().then(res => {
+        if (!res.data) {
+            notification = ElNotification({
+                title: '温馨提示',
+                dangerouslyUseHTMLString: true,
+                duration: 0,
+                position: 'bottom-right',
+                message: '您的【队列】运行异常，会导致商城订单相关任务无法正常使用，请尽快启动队列<br><a class="text-[var(--el-color-primary)]" href="https://doc.press.niucloud.com/php/saas-framework/use/other/scheduled-task-config.html" target="_blank">>>> 点击查看处理方法 <<<</a>',
+                type: 'warning'
+            })
+        }
+    }).catch(() => {
+    })
+}
+checkJob()
 </script>
 
 <style lang="scss" scoped></style>

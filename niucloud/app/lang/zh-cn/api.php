@@ -67,6 +67,7 @@ return [
     'CLOUD_BUILD_AUTH_CODE_NOT_FOUND' => '请先填写授权码',
     'TASK_CYCLE_ERROR' => '任务周期填写错误',
     'UPGRADE_TASK_EXIST' => '有正在执行的升级任务，可以展开正在升级的任务，也可以在开发>更新缓存中清除缓存重新开始升级',
+    'ZIP_ARCHIVE_NOT_EXIST' => '请先安装或启用zip扩展',
     //登录注册重置账号....
 
     'LOGIN_SUCCESS' => '登录成功',
@@ -79,7 +80,6 @@ return [
     'OLD_PASSWORD_ERROR' => '原始密码不正确',
     'MOBILE_LOGIN_UNOPENED' => '手机号登录注册未开启',
     'APP_TYPE_NOT_EXIST' => '无效的登录端口',
-    "USER_NOT_ALLOW_DEL" => "该用户是一些站点的管理员不允许删除",
     "SUPER_ADMIN_NOT_ALLOW_DEL" => "超级管理员不允许删除",
 
     //用户组权限
@@ -112,7 +112,7 @@ return [
     'ATTACHMENT_GROUP_HAS_IMAGE' => '附件组中存在图片不允许删除',
     'OSS_TYPE_NOT_EXIST' => '云存储类型不存在',
     'URL_FILE_NOT_EXIST' => '获取不到网址指向的文件',
-    'PLEACE_SELECT_IMAGE' => '请选择要删除的图片',
+    'PLEASE_SELECT_IMAGE' => '请选择要删除的图片',
     'UPLOAD_TYPE_ERROR' => '不是有效的上传类型',
     'OSS_FILE_URL_NOT_EXIST' => '远程资源文件地址不能为空',
     'BASE_IMAGE_FILE_NOT_EXIST' => 'base图片资源不能为空',
@@ -218,6 +218,7 @@ return [
     'WEAPP_NOT_EXIST' => '微信小程序未配置完善',
     'WEAPP_EMPOWER_NOT_EXIST' => '微信小程序授信信息不存在',
     'WEAPP_EMPOWER_TEL_NOT_EXIST' => '微信小程序授信手机号不存在',
+    'CURR_SITE_IS_NOT_OPEN_SSL' => '微信小程序请求地址只支持https请先配置ssl',
     'WECHAT_MINI_PROGRAM_CODE_GENERATION_FAILED' => '微信小程序码生成失败',
 
 
@@ -329,8 +330,6 @@ return [
 
     /********************************************************* 微信开放平台 **************************************/
     'WECHAT_OPLATFORM_NOT_EXIST' => '未配置微信开放平台',
-    'WEAPP_EXIST' => '该小程序已经授权给其他站点',
-    'WECHAT_EXIST' => '该公众号已经授权给其他站点',
     'NOT_YET_PRESENT_TEMPLATE_LIBRARY' => '平台尚未上传小程序到模板库',
     'WEAPP_VERSION_NOT_EXIST' => '未获取到小程序版本提交记录',
     'NOT_ALLOWED_CANCEL_AUDIT' => '只有审核中的才可以撤回',

@@ -14,7 +14,9 @@ namespace addon\shop\app\listener\order_export;
 use addon\shop\app\dict\order\InvoiceDict;
 use addon\shop\app\model\order\Order;
 use addon\shop\app\model\order\OrderGoods;
+use app\dict\pay\PayDict;
 use think\db\Query;
+use think\facade\Db;
 
 /**
  * 订单导出数据源查询
@@ -31,15 +33,35 @@ class ShopOrderExportDataListener
             $model = new Order();
             $orderGoodsModel = new OrderGoods();
             $pay_where = [];
-            if ($param[ 'where' ][ 'pay_type' ]) {
-                $pay_where[] = [ 'pay.type', '=', $param[ 'where' ][ 'pay_type' ] ];
+
+            if ($param[ 'where' ]['pay_type']) {
+                if ($param[ 'where' ]['pay_type'] == PayDict::FRIENDSPAY) {
+                    $pay_where = [
+                        ['pay.main_id', '<>', Db::raw("pay.from_main_id")],
+                        ['pay.from_main_id', '>', 0],
+                        ['pay.status', '=', PayDict::STATUS_FINISH]
+                    ];
+                } else {
+                    $pay_where[] = ['pay.type', '=', $param[ 'where' ]['pay_type']];
+                }
+            }
+            $member_where = [];
+            if ($param['where']['keyword'] != '') {
+                $member_where = [
+                    ['member.member_no|member.nickname|member.username|member.mobile', 'like', "%" . $param[ 'where' ]['keyword'] . "%"],
+                ];
             }
             //查询导出订单项数据
-            $order_ids = $model->where([ [ 'order.order_id', '>', 0 ] ])->withSearch([ 'search_type', 'order_from', 'join_status', 'create_time', 'join_pay_time' ], $param[ 'where' ])
+            $order_ids = $model->where([ [ 'order.order_id', '>', 0 ] ])
+                ->withSearch([ 'search_type', 'order_from', 'join_status', 'create_time', 'join_pay_time' ], $param[ 'where' ])
                 ->withJoin([
                     'pay' => function(Query $query) use ($pay_where) {
                         $query->where($pay_where);
-                    } ], 'left')
+                    },
+                    'member' => function (Query $query) use ($member_where) {
+                        $query->where($member_where);
+                    },
+                    ], 'left')
                 ->field('order_id')->order('order.create_time desc')->column('order_id');
 
             $order_goods_field = 'extend,order_goods_id,order_id,member_id,goods_id,sku_id,delivery_id,goods_name,sku_name,goods_image,sku_image,price,num,goods_money,is_enable_refund,goods_type,delivery_status,status';
@@ -56,7 +78,6 @@ class ShopOrderExportDataListener
                 $data = $search_model->select()->toArray();
             }
 
-            $is_first = true;
             $encountered = array();
             foreach ($data as $key => $val) {
 

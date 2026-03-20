@@ -114,7 +114,8 @@ class ShopPoster
                         ])->findOrEmpty()->toArray();
 
                         if (!empty($newcomer_goods_info) && $newcomer_goods_info[ 'active' ][ 'active_status' ] == ActiveDict::ACTIVE) {
-                            $url_data[] = [ 'key' => 'type', 'value' => 'newcomer_discount' ];
+//                            $url_data[] = [ 'key' => 'type', 'value' => 'newcomer_discount' ];
+                            $url_data[] = [ 'key' => 'type', 'value' => 'nd' ];
                             $newcomer_price = json_decode($newcomer_goods_info[ 'active_goods_value' ], true)[ 'newcomer_price' ];
                             if ($newcomer_price > 0) $show_price_data[] = $newcomer_price;
                         }

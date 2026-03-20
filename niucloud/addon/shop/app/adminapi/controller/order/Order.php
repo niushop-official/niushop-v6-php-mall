@@ -122,6 +122,9 @@ class Order extends BaseAdminController
             ['electronic_sheet_id', 0], // 电子面单
             ['local_deliver_id', 0],//配送员
             ['remark', ''],//配送员
+            ['local_delivery_type', ''],
+            ['goods_weight', 0],
+            ['store_id', ''],//提货点id
         ]);
         return success("DELIVERY_SUCCESS", (new OrderDeliveryService())->delivery($data));
     }
@@ -322,6 +325,35 @@ class Order extends BaseAdminController
     public function getBatchStatus()
     {
         return success(data: OrderBatchDeliveryDict::getStatus());
+    }
+
+    /**
+     * 获取已选商品总重量
+     * @return \think\Response
+     */
+    public function getSelectOrderGoodsWeight()
+    {
+        $data = $this->request->params([
+            [ 'order_goods_ids', [] ], // 已选订单项id集合
+        ]);
+        return success(data:( new OrderService() )->getSelectOrderGoodsWeight($data));
+    }
+
+    /**
+     * 配送费用计算
+     */
+    public function getDeliveryFee()
+    {
+        $data = $this->request->params([
+            ['order_id', 0],
+            ['order_goods_ids', []],
+            ['delivery_type', ''],
+            ['delivery_way', ''],
+            ['local_delivery_type', ''],
+            ['goods_weight', 0],
+            ['store_id', 0],
+        ]);
+        return success(data:( new OrderDeliveryService() )->getDeliveryFee($data));
     }
 
     /**

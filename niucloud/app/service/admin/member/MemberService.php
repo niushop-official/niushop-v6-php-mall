@@ -22,6 +22,7 @@ use core\exception\AdminException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
+use think\facade\Db;
 
 /**
  * 会员服务层
@@ -80,7 +81,11 @@ class MemberService extends BaseAdminService
     public function getInfo(int $member_id)
     {
         $field = 'member_id,member_no, id_card,remark,username, mobile, password, register_channel, register_type, nickname, headimg, member_level, member_label, wx_openid, weapp_openid, wx_unionid, ali_openid, douyin_openid, login_ip, login_type, login_channel, login_count, login_time, create_time, last_visit_time, last_consum_time, sex, status, birthday, point, point_get, balance, balance_get, growth, growth_get, is_member, member_time, is_del, province_id, city_id, district_id, address, location, delete_time, money, money_get, commission, commission_get, commission_cash_outing';
-        return $this->makeUp($this->model->where([ [ 'member_id', '=', $member_id ] ])->field($field)->with('member_level_name_bind')->append([ 'register_channel_name', 'register_type_name', 'sex_name', 'login_channel_name', 'login_type_name', 'status_name' ])->findOrEmpty()->toArray());
+        $info = $this->makeUp($this->model->where([ [ 'member_id', '=', $member_id ] ])->field($field)->with('member_level_name_bind')->append([ 'register_channel_name', 'register_type_name', 'sex_name', 'login_channel_name', 'login_type_name', 'status_name' ])->findOrEmpty()->toArray());
+        if (empty($info[ 'member_level' ])) {
+            $info[ 'member_level' ] = '';
+        }
+        return $info;
     }
 
     /**
@@ -149,6 +154,7 @@ class MemberService extends BaseAdminService
      * @param int $member_id
      * @param string $field
      * @param $data
+     * @return Member
      */
     public function modify(int $member_id, string $field, $data)
     {
@@ -168,6 +174,10 @@ class MemberService extends BaseAdminService
     /**
      * 组合整理数据
      * @param $data
+     * @return mixed
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function makeUp($data)
     {
@@ -223,7 +233,16 @@ class MemberService extends BaseAdminService
      */
     public function getMemberNo()
     {
-        return ( new CoreMemberService() )->createMemberNo();
+        //开启事务,解决创建会员编码重复
+        try {
+            Db::startTrans();
+            $member_no = ( new CoreMemberService() )->createMemberNo();
+            Db::commit();
+            return $member_no;
+        } catch (AdminException $e) {
+            Db::rollback();
+            throw new AdminException("MEMBER_NO_CREATE_ERROR");
+        }
     }
 
     /**
@@ -256,7 +275,7 @@ class MemberService extends BaseAdminService
 
     /**
      * 获取会员权益字典
-     * @return mixed
+     * @return array|null
      */
     public function getMemberBenefitsDict()
     {
@@ -302,7 +321,7 @@ class MemberService extends BaseAdminService
 
     /**
      * 获取会员礼包内容
-     * @param array $benefits
+     * @param array $gifts
      * @return array|null
      */
     public function getMemberGiftsContent(array $gifts)

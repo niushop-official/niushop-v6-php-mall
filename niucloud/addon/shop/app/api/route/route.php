@@ -14,7 +14,8 @@ use app\api\middleware\ApiCheckToken;
 use app\api\middleware\ApiLog;
 use think\facade\Route;
 
-
+// 第三方配送
+Route::any('delivery/notify/:type/:order_no/:action', 'addon\shop\app\api\controller\delivery\Order@notify');
 /**
  * 商城系统
  */
@@ -203,6 +204,9 @@ Route::group('shop', function () {
     // 查询自提点
     Route::get('order_create/store', 'addon\shop\app\api\controller\order\OrderCreate@getStore');
     Route::get('order_create/local', 'addon\shop\app\api\controller\order\OrderCreate@getLocalDeliveryConfig');
+
+    // 获取同城配送轨迹
+    Route::get('delivery/track_of_local', 'addon\shop\app\api\controller\delivery\Order@getTrackOfLocalDeliveryOrder');
 
     //获取订单确认数据
     Route::get('confirm', 'addon\shop\app\api\controller\order\OrderCreate@confirm');

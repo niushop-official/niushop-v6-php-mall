@@ -117,7 +117,7 @@ const router = useRouter()
  * 添加商家地址库
  */
 const addEvent = () => {
-    router.push('/shop/order/address/edit')
+    router.push('/shop/address/edit')
 }
 
 /**
@@ -125,7 +125,7 @@ const addEvent = () => {
  * @param data
  */
 const editEvent = (data: any) => {
-    router.push('/shop/order/address/edit?id=' + data.id)
+    router.push('/shop/address/edit?id=' + data.id)
 }
 
 /**

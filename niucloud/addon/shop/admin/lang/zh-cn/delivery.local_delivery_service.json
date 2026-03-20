@@ -1,0 +1,12 @@
+{
+    "name": "三方配送类型",
+    "dadaThirdDelivery":"达达秒送",
+    "isUse":"是否启用",
+    "config":"设置",
+    "dadaAppKey": "APP_KEY",
+    "dadaAppSecret":"APP_SECRET",
+    "dadaSourceId": "商户ID",
+    "dadaAppKeyPlaceholder": "请输入APP_KEY",
+    "dadaAppSecretPlaceholder":"请输入APP_SECRET",
+    "dadaSourceIdPlaceholder":"请输入商户ID"
+}

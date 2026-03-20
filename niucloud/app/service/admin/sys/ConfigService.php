@@ -87,6 +87,9 @@ class ConfigService extends BaseAdminService
                 'front_end_logo' => '',
                 'front_end_icon' => '',
                 'icon' => '',
+                'meta_title' => '',
+                'meta_desc' => '',
+                'meta_keyword' => '',
             ];
         }
         return $info[ 'value' ];
@@ -137,7 +140,6 @@ class ConfigService extends BaseAdminService
             "enterprise_wechat" => $value[ 'enterprise_wechat' ],
             "tel" => $value[ 'tel' ]
         ];
-
         return $this->core_config_service->setConfig('SERVICE_INFO', $data);
     }
 
@@ -227,9 +229,9 @@ class ConfigService extends BaseAdminService
     public function setLayout(array $data)
     {
         $config_service = new CoreConfigService();
-        $config = $config_service->getConfigValue( "LAYOUT_SETTING");
+        $config = $config_service->getConfigValue("LAYOUT_SETTING");
         $config[ $data[ 'key' ] ] = $data[ 'value' ];
-        return ( new CoreConfigService() )->setConfig( "LAYOUT_SETTING", $config);
+        return ( new CoreConfigService() )->setConfig("LAYOUT_SETTING", $config);
     }
 
     /**
@@ -238,7 +240,7 @@ class ConfigService extends BaseAdminService
      */
     public function getThemeColor()
     {
-        return ( new CoreConfigService() )->getConfigValue( "THEMECOLOR_SETTING");
+        return ( new CoreConfigService() )->getConfigValue("THEMECOLOR_SETTING");
     }
 
     /**

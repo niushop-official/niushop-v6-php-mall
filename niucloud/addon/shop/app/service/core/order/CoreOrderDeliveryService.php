@@ -11,20 +11,18 @@
 
 namespace addon\shop\app\service\core\order;
 
-use addon\shop\app\dict\delivery\DeliveryLocalDict;
 use addon\shop\app\dict\goods\GoodsDict;
 use addon\shop\app\dict\order\OrderDeliveryDict;
 use addon\shop\app\dict\order\OrderDict;
 use addon\shop\app\dict\order\OrderGoodsDict;
-use addon\shop\app\model\delivery\Local;
 use addon\shop\app\model\goods\Goods;
 use addon\shop\app\model\order\Order;
 use addon\shop\app\model\order\OrderDelivery;
 use addon\shop\app\model\order\OrderGoods;
 use addon\shop\app\model\shop_address\ShopAddress;
 use addon\shop\app\service\core\delivery\CoreElectronicSheetService;
-use addon\shop\app\service\core\delivery\CoreLocalDeliveryService;
-use addon\shop\app\service\core\delivery\third_delivery\ThirdDeliveryLoader;
+use addon\shop\app\service\core\local_delivery\CoreLocalDeliveryOrderCreateService;
+use addon\shop\app\service\core\local_delivery\CoreLocalDeliveryOrderService;
 use app\dict\pay\PayDict;
 use app\model\member\Member;
 use app\model\pay\Pay;
@@ -325,15 +323,12 @@ class CoreOrderDeliveryService extends BaseCoreService
         $order_goods_data = $data['order_goods_data'];
         $param = $data['param'];
         $delivery_type = $param['delivery_type'];
-        $local = (new Local())->where([['local_id', '>', 0 ]])->field('fee_type,base_dist,base_price,grad_dist,grad_price,weight_start,weight_unit,weight_price,delivery_type,area,center')->findOrEmpty()->toArray();
-        //若使用的是第三方配送
-        if (in_array(DeliveryLocalDict::DELIVERY_TYPE_THIRD, $local['delivery_type'])) {
-            $third_party_config = (new CoreLocalDeliveryService())->getConfig();
-            $third_delivery = $third_party_config['default'] ?? '';
-            $loader = new ThirdDeliveryLoader($third_delivery, $third_party_config[$third_delivery]);
-            //三方配送下单
-            $loader->createOrder($data);
-        }
+        //检查当前交易下是否有在进行中的配送订单
+        $check = (new CoreLocalDeliveryOrderService())->getUnderwayDeliveryOrder([
+            'trade_no' => $order_data['order_no'],
+        ]);
+        if (!$check) throw new CommonException('LOCAL_DELIVERY_ORDER_EXIST');//该订单已存在正在进行中的配送订单
+        $local_delivery_no = create_no();
         $insert_data = array(
             'delivery_ids' => $param['delivery_ids'] ?? [],
             'order_id' => $order_data['order_id'],
@@ -341,7 +336,7 @@ class CoreOrderDeliveryService extends BaseCoreService
             'sub_delivery_type' => $delivery_type,
             'local_deliver_id' => $param['local_deliver_id'],
             'remark' => $param['remark'],
-            'third_delivery' => $third_delivery ?? "",
+            'local_delivery_order_id' => $local_delivery_no
         );
         $delivery_id = $this->package($insert_data);
         $delivery_ids = $param['delivery_ids'];
@@ -351,6 +346,14 @@ class CoreOrderDeliveryService extends BaseCoreService
                 'delivery_id' => $delivery_id
             ]);
         }
+        //同城配送订单创建
+        (new CoreLocalDeliveryOrderCreateService())->create([
+            'order_data' => $order_data,
+            'trade_no' => $order_data['order_no'],
+            'order_goods_data' => $order_goods_data,
+            'local_delivery_no' => $local_delivery_no,
+            'param' => $param,
+        ]);
         return true;
     }
 
@@ -473,6 +476,39 @@ class CoreOrderDeliveryService extends BaseCoreService
     }
 
     /**
+     * 配送费用计算
+     * @param $data
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getDeliveryFee($data)
+    {
+        if ($data['delivery_type'] == 'local_delivery' && $data['delivery_way'] == 'third_party_delivery') {
+            $order_id = $data['order_id'];
+            $order_goods_ids = $data['order_goods_ids'];//订单项id
+            //查询订单
+            $order_data = $this->model->where([['order_id', '=', $order_id]])->findOrEmpty();
+            if ($order_data->isEmpty()) throw new CommonException('MALL_ORDER_NOT_FOUND');//订单不存在
+            $order_goods_where = [
+                ['order_id', '=', $order_id],
+                ['order_goods_id', 'in', $order_goods_ids],
+                ['status', '=', OrderGoodsDict::NORMAL]
+            ];
+            $order_goods_data = (new OrderGoods())->with(['sku' => function ($q) {
+                $q->field('sku_id,weight');
+            }, 'goods' => function ($q) {
+                $q->field('goods_id,unit');
+            }])->where($order_goods_where)->select();
+            $data['order_data'] = $order_data;
+            $data['order_goods_data'] = $order_goods_data;
+            return (new CoreLocalDeliveryOrderCreateService())->getDeliveryFee($data);
+        }
+        return 0;
+    }
+
+    /**
      * 微信小程序 发货信息录入接口
      * @param $params
      * @return string
@@ -532,7 +568,7 @@ class CoreOrderDeliveryService extends BaseCoreService
             }
 
             // 设置消息跳转路径设置接口
-            $result_jump_path = $weapp_delivery_service->setMsgJumpPath( 'shop_order');
+            $result_jump_path = $weapp_delivery_service->setMsgJumpPath('shop_order');
             if ($result_jump_path['errcode'] != 0) {
                 return '设置消息跳转路径设置接口，报错：' . $result_jump_path["errmsg"];
             }
@@ -662,7 +698,7 @@ class CoreOrderDeliveryService extends BaseCoreService
                 $is_all_delivered = true;
             }
 
-            $member_info = (new Member())->where([ ['member_id', '=', $order_data['member_id']]])->field('weapp_openid')->findOrEmpty()->toArray();
+            $member_info = (new Member())->where([['member_id', '=', $order_data['member_id']]])->field('weapp_openid')->findOrEmpty()->toArray();
 
             $data = [
                 'out_trade_no' => $order_data['out_trade_no'],
@@ -674,7 +710,7 @@ class CoreOrderDeliveryService extends BaseCoreService
                 'is_all_delivered' => $is_all_delivered
             ];
 
-            $weapp_delivery_service->uploadShippingInfo( $data);
+            $weapp_delivery_service->uploadShippingInfo($data);
         } catch (\Exception $e) {
             Log::write('商城订单发货失败' . $e->getMessage() . $e->getFile() . $e->getLine());
         }

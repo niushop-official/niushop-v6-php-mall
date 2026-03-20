@@ -126,12 +126,12 @@ trait WapTrait
         $content .= "                </view>\n";
         $content .= "            </view>\n";
         $content .= "        </template>\n";
-        $content .= "        <template v-if=\"diyStore.mode == '' && data.global && diyGroup.showCopyright.value && data.global.copyright && data.global.copyright.isShow\">\n";
+        $content .= "        <template v-if=\"data.global && diyGroup.showCopyright.value && data.global.copyright && data.global.copyright.isShow\">\n";
         $content .= "           <copy-right :textColor=\"data.global.copyright.textColor\" />\n";
         $content .= "        </template>\n\n";
         $content .= "        <template v-if=\"diyStore.mode == '' && data.global && data.global.bottomTabBar && data.global.bottomTabBar.isShow\">\n";
         $content .= "            <view class=\"pt-[20rpx]\"></view>\n";
-        $content .= "            <tabbar :addon=\"data.global.bottomTabBar.designNav.key\" />\n";
+        $content .= "            <tabbar :addon=\"data.global.bottomTabBar.designNav?.key\" />\n";
         $content .= "        </template>\n";
         $content .= "    </view>\n";
         $content .= "</template>\n";
@@ -191,12 +191,20 @@ trait WapTrait
      */
     public function installPageCode($compile_path, $addon = '')
     {
-        if (!file_exists($this->geAddonPackagePath($this->addon) . 'uni-app-pages.php')) return;
+        if (is_array($addon)){
+            foreach ($addon as $item_addon){
+                if (!file_exists($this->geAddonPackagePath($item_addon) . 'uni-app-pages.php')) {
+                    continue;
+                }
+                $uniapp_pages = require $this->geAddonPackagePath($item_addon) . 'uni-app-pages.php';
+            }
+        }else{
+            if (!file_exists($this->geAddonPackagePath($this->addon) . 'uni-app-pages.php')) return;
 
-        $uniapp_pages = require $this->geAddonPackagePath($this->addon) . 'uni-app-pages.php';
-
-        if (empty($uniapp_pages[ 'pages' ])) {
-            return;
+            $uniapp_pages = require $this->geAddonPackagePath($this->addon) . 'uni-app-pages.php';
+            if (empty($uniapp_pages[ 'pages' ])) {
+                return;
+            }
         }
 
         $pages = [];

@@ -6,7 +6,7 @@
                 <view class="back-wrap text-[26px] nc-iconfont nc-icon-zuoV6xx" @click="back"></view>
                 <!-- #endif -->
                 <view class="search-input bg-[#fff]">
-                    <text @click.stop="searchNameFn" class="nc-iconfont nc-icon-sousuo-duanV6xx1 btn"></text>
+                    <text @click.stop="searchNameFn" class="nc-iconfont nc-icon-sousuo-duanV6xx1 text-[var(--text-color-light9)] text-[26rpx] mr-[18rpx]"></text>
                     <input class="input" type="text" v-model.trim="searchName" placeholder="请输入商品名称" @confirm="searchNameFn" placeholderClass="text-[var(--text-color-light9)]">
                     <text v-if="searchName" class="nc-iconfont nc-icon-cuohaoV6xx1 clear" @click="searchName=''"></text>
                 </view>
@@ -14,12 +14,12 @@
         </view>
         <view class="fixed left-0 top-0 right-0 z-10" v-if="statusLoading" :style="`top: ${categoryTop}`">
             <view class="flex justify-center items-center">
-                <scroll-view :scroll-x="true" class="tab-style-2  pr-[180rpx]" scroll-with-animation :scroll-into-view="'id' + orderState">
+                <scroll-view :scroll-x="true" class="tab-style-2" scroll-with-animation :scroll-into-view="'id' + orderState" :class="{'pr-[160rpx]':invoiceConfig.is_invoice==1}">
                     <view class="tab-content">
-                        <view :id="'id' + index"  class="tab-items mr-[40rpx] flex-shrink-0" :class="{ 'class-select': orderState === item.status.toString() }" @click="orderStateFn(item.status)" v-for="(item, index) in orderStateList">{{ item.name }}</view>
+                        <view :id="'id' + index"  class="tab-items flex-shrink-0" :class="{ 'class-select': orderState === item.status.toString(), 'mr-[34rpx]':invoiceConfig.is_invoice==1 }" @click="orderStateFn(item.status)" v-for="(item, index) in orderStateList">{{ item.name }}</view>
                     </view>
                 </scroll-view>
-                <view @click="isEdit = !isEdit" class="text-[#333] text-[28rpx] bg-[#f6f6f6] flex items-center pr-[20rpx] absolute right-0 top-0 h-[88rpx] z-10">
+                <view @click="isEdit = !isEdit" v-if="invoiceConfig.is_invoice==1" class="text-[#333] text-[26rpx] bg-[#f6f6f6] flex items-center pr-[20rpx] absolute right-0 top-0 h-[88rpx] z-10">
                     <image class="h-[30rpx] w-[1rpx] mr-[20rpx]" :src="img('addon/shop/rectangle.png')" mode="heightFix" />
                     <image class="h-[26rpx] w-[26rpx]" :src="img('addon/shop/invoice.png')" mode="heightFix" />
                     <view class="flex-1 whitespace-nowrap ml-[10rpx]">开发票</view>
@@ -27,7 +27,7 @@
             </view>
         </view>
         <mescroll-body ref="mescrollRef" :top="listTop" @init="mescrollInit" :down="{ use: false }" @up="getShopOrderFn">
-            <view class="sidebar-margin pt-[var(--top-m)]" v-if="list.length">
+            <view class="sidebar-margin" v-if="list.length">
                 <template v-for="(item, index) in list" :key="index">
                     <view class="flex justify-between items-center">
                         <view class="flex items-center h-[34rpx] mb-[20rpx]" v-if="isEdit">
@@ -125,7 +125,7 @@
                                 <view class="text-[24rpx] font-500 leading-[52rpx] h-[56rpx] min-w-[150rpx] text-center border-[2rpx] border-solid border-[#ccc] rounded-full ml-[20rpx]  text-[var(--text-color-light3)] box-border"
                                     v-if="item.status == 5 && evaluateConfig.evaluate_is_show && evaluateConfig.is_evaluate == 1"
                                     @click.stop="orderBtnFn(item, 'evaluate')">{{ item.is_evaluate == 1 ? t('selectedEvaluate') : t('evaluate') }}</view>
-                                <view class="text-[24rpx] font-500 leading-[52rpx] h-[56rpx] min-w-[150rpx] text-center border-[2rpx] border-solid border-[#ccc] rounded-full text-[var(--text-color-light3)] ml-[20rpx] box-border" v-if="item.is_can_invoice" @click.stop="orderBtnFn(item, 'invoice')">开票</view>
+                                <view class="text-[24rpx] font-500 leading-[52rpx] h-[56rpx] min-w-[150rpx] text-center border-[2rpx] border-solid border-[#ccc] rounded-full text-[var(--text-color-light3)] ml-[20rpx] box-border" v-if="item.is_can_invoice && invoiceConfig.is_invoice==1" @click.stop="orderBtnFn(item, 'invoice')">开票</view>
 
                             </view>
                         
@@ -136,7 +136,7 @@
             </view>
             <mescroll-empty v-if="!list.length && loading" :option="{tip : '暂无订单'}"></mescroll-empty>
         </mescroll-body>
-        <view v-if="list.length && isEdit" class="fixed left-0 right-0 bottom-0 z-200 bg-[#fff]  pb-ios">
+        <view v-if="list.length && isEdit" class="fixed left-0 right-0 bottom-0 z-200 bg-[#fff] pb-ios">
             <view v-if="checkedNum"
                   class="h-[66rpx] flex items-center justify-between pl-[30rpx] pr-[20rpx] border-0  border-b-[1rpx] border-solid border-[#f6f6f6]">
                 <view class="text-[24rpx]">
@@ -168,6 +168,7 @@ import { ref, nextTick,computed } from 'vue';
 import { t } from '@/locale'
 import { img, redirect, copy ,pxToRpx} from '@/utils/common'
 import { getShopOrderStatus, getShopOrder, orderClose, orderFinish } from '@/addon/shop/api/order';
+import { getInvoiceConfig } from '@/addon/shop/api/config'
 import { getEvaluateConfig } from '@/addon/shop/api/shop';
 import MescrollBody from '@/components/mescroll/mescroll-body/mescroll-body.vue';
 import MescrollEmpty from '@/components/mescroll/mescroll-empty/mescroll-empty.vue';
@@ -225,6 +226,7 @@ const wxPrivacyPopupRef: any = ref(null)
 onLoad((option: any) => {
     orderState.value = option.status || "";
     evaluateEvent()
+    getInvoiceConfigFn()
     getShopOrderStatusFn();
     // #ifdef MP
     nextTick(() => {
@@ -241,6 +243,12 @@ onShow(() => {
         }
     })
 })
+const invoiceConfig = ref({})
+const getInvoiceConfigFn = () => {
+    getInvoiceConfig().then((data: any) => {
+        invoiceConfig.value = data.data
+    })
+}
 
 const evaluateEvent = () => {
     getEvaluateConfig().then((data: any) => {
@@ -504,5 +512,9 @@ const finish = (item: any) => {
 
 .bg-color {
     background-color: var(--primary-color);
+}
+
+input{
+    color: var(--text-color-light9) !important;
 }
 </style>

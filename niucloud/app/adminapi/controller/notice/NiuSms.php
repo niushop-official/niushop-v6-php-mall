@@ -209,23 +209,6 @@ class NiuSms extends BaseAdminController
     }
 
     /**
-     * 忘记密码
-     * @description 忘记密码
-     * @param $username
-     * @return Response
-     */
-    public function forgetPassword($username)
-    {
-        $params = $this->request->params([
-            ['mobile', ''],
-            ['code', ''],
-            ['key', ''],
-        ]);
-        $data = (new NiuSmsService())->forgetPassword($username, $params);
-        return success($data);
-    }
-
-    /**
      * 签名列表
      * @description 签名列表
      * @param $username
@@ -281,6 +264,15 @@ class NiuSms extends BaseAdminController
             ['signType', ""],
             ['imgUrl', ""],
             ['defaultSign', 0],
+
+            //新增字段
+            ['bizLicenseUrl', ''],
+            ['qccUrl', ''],
+            ['tmnetUrl', ''],
+            ['mobileIcpUrl', ''],
+            ['telecomAppstoreUrl', ''],
+            ['idcardFrontUrl', ''],
+            ['idcardBackUrl', ''],
         ]);
         (new NiuSmsService())->signCreate($username, $params);
         return success("SUCCESS");

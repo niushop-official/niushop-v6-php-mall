@@ -34,7 +34,7 @@ class Addon extends BaseAdminController
      */
     public function init()
     {
-        return success((new CoreAddonService())->getInitList());
+        return success(( new CoreAddonService() )->getInitList());
     }
 
     /**
@@ -43,7 +43,7 @@ class Addon extends BaseAdminController
      */
     public function getLocalAddonList()
     {
-        return success((new CoreAddonService())->getLocalAddonList());
+        return success(( new CoreAddonService() )->getLocalAddonList());
     }
 
     /**
@@ -53,7 +53,7 @@ class Addon extends BaseAdminController
      */
     public function install($addon)
     {
-        return success((new AddonService())->install($addon));
+        return success(( new AddonService() )->install($addon));
     }
 
     /**
@@ -64,7 +64,7 @@ class Addon extends BaseAdminController
      */
     public function cloudInstall($addon)
     {
-        return success(data:(new AddonService())->cloudInstall($addon));
+        return success(data: ( new AddonService() )->cloudInstall($addon));
     }
 
     /**
@@ -72,8 +72,9 @@ class Addon extends BaseAdminController
      * @description 获取安装任务
      * @return Response
      */
-    public function getInstallTask() {
-        return success(data:(new AddonService())->getInstallTask());
+    public function getInstallTask()
+    {
+        return success(data: ( new AddonService() )->getInstallTask());
     }
 
     /**
@@ -82,8 +83,9 @@ class Addon extends BaseAdminController
      * @param $addon
      * @return mixed
      */
-    public function cloudInstallLog($addon) {
-        return success(data:(new AddonService())->cloudInstallLog($addon));
+    public function cloudInstallLog($addon)
+    {
+        return success(data: ( new AddonService() )->cloudInstallLog($addon));
     }
 
     /**
@@ -94,7 +96,7 @@ class Addon extends BaseAdminController
      */
     public function installCheck($addon)
     {
-        return success(data:(new AddonService())->installCheck($addon));
+        return success(data: ( new AddonService() )->installCheck($addon));
     }
 
     /**
@@ -105,7 +107,7 @@ class Addon extends BaseAdminController
      */
     public function cancleInstall($addon)
     {
-        return success(data:(new AddonService())->cancleInstall($addon));
+        return success(data: ( new AddonService() )->cancleInstall($addon));
     }
 
     /**
@@ -115,7 +117,7 @@ class Addon extends BaseAdminController
      */
     public function uninstall($addon)
     {
-        (new AddonService())->uninstall($addon);
+        ( new AddonService() )->uninstall($addon);
         return success('ADDON_UNINSTALL_SUCCESS');
     }
 
@@ -127,7 +129,7 @@ class Addon extends BaseAdminController
      */
     public function uninstallCheck($addon)
     {
-        return success(data:(new AddonService())->uninstallCheck($addon));
+        return success(data: ( new AddonService() )->uninstallCheck($addon));
     }
 
     /**
@@ -138,9 +140,9 @@ class Addon extends BaseAdminController
     public function lists()
     {
         $data = $this->request->params([
-            ['title', ''],
+            [ 'title', '' ],
         ]);
-        return success((new AddonService())->getPage($data));
+        return success(( new AddonService() )->getPage($data));
     }
 
     /**
@@ -151,7 +153,7 @@ class Addon extends BaseAdminController
      */
     public function info(int $id)
     {
-        return success((new AddonService())->getInfo($id));
+        return success(( new AddonService() )->getInfo($id));
     }
 
     /**
@@ -163,7 +165,7 @@ class Addon extends BaseAdminController
      */
     public function setStatus(int $id, int $status)
     {
-        (new AddonService())->setStatus($id, $status);
+        ( new AddonService() )->setStatus($id, $status);
         return success('SET_SUCCESS');
     }
 
@@ -173,11 +175,12 @@ class Addon extends BaseAdminController
      * @param $addon
      * @return Response
      */
-    public function download($addon){
+    public function download($addon)
+    {
         $data = $this->request->params([
-            ['version', '']
+            [ 'version', '' ]
         ]);
-        (new AddonService())->download($addon, $data['version']);
+        ( new AddonService() )->download($addon, $data[ 'version' ]);
         return success('DOWNLOAD_SUCCESS');
     }
 
@@ -186,8 +189,9 @@ class Addon extends BaseAdminController
      * @description 查询已安装插件
      * @return Response
      */
-    public function getInstallList(){
-        return success(data:(new AddonService())->getInstallList());
+    public function getInstallList()
+    {
+        return success(data: ( new AddonService() )->getInstallList());
     }
 
     /**
@@ -196,7 +200,7 @@ class Addon extends BaseAdminController
      */
     public function getAddonList()
     {
-        return success((new CoreAddonService())->getInstallAddonList());
+        return success(( new CoreAddonService() )->getInstallAddonList());
     }
 
     /**
@@ -204,7 +208,8 @@ class Addon extends BaseAdminController
      * @description 插件类型
      * @return Response
      */
-    public function getType(){
+    public function getType()
+    {
         return success(AddonDict::getType());
     }
 
@@ -214,20 +219,10 @@ class Addon extends BaseAdminController
      * @param $addon
      * @return Response
      */
-    public function upgrade($addon = ''){
-        return success('DOWNLOAD_SUCCESS', (new AddonService())->upgrade($addon));
-    }
-
-    public function showApp()
+    public function upgrade($addon = '')
     {
-        return success(data:(new AddonService())->getShowAppTools());
+        return success('DOWNLOAD_SUCCESS', ( new AddonService() )->upgrade($addon));
     }
-
-    public function showMarketing()
-    {
-        return success(( new AddonService() )->getShowMarketingTools());
-    }
-
 
     /**
      * 统一展示 安装的插件 应用 营销工具等。。
@@ -235,11 +230,12 @@ class Addon extends BaseAdminController
      */
     public function showCustomer()
     {
-        return success((new AddonService())->showCustomer());
+        return success(( new AddonService() )->showCustomer());
     }
+
     public function getSpecialMenuList()
     {
-        return success('SUCCESS', (new AddonService())->getSpecialMenuList());
+        return success('SUCCESS', ( new AddonService() )->getSpecialMenuList());
 
     }
 
@@ -249,7 +245,7 @@ class Addon extends BaseAdminController
      */
     public function getIndexAddonLabelList()
     {
-        return success((new CoreAddonService())->getIndexAddonLabelList());
+        return success(( new CoreAddonService() )->getIndexAddonLabelList());
     }
 
     /**
@@ -260,9 +256,9 @@ class Addon extends BaseAdminController
     public function getIndexAddonList()
     {
         $data = $this->request->params([
-            ['label_id', ''],
+            [ 'label_id', '' ],
         ]);
-        return success((new CoreAddonService())->getIndexAddonList($data['label_id']));
+        return success(( new CoreAddonService() )->getIndexAddonList($data[ 'label_id' ]));
     }
 
 }

@@ -53,8 +53,8 @@ class AfterShopOrderFinish
             }
 
             // 订单完成发放积分成长值
-            CoreMemberService::sendGrowth($order_data[ 'member_id' ], 'shop_buy_goods', $order_data);
-            CoreMemberService::sendGrowth($order_data[ 'member_id' ], 'shop_buy_order');
+            CoreMemberService::sendGrowth($order_data[ 'member_id' ], 'shop_buy_goods', array_merge($order_data, [ 'from_type' => 'shop_buy_goods', 'related_id' => $order_data[ 'order_id' ] ]));
+            CoreMemberService::sendGrowth($order_data[ 'member_id' ], 'shop_buy_order',['from_type'=>'shop_buy_order','related_id'=>$order_data[ 'order_id' ] ]);
             CoreMemberService::sendPoint($order_data[ 'member_id' ], 'shop_buy_goods', array_merge($order_data, [ 'from_type' => 'consume_reward', 'related_id' => $order_data[ 'order_id' ] ]));
 
             // 微信小程序 发送 确认收货提醒消息

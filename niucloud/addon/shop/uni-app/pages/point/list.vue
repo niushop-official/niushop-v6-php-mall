@@ -67,15 +67,16 @@
 						     </template>
 						 </view>
                             <view class="text-[24rpx] font-400 leading-[34rpx] mt-[10rpx] text-[var(--text-color-light9)]">已兑{{ item.total_exchange_num }}人</view>
-                            <view class="flex justify-between flex-wrap items-center mt-[16rpx]">
-                                <view class="flex flex-col">
-                                    <view class="text-[var(--price-text-color)] price-font ml-[2rpx] flex items-center">
-                                        <text class="text-[32rpx]">{{ item.point }}</text>
-                                        <text class="text-[26rpx] ml-[4rpx]">积分</text>
-                                    </view>
-                                    <view v-if="item.price&&item.price>0" class="flex items-center price-font mt-[6rpx]">
-                                        <text class="text-[var(--price-text-color)] font-400 text-[32rpx]">+{{ parseFloat(item.price).toFixed(2) }}</text>
-                                        <text class="text-[var(--price-text-color)] font-400 ml-[4rpx] text-[20rpx]">元</text>
+                            <view class="flex justify-between flex-wrap items-center mt-[16rpx] gap-[10rpx]">
+                                <view class="flex items-baseline">
+                                    <image class="h-[22rpx] w-[22rpx] mr-[4rpx]" :style="imageStyle2"  :src="img('addon/shop/diy/point/nav_point.png')" mode="aspectFit" />
+                                    <view class="inline-block price-font text-[24rpx] leading-[1] text-[var(--price-text-color)]">
+                                        <text class="text-[38rpx] price-font font-500">{{ parseInt(item.point) }}</text>
+                                        <template v-if="item.price && item.price > 0">
+                                            <text class="mx-[2rpx]">+</text>
+                                            <text class="font-500">{{ parseFloat(item.price).toFixed(2) }}</text>
+                                            <text>元</text>
+                                        </template>
                                     </view>
                                 </view>
                                 <view class="w-[120rpx] h-[54rpx] text-[22rpx] flex-center !text-[#fff] m-0 rounded-full primary-btn-bg remove-border text-center" shape="circle">去兑换</view>
@@ -92,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { t } from '@/locale'
 import { redirect, img } from '@/utils/common';
 import { getExchangeGoodsList } from '@/addon/shop/api/point';
@@ -146,6 +147,14 @@ const getAllAppListFn = (mescroll: mescrollStructure) => {
         mescroll.endErr(); // 请求失败, 结束加载
     })
 }
+
+const imageStyle2 = computed(() => {
+    let style = '';
+    // #ifdef MP
+    style += 'position:relative; top:2rpx;';
+    // #endif
+    return style;
+})
 
 // 搜索
 const searchTypeFn = (type: string) => {

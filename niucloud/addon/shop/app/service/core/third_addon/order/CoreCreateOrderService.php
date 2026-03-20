@@ -70,7 +70,7 @@ class CoreCreateOrderService extends BaseCoreService
                 $sku_id = $sku_info['source_sku_id'] ?? 0;
                 $relate_order_id = $relate_order_info['id'] ?? 0;
 
-                list($check_res, $reason) = $this->checkGoods( $goods_id, $sku_id, $relate_order_info['num']);
+                list($check_res, $reason) = $this->checkGoods($goods_id, $sku_id, $relate_order_info['num']);
                 if (!$check_res) {
                     $failed_orders[] = "第{$order_index}个订单（ID: {$relate_order_id}）" . $reason;
                     $return_order_list[$relate_order_id] = [
@@ -175,7 +175,7 @@ class CoreCreateOrderService extends BaseCoreService
                     'num' => $relate_order_info['num'] ?? 0,
                     'goods_money' => ($relate_order_info['goods_money'] ?? 0),
                     'goods_type' => $goods_type,
-                    'order_goods_money' => $goods_single_money,
+                    'order_goods_money' => ($relate_order_info['goods_money'] ?? 0),
                     'order_id' => $shop_order_id,
                     'discount_money' => 0,
                     'status' => OrderGoodsDict::NORMAL,
@@ -268,7 +268,7 @@ class CoreCreateOrderService extends BaseCoreService
                 $sku_id = $sku_info['source_sku_id'] ?? 0;
                 $relate_order_id = $relate_order_info['id'] ?? 0;
 
-                list($check_res, $reason) = $this->checkGoods( $goods_id, $sku_id, $relate_order_info['num']);
+                list($check_res, $reason) = $this->checkGoods($goods_id, $sku_id, $relate_order_info['num']);
                 if (!$check_res) {
                     $failed_orders[] = "第{$order_index}个订单（ID: {$relate_order_id}）" . $reason;
                     $return_order_list[$relate_order_id] = [

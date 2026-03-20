@@ -91,3 +91,10 @@ export function getMaterialflowList(params: Record<string, any>) {
 export function getLocal() {
     return request.get('shop/order_create/local')
 }
+
+/**
+ * 查询同城配送地图
+ */
+export function getTrackOfLocal(params: Record<string, any>) {
+    return request.get('shop/delivery/track_of_local', params)
+}

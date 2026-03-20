@@ -138,12 +138,13 @@ class CoreWechatServeService extends BaseCoreService
         }
         $scene = [ $sceneKey => $key ];
         $param = [
-            'expire_seconds' => $expire_seconds, // 二维码的有效时间
+            'expire_seconds' => $expire_seconds,
             'action_name' => $type,
             'action_info' => [
                 'scene' => $scene
             ],
         ];
-        return $api->postJson('cgi-bin/qrcode/create', $param);
+        $response = $api->postJson('cgi-bin/qrcode/create', $param);
+        return json_decode($response->getContent(), true);
     }
 }

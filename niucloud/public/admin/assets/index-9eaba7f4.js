@@ -1,1 +1,0 @@
-import{_ as n,h as t,m as c,w as r,e as s,N as a,y as _}from"./index-3f969305.js";const i={};function l(m,p){const e=a("router-view"),o=_;return t(),c(o,{class:"w-screen h-screen min-w-[1200px]"},{default:r(()=>[s(e)]),_:1})}const u=n(i,[["render",l]]);export{u as default};

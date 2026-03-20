@@ -3,7 +3,7 @@ import { t } from '@/lang'
 import { TabsPaneContext, ElMessage } from 'element-plus'
 import Sortable from 'sortablejs'
 import { range, cloneDeep } from 'lodash-es'
-import { debounce, deepClone } from '@/utils/common'
+import { debounce, deepClone, getImageDimensions } from '@/utils/common'
 import { useRoute, useRouter } from 'vue-router'
 import Test from '@/utils/test'
 import {
@@ -125,7 +125,9 @@ export function useGoodsEdit(params: any = {}) {
 
     // 切换商品类型
     const changeGoodsType = (data: any) => {
-        router.push(data.path)
+        // 添加商品是切换类型不应该是edit
+        let url = '/shop/goods/'+data.type + '_add'
+        router.push(url)
     }
 
     // 商品类型
@@ -1358,13 +1360,18 @@ export function useGoodsEdit(params: any = {}) {
 
     // 保存数据
     const save = (callback: any = null) => {
-        verify(() => {
+        verify(async() => {
 
             if (repeat.value) return
             repeat.value = true
 
             const api = formData.goods_id ? editApi : addApi
             const data = cloneDeep(formData)
+            const coverImage = data.goods_image.split(',')[0]
+
+            const info = await getImageDimensions(coverImage)
+            data.goods_image_width = info ? info.width : 800
+            data.goods_image_height = info ? info.height : 800
 
             if (data.spec_type == 'multi') {
                 data.stock = 0

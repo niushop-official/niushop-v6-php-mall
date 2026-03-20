@@ -254,6 +254,11 @@ class GoodsService extends BaseAdminService
                     }
                     if (isset($v[ 'short' ])) {
                         $active_tips[ $goods_id ][ $join_type ][ 'short' ] = $v[ 'short' ];
+                        if(($v['short']['is_need_params']??0) == 1){
+                            $active_tips[ $goods_id ][ $join_type ][ 'jump_url' ] = ($v[ 'short' ]['jump_url'] ?? '')."?active_id=".$join_active[0]['join_id'];
+                        }else{
+                            $active_tips[ $goods_id ][ $join_type ][ 'jump_url' ] = $v[ 'short' ]['jump_url'] ?? '';
+                        }
                         unset($v[ 'short' ]);
                         $active_tips[ $goods_id ][ $join_type ][ 'list' ][] = $v;
                         $active_tips[ $goods_id ][ $join_type ][ 'name' ] .= $v[ 'name' ] . PHP_EOL;
@@ -304,6 +309,8 @@ class GoodsService extends BaseAdminService
                 'goods_type' => $data[ 'goods_type' ],
                 'goods_cover' => $data[ 'goods_cover' ],
                 'goods_image' => $data[ 'goods_image' ],
+                'goods_image_width' => $data[ 'goods_image_width' ] ?? 0,
+                'goods_image_height' => $data[ 'goods_image_height' ] ?? 0,
                 'goods_video' => $data[ 'goods_video' ],
                 'goods_category' => array_map(function ($item) {
                     return (string) $item;
@@ -471,6 +478,8 @@ class GoodsService extends BaseAdminService
                 'goods_type' => $data[ 'goods_type' ],
                 'goods_cover' => $data[ 'goods_cover' ],
                 'goods_image' => $data[ 'goods_image' ],
+                'goods_image_width' => $data[ 'goods_image_width' ] ?? 0,
+                'goods_image_height' => $data[ 'goods_image_height' ] ?? 0,
                 'goods_video' => $data[ 'goods_video' ],
                 'goods_category' => array_map(function ($item) {
                     return (string) $item;
@@ -508,7 +517,7 @@ class GoodsService extends BaseAdminService
                 'update_time' => time()
             ];
 
-            $this->model->where([ [ 'goods_id', '=', $goods_id ]])->update($goods_data);
+            $this->model->where([ [ 'goods_id', '=', $goods_id ] ])->update($goods_data);
             $sku_data = [];
             if ($data[ 'spec_type' ] == 'single') {
                 if (!empty($data[ 'sku_no' ])) {
@@ -817,7 +826,7 @@ class GoodsService extends BaseAdminService
      */
     public function recycle($goods_ids)
     {
-        $res = $this->model->restore([ [ 'goods_id', 'in', $goods_ids ]]);
+        $res = $this->model->restore([ [ 'goods_id', 'in', $goods_ids ] ]);
         return $res;
     }
 
@@ -837,7 +846,7 @@ class GoodsService extends BaseAdminService
      */
     public function editSort($data)
     {
-        return $this->model->where([ [ 'goods_id', '=', $data[ 'goods_id' ] ]])->update([ 'sort' => $data[ 'sort' ] ]);
+        return $this->model->where([ [ 'goods_id', '=', $data[ 'goods_id' ] ] ])->update([ 'sort' => $data[ 'sort' ] ]);
     }
 
     /**
@@ -899,7 +908,7 @@ class GoodsService extends BaseAdminService
             // 查询商品信息
             $field = 'goods_name,sub_title,goods_type,goods_cover,goods_image,goods_video,goods_desc,brand_id,goods_category,label_ids,service_ids,unit,stock,virtual_sale_num,is_limit,limit_type,max_buy,min_buy,status,sort,delivery_type,is_free_shipping,fee_type,delivery_money,delivery_template_id,supplier_id,attr_ids,attr_format,virtual_auto_delivery,virtual_receive_type,virtual_verify_type,virtual_indate,poster_id,form_id';
 
-            $goods_data = $this->model->field($field)->where([ [ 'goods_id', '=', $goods_id ]])->findOrEmpty()->toArray();
+            $goods_data = $this->model->field($field)->where([ [ 'goods_id', '=', $goods_id ] ])->findOrEmpty()->toArray();
             if (empty($goods_data)) {
                 throw new AdminException('SHOP_GOODS_NOT_EXIST');
             }
@@ -982,7 +991,7 @@ class GoodsService extends BaseAdminService
      */
     public function getSelectPage(array $where = [])
     {
-        $field = ' goods_id, goods_name, goods_type, goods_cover,goods_image, stock,sub_title,goods_desc,is_gift';
+        $field = 'goods_id, goods_name, goods_type, goods_cover,goods_image, stock,sub_title,goods_desc,is_gift';
         $order = 'sort desc,create_time desc';
 
         $sku_where = [
@@ -1085,7 +1094,7 @@ class GoodsService extends BaseAdminService
      */
     public function getSelectSku(array $where = [])
     {
-        $field = ' goods_id, goods_name, goods_type, goods_cover, stock,is_gift';
+        $field = 'goods_id, goods_name, goods_type, goods_cover, stock,is_gift';
         $order = 'sort desc,create_time desc';
 
         $select_goods_list = [];// 已选商品列表
@@ -1170,7 +1179,7 @@ class GoodsService extends BaseAdminService
      */
     public function getBuyGoodsSelect(array $where = [])
     {
-        $field = ' goods_id, goods_name, goods_type, goods_cover,goods_image, stock,sub_title,goods_desc,is_limit,limit_type,max_buy,min_buy,member_discount';
+        $field = 'goods_id, goods_name, goods_type, goods_cover,goods_image, stock,sub_title,goods_desc,is_limit,limit_type,max_buy,min_buy,member_discount';
         $order = 'sort desc,create_time desc';
 
         $sku_where = [
@@ -1228,7 +1237,7 @@ class GoodsService extends BaseAdminService
                     $v[ 'member_price' ] = $this->getMemberPrice($member_info, $v[ 'goods' ][ 'member_discount' ], $v[ 'member_price' ], $v[ 'price' ]);
                 }
                 // 限购查询当前会员已购数量
-                $has_buy = ( new CoreGoodsLimitBuyService() )->getGoodsHasBuyNumber( $where[ 'member_id' ], $v[ 'goods_id' ]);
+                $has_buy = ( new CoreGoodsLimitBuyService() )->getGoodsHasBuyNumber($where[ 'member_id' ], $v[ 'goods_id' ]);
                 $v[ 'has_buy' ] = $has_buy;
                 // 满减活动
                 $manjian_info = ( new ManjianService() )->getManjianInfo([ 'goods_id' => $v[ 'goods_id' ], 'sku_id' => $v[ 'sku_id' ], 'member_id' => $where[ 'member_id' ] ]);
@@ -1250,7 +1259,7 @@ class GoodsService extends BaseAdminService
 
         $goods_sku_model = new GoodsSku();
 
-        $info = $goods_sku_model->where([  [ 'sku_id', '=', $data[ 'sku_id' ] ] ])
+        $info = $goods_sku_model->where([ [ 'sku_id', '=', $data[ 'sku_id' ] ] ])
             ->field($field)
             ->with([
                 // 商品主表
@@ -1260,7 +1269,7 @@ class GoodsService extends BaseAdminService
                 },
                 // 商品规格列表
                 'skuList' => function ($query) {
-                    $query->field(' sku_id, sku_name, sku_image, sku_no, goods_id, sku_spec_format, price, market_price, sale_price, stock, weight, volume, is_default,member_price');
+                    $query->field('sku_id, sku_name, sku_image, sku_no, goods_id, sku_spec_format, price, market_price, sale_price, stock, weight, volume, is_default,member_price');
                 },
                 // 商品规格项/规格值列表
                 'goodsSpec' => function ($query) {
@@ -1276,7 +1285,7 @@ class GoodsService extends BaseAdminService
 
             $this->getMemberPriceByList($member_info, $info[ 'goods' ][ 'member_discount' ], $info[ 'skuList' ]);
             // 限购查询当前会员已购数量
-            $has_buy = ( new CoreGoodsLimitBuyService() )->getGoodsHasBuyNumber( $data[ 'member_id' ], $info[ 'goods_id' ]);
+            $has_buy = ( new CoreGoodsLimitBuyService() )->getGoodsHasBuyNumber($data[ 'member_id' ], $info[ 'goods_id' ]);
             $info[ 'has_buy' ] = $has_buy;
             // 满减活动
             $manjian_info = ( new ManjianService() )->getManjianInfo([ 'goods_id' => $info[ 'goods_id' ], 'sku_id' => $info[ 'sku_id' ], 'member_id' => $data[ 'member_id' ] ]);
@@ -1708,7 +1717,7 @@ class GoodsService extends BaseAdminService
                     } else {
                         $query = GoodsSku::alias('goodsSku')
                             ->join(( new Goods() )->getTable() . ' goods', 'goods.goods_id = goodsSku.goods_id')
-                           ->whereIn('goods.goods_id', $goods_ids);
+                            ->whereIn('goods.goods_id', $goods_ids);
                     }
                     $query->update([
                         'goodsSku.stock' => Db::raw("goodsSku.stock + {$update_stock}"),
@@ -1814,8 +1823,7 @@ class GoodsService extends BaseAdminService
     {
         $goods_category = [];
 
-        $category_goods_list = ( new Goods() )->where([
-        ])->withSearch([ 'goods_category' ], [
+        $category_goods_list = ( new Goods() )->withSearch([ 'goods_category' ], [
             'goods_category' => $category_id
         ])->select()->toArray();
         if ($old_pid != 0 && $new_pid == 0) {

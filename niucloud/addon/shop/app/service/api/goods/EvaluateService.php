@@ -125,7 +125,7 @@ class EvaluateService extends BaseApiService
     {
         $field = 'evaluate_id,order_id,order_goods_id,goods_id,member_id,member_name,member_head,content,images,is_anonymous,scores,is_audit,explain_first,create_time';
         $list = $this->model->field($field)->where([ [ 'order_id', '=', $order_id ] ])->with([
-            'order_goods' => function($query) {
+            'order_goods' => function ($query) {
                 $query->field('order_goods_id, goods_name, sku_name, goods_image, num, price')->append([ 'goods_image_thumb_mid' ]);
             }
         ])->append([ 'image_mid', 'image_big' ])->select()->toArray();

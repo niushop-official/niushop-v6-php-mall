@@ -31,11 +31,6 @@ class OrderAmountServiceListener
 //                        'name' => '配送费',
 //                        'key' => 'delivery_money',
 //                        'amount' => 20
-//                    ],
-//                    [
-//                        'name' => '服务费',
-//                        'key' => 'service_money',
-//                        'amount' => 10
 //                    ]
 //                ];
                 $this->getDeliveryMoney($data);

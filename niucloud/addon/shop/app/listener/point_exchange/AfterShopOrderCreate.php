@@ -58,8 +58,9 @@ class AfterShopOrderCreate
                         'total_point_num' => Db::raw('total_point_num+' . $order_data['point']),
                         'total_price_num' => Db::raw('total_price_num+' . $v['goods_money']),
                         'total_order_num' => Db::raw('total_order_num+1'),
-                        'goods_id' => $v['goods_id'],
-                        'sku_id' => $v['sku_id'],
+                        'update_time' => time(),
+//                        'goods_id' => $v['goods_id'],
+//                        'sku_id' => $v['sku_id'],
                         'id' => $order_data['relate_id'],
                     ];
                 }

@@ -36,7 +36,7 @@ class AfterShopOrderDelivery
 
             //消息发送
             if ($order_data[ 'status' ] == OrderDict::WAIT_TAKE) {
-                ( new NoticeService() )->send('shop_order_delivery', [ 'order_id' => $order_data[ 'order_id' ] ]);
+                ( new NoticeService() )->send('shop_order_delivery', $order_data);
             }
 
             //写入定时收货任务

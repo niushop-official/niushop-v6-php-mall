@@ -85,6 +85,12 @@ class ElectronicSheet extends BaseAdminController
             [ 'exp_type', 0 ],
             [ "print_style", "" ],
             [ "is_default", 0 ],
+//            [ "kd100_customer_name", "" ],
+//            [ "kd100_customer_pwd", "" ],
+//            [ "kd100_send_site", "" ],
+//            [ "kd100_send_staff", "" ],
+//            [ "kd100_month_code", "" ],
+//            [ "kd100_pay_type", 0 ],
         ]);
         $this->validate($data, 'addon\shop\app\validate\delivery\ElectronicSheet.add');
         $id = ( new ElectronicSheetService() )->add($data);
@@ -113,6 +119,12 @@ class ElectronicSheet extends BaseAdminController
             [ 'exp_type', 0 ],
             [ "print_style", "" ],
             [ "is_default", 0 ],
+//            [ "kd100_customer_name", "" ],
+//            [ "kd100_customer_pwd", "" ],
+//            [ "kd100_send_site", "" ],
+//            [ "kd100_send_staff", "" ],
+//            [ "kd100_month_code", "" ],
+//            [ "kd100_pay_type", 0 ],
         ]);
         $this->validate($data, 'addon\shop\app\validate\delivery\ElectronicSheet.edit');
         ( new ElectronicSheetService() )->edit($id, $data);
@@ -156,7 +168,9 @@ class ElectronicSheet extends BaseAdminController
             [ "kdniao_api_key", "" ],
             [ 'server_port1', '8000' ],
             [ 'server_port2', '18000' ],
-            [ 'https_port', '8443' ]
+            [ 'https_port', '8443' ],
+            [ "kd100_key", "" ],
+            [ "kd100_secret", "" ],
         ]);
         ( new ElectronicSheetService() )->setConfig($data);
         return success();

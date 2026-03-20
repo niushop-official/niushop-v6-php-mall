@@ -55,27 +55,6 @@ class CoreAppService extends BaseCoreService
     public function setConfig($data)
     {
         $info = (new CoreConfigService())->setConfig(ConfigKeyDict::APP, $data);
-        $this->appConfigChange($data);
         return $info;
-    }
-
-    /**
-     * 地图key改变后变更 manifest.json
-     * @param string $map_key
-     * @return void
-     */
-    public function appConfigChange($data) {
-//        $compile_path = project_path(). 'uni-app' . DIRECTORY_SEPARATOR;
-//        $this->mergeManifestJson($compile_path, [
-//            "h5" => [
-//                "sdkConfigs" => [
-//                    "maps" => [
-//                        "qqmap" => [
-//                            "key" => $map_key
-//                        ]
-//                    ]
-//                ]
-//            ]
-//        ]);
     }
 }

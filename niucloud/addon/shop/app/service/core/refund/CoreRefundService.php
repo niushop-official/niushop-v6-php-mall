@@ -142,7 +142,7 @@ class CoreRefundService extends BaseCoreService
                 ['order_id', '=', $order_refund_data['order_id']]
             ])->findOrEmpty();
             if ($order->isEmpty()) throw new CommonException('SHOP_ORDER_NOT_FOUND');
-            $refund_no = $core_refund_service->create( $order['out_trade_no'], $order_refund_data['money'], get_lang('SHOP_ORDER_BUYER_APPLY_REFUND'), OrderDict::TYPE, $order_refund_data['order_refund_no']);
+            $refund_no = $core_refund_service->create($order['out_trade_no'], $order_refund_data['money'], get_lang('SHOP_ORDER_BUYER_APPLY_REFUND'), OrderDict::TYPE, $order_refund_data['order_refund_no']);
             $this->model->where(
                 [
                     ['order_refund_no', '=', $order_refund_data['order_refund_no']]
@@ -153,7 +153,7 @@ class CoreRefundService extends BaseCoreService
                     'status' => OrderRefundDict::STORE_REFUND_TRANSFERING
                 ]
             );
-            $core_refund_service->refund( $refund_no, '', RefundDict::BACK, $main_type, $main_id);
+            $core_refund_service->refund($refund_no, '', RefundDict::BACK, $main_type, $main_id);
         }
         //状态改变
         return true;

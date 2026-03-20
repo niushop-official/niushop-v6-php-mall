@@ -124,10 +124,10 @@ class AuthService extends BaseApiService
         $mobile = $phone_info[ 'purePhoneNumber' ];
         if (empty($mobile)) throw new ApiException('WECHAT_EMPOWER_NOT_EXIST');
 
-        $member_service = new MemberService();
+//        $member_service = new MemberService();
 
-        $mobile_member = $member_service->findMemberInfo([ 'mobile' => $mobile ]);
-        if (!$mobile_member->isEmpty()) throw new AuthException('MOBILE_IS_EXIST');
+//        $mobile_member = $member_service->findMemberInfo([ 'mobile' => $mobile ]);
+//        if (!$mobile_member->isEmpty()) throw new AuthException('MOBILE_IS_EXIST');
 
         return [
             'mobile' => $mobile

@@ -34,7 +34,7 @@
                 <view class="flex">
                     <view class="inline-flex bg-[#fff] p-[16rpx] box-border" :style="commonTempCss()" @click="toDetail(list[0])">
                         <view class="w-[150rpx] h-[150rpx] flex items-center justify-center">
-                            <up-image :radius="imageRounded.val" width="150rpx" height="150rpx" :src="img(list[0].sku_image || '')" model="aspectFill">
+                            <up-image :radius="imageRounded.val" width="150rpx" height="150rpx" :src="img(list[0].sku_image || '')" :mode="diyComponent.mode">
                                 <template #error>
                                     <image class="w-[150rpx] h-[150rpx] overflow-hidden" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                 </template>
@@ -56,7 +56,7 @@
                               class="ml-[10rpx] inline-flex flex-col items-center p-[16rpx] bg-[#fff] box-border"
                               :style="commonTempCss()" @click="toDetail(item)">
                             <view class="w-[110rpx] h-[110rpx] flex items-center justify-center">
-                                <up-image :radius="imageRounded.val" width="110rpx" height="110rpx" :src="img(item.sku_image || '')" model="aspectFill">
+                                <up-image :radius="imageRounded.val" width="110rpx" height="110rpx" :src="img(item.sku_image || '')" :mode="diyComponent.mode">
                                     <template #error>
                                         <image class="w-[110rpx] h-[110rpx] overflow-hidden" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                     </template>
@@ -108,7 +108,7 @@
                           class="item-bg mr-[10rpx] inline-flex flex-col items-center p-[6rpx] bg-[#fff] box-border"
                           :style="commonTempCss()" @click="toDetail(item)">
                         <view class="flex items-center justify-center w-[146rpx] h-[146rpx]">
-                            <up-image :radius="imageRounded.val" width="146rpx" height="146rpx" :src="img(item.sku_image || '')" model="aspectFill">
+                            <up-image :radius="imageRounded.val" width="146rpx" height="146rpx" :src="img(item.sku_image || '')" :mode="diyComponent.mode">
                                 <template #error>
                                     <image class="w-[146rpx] h-[146rpx] overflow-hidden" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                 </template>
@@ -164,7 +164,7 @@
                         <view
                             class="bg-[#f8f8f8] flex items-center justify-center w-[152rpx] h-[152rpx] overflow-hidden"
                             :style="imageRounded.style">
-                            <up-image :radius="imageRounded.val" width="152rpx" height="152rpx" :src="img(item.sku_image || '')" model="aspectFill">
+                            <up-image :radius="imageRounded.val" width="152rpx" height="152rpx" :src="img(item.sku_image || '')" :mode="diyComponent.mode">
                                 <template #error>
                                     <image class="w-[152rpx] h-[152rpx] overflow-hidden" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                 </template>
@@ -216,7 +216,7 @@
                           :class="{'mr-[20rpx]': index != (list.length-1)}" :style="commonTempCss()"
                           @click="toDetail(item)">
                         <view class="relative flex items-center justify-center w-[100%] h-[130rpx] pt-[40rpx] mb-[10rpx]">
-                            <up-image :radius="imageRounded.val" width="130rpx" height="130rpx" :src="img(item.sku_image || '')" model="aspectFill">
+                            <up-image :radius="imageRounded.val" width="130rpx" height="130rpx" :src="img(item.sku_image || '')" :mode="diyComponent.mode">
                                 <template #error>
                                     <image class="w-[130rpx] h-[130rpx] overflow-hidden" :style="imageRounded.style" :src="img('static/resource/images/diy/shop_default.jpg')" mode="aspectFill" />
                                 </template>

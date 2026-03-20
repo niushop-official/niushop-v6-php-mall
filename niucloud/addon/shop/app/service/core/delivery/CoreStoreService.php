@@ -80,7 +80,7 @@ class CoreStoreService extends BaseCoreService
      */
     public function getStoreList($latlng = [])
     {
-        $list = $this->model->where([ [ 'store_id', '>', 0 ] ])->field('store_id,time_week,time_interval,trade_time_json,store_name,store_logo,store_mobile,full_address,longitude,latitude,trade_time')->select()->toArray();
+        $list = $this->model->where([ [ 'support_store', '=', 1 ], [ 'status', '=', 1 ] ])->field('store_id,time_week,time_interval,trade_time_json,store_name,store_logo,store_mobile,full_address,longitude,latitude,trade_time')->select()->toArray();
         if (!empty($list) && !empty($latlng) && !empty($latlng[ 'lat' ]) && !empty($latlng[ 'lng' ])) {
             $location = new Coordinate($latlng[ 'lat' ], $latlng[ 'lng' ]);
             $list = array_map(function($item) use ($location) {

@@ -30,20 +30,25 @@
                         </el-table-column>
                         <el-table-column label="有效期" min-width="210">
                             <template #default="{ row }">
-                                <template v-if="row.receive_type == 1">
-                                    <span v-if="row.valid_type == 1">  领取之日起{{ row.length || '' }} 天内有效</span>
-                                    <span v-else> 使用截止时间至{{ row.valid_end_time || ''}} </span>
-                                </template>
-                                <span v-else>--</span>
+                                <span v-if="row.valid_type == 1">  领取之日起{{ row.length || '' }} 天内有效</span>
+                                <span v-else> 使用截止时间至{{ row.valid_end_time || ''}} </span>
                             </template>
                         </el-table-column>
                         <el-table-column label="赠券数" min-width="130">
                             <template #default="{ row }">
-                                <el-input-number
+                                <el-input-number v-if="row.limit_count"
                                     v-model="formData.coupon_list['id_' + row.id]"
                                     :min="1"
                                     :precision="0"
                                     :max="row.limit_count"
+                                    controls-position="right"
+                                    class="!w-[100px]"
+                                />
+                                <el-input-number v-else
+                                    v-model="formData.coupon_list['id_' + row.id]"
+                                    :min="1"
+                                    :max="999999"
+                                    :precision="0"
                                     controls-position="right"
                                     class="!w-[100px]"
                                 />

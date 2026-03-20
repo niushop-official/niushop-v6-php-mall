@@ -154,10 +154,7 @@ class Cart extends BaseModel
     public function goods()
     {
         return $this->hasOne(Goods::class, 'goods_id', 'goods_id')
-            ->joinType('inner')
-            ->withTrashed()
-            ->withField('goods_id, goods_name, goods_type, sub_title, goods_cover, unit, stock, sale_num + virtual_sale_num as sale_num, status,delete_time')
-            ->append([ 'goods_type_name', 'goods_cover_thumb_small', 'goods_cover_thumb_mid' ]);
+            ->joinType('inner')->withTrashed();
     }
 
     /**
@@ -166,10 +163,7 @@ class Cart extends BaseModel
      */
     public function goodsSku()
     {
-        return $this->hasOne(GoodsSku::class, 'sku_id', 'sku_id')
-            ->joinType('inner')
-            ->withField('sku_id, sku_name, sku_image, sku_no, goods_id, sku_spec_format, price, market_price, sale_price, stock, weight, volume, is_default')
-            ->append([ 'sku_image_thumb_small', 'sku_image_thumb_mid', 'sku_image_thumb_big' ]);
+        return $this->hasOne(GoodsSku::class, 'sku_id', 'sku_id')->joinType('inner');
     }
 
     /**

@@ -15,6 +15,8 @@ namespace app\service\core\notice;
 use app\job\notice\Notice;
 use app\model\sys\SysNotice;
 use core\base\BaseCoreService;
+use core\exception\NoticeException;
+use think\facade\Log;
 
 
 /**
@@ -36,16 +38,19 @@ class NoticeService extends BaseCoreService
      * @return false|mixed
      * @throws \Exception
      */
-    public static function send($key, $data){
+    public static function send($key, $data)
+    {
 
         try {
             $template = (new CoreNoticeService())->getInfo($key);
-            if(empty($template)) return false;
+            Log::write("消息发送");
+            Log::write($template);
+            if (empty($template)) return false;
 
-            return Notice::dispatch(['key' => $key, 'data' => $data, 'template' => $template], is_async:$template['async']);
+            return Notice::dispatch(['key' => $key, 'data' => $data, 'template' => $template], is_async: $template['async']);
 
-        }catch (\Exception $e){
-            throw new \Exception($e->getMessage());
+        } catch (\Exception $e) {
+            throw new NoticeException($e->getMessage());
         }
     }
 }

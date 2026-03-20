@@ -26,8 +26,7 @@ use addon\shop\app\model\manjian\ManjianGiveRecords;
 use addon\shop\app\model\order\Order;
 use addon\shop\app\model\order\OrderDelivery;
 use addon\shop\app\model\order\OrderRefund;
-use addon\shop\app\service\core\delivery\CoreLocalDeliveryService;
-use addon\shop\app\service\core\delivery\third_delivery\ThirdDeliveryLoader;
+use addon\shop\app\service\core\local_delivery\CoreLocalDeliveryService;
 use addon\shop\app\service\core\marketing\CoreManjianService;
 use addon\shop\app\service\core\order\CoreOrderCloseService;
 use addon\shop\app\service\core\order\CoreOrderConfigService;
@@ -202,21 +201,15 @@ class OrderService extends BaseApiService
             if ($info['delivery_type'] == DeliveryDict::EXPRESS || $info['delivery_type'] == DeliveryDict::LOCAL_DELIVERY) {
                 $info['order_delivery'] = (new OrderDelivery())
                     ->where([['order_id', '=', $info['order_id']]])
-                    ->field('id, order_id, name, delivery_type, sub_delivery_type,express_company_id, express_number, create_time,third_delivery')
-                    ->append(['third_delivery_name'])
+                    ->field('id, order_id, name, delivery_type, sub_delivery_type,express_company_id, express_number, create_time,local_delivery_order_id')
                     ->select()->toArray();
                 if ($info['delivery_type'] == DeliveryDict::LOCAL_DELIVERY) {
-                    $third_party_config = (new CoreLocalDeliveryService())->getConfig();
-                    foreach ($info['order_delivery'] as $k => $item) {
-                        if (!empty($item['third_delivery'])) {
-                            $third_delivery = $item['third_delivery'];
-                            $loader = new ThirdDeliveryLoader($third_delivery, $third_party_config[$third_delivery]);
-                            //三方配送下单
-                            $info['order_delivery'][$k]['third_delivery_info'] = $loader->queryOrderInfo(['order_no' => $info['order_no']]);
-                        }
+                    if (!empty($info['order_delivery'])) {
+                        $local_delivery_order_id = $info['order_delivery'][0]['local_delivery_order_id'];
+                        $local_delivery_order_info = (new CoreLocalDeliveryService()) ->getLocalDeliveryOrderInfo($local_delivery_order_id);
+                        $info = array_merge($info, $local_delivery_order_info);
                     }
                 }
-
             }
 
             if ($info['order_goods']) {

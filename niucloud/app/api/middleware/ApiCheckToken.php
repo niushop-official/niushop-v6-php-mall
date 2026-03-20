@@ -46,7 +46,7 @@ class ApiCheckToken
             if (!empty($token_info)) {
                 $request->memberId($token_info[ 'member_id' ]);
             }
-            //校验会员和站点
+            //校验会员
             ( new AuthService() )->checkMember($request);
         } catch (AuthException $e) {
             //是否将登录错误抛出

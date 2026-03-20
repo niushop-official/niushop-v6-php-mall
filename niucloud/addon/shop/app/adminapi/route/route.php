@@ -14,9 +14,6 @@ use app\adminapi\middleware\AdminCheckToken;
 use app\adminapi\middleware\AdminLog;
 use think\facade\Route;
 
-// 第三方配送
-Route::any('delivery/third/callback/:type/:order_no', 'addon\shop\app\adminapi\controller\delivery\Local@thirdDeliveryCallback');
-
 /**
  * 商城系统
  */
@@ -65,51 +62,135 @@ Route::group('shop', function () {
     //运费模版 删除
     Route::delete('shipping/template/:template_id', 'addon\shop\app\adminapi\controller\delivery\ShippingTemplate@del');
 
-    //自提门店列表（分页）
-    Route::get('delivery/store', 'addon\shop\app\adminapi\controller\delivery\Store@lists');
+    /************************************************** 提货点 *****************************************************/
+    //提货点列表（分页）
+    Route::get('delivery/store', 'addon\shop\app\adminapi\controller\delivery_store\DeliveryStore@lists');
 
-    Route::get('delivery/store/init', 'addon\shop\app\adminapi\controller\delivery\Store@init');
+    //提货点初始化数据
+    Route::get('delivery/store/init', 'addon\shop\app\adminapi\controller\delivery_store\DeliveryStore@init');
 
-    //自提门店列表（不分页）
-    Route::get('delivery/store/list', 'addon\shop\app\adminapi\controller\delivery\Store@getList');
+    //提货点列表（不分页）
+    Route::get('delivery/store/list', 'addon\shop\app\adminapi\controller\delivery_store\DeliveryStore@getList');
 
-    //自提门店详情
-    Route::get('delivery/store/:id', 'addon\shop\app\adminapi\controller\delivery\Store@info');
+    //提货点详情
+    Route::get('delivery/store/:id', 'addon\shop\app\adminapi\controller\delivery_store\DeliveryStore@info');
 
-    //添加自提门店
-    Route::post('delivery/store', 'addon\shop\app\adminapi\controller\delivery\Store@add');
+    //添加提货点
+    Route::post('delivery/store', 'addon\shop\app\adminapi\controller\delivery_store\DeliveryStore@add');
 
-    //编辑自提门店
-    Route::put('delivery/store/:id', 'addon\shop\app\adminapi\controller\delivery\Store@edit');
+    //编辑提货点
+    Route::put('delivery/store/:id', 'addon\shop\app\adminapi\controller\delivery_store\DeliveryStore@edit');
 
-    //删除自提门店
-    Route::delete('delivery/store/:id', 'addon\shop\app\adminapi\controller\delivery\Store@del');
+    //删除提货点
+    Route::delete('delivery/store/:id', 'addon\shop\app\adminapi\controller\delivery_store\DeliveryStore@del');
 
+    //提货点提货类型
+    Route::get('delivery/store/pick_up_type', 'addon\shop\app\adminapi\controller\delivery_store\DeliveryStore@getPickUpType');
+
+    //修改提货点状态
+    Route::put('delivery/store/modify_status', 'addon\shop\app\adminapi\controller\delivery_store\DeliveryStore@modifyStatus');
+
+    /************************************************** 配送服务商 *****************************************************/
+    //获取配送服务商列表
+    Route::get('delivery_store/delivery_service_list/:id', 'addon\shop\app\adminapi\controller\delivery_store\DeliveryService@getDeliveryServiceList');
+
+    //配送门店开通配送服务
+    Route::put('delivery_store/delivery_shop_open/:id', 'addon\shop\app\adminapi\controller\delivery_store\DeliveryService@deliveryServiceOpen');
+
+    //配送门店品类修改
+    Route::put('delivery_store/delivery_shop_edit/:id', 'addon\shop\app\adminapi\controller\delivery_store\DeliveryService@deliveryServiceEdit');
+
+    /************************************************** 配送设置 *****************************************************/
     //物流配置
     Route::get('delivery/deliveryList', 'addon\shop\app\adminapi\controller\delivery\Delivery@getDeliveryList');
     Route::put('delivery/setConfig', 'addon\shop\app\adminapi\controller\delivery\Delivery@setDeliveryConfig');
 
-    //配送员列表
-    Route::get('delivery/staff', 'addon\shop\app\adminapi\controller\delivery\Delivery@lists');
+    //获取配送方式
+    Route::get('delivery/delivery_type', 'addon\shop\app\adminapi\controller\delivery\Delivery@getDeliveryType');
 
-    //配送员详情
-    Route::get('delivery/staff/:id', 'addon\shop\app\adminapi\controller\delivery\Delivery@info');
-
-    //添加配送员
-    Route::post('delivery/staff', 'addon\shop\app\adminapi\controller\delivery\Delivery@add');
-
-    //编辑配送员
-    Route::put('delivery/staff/:id', 'addon\shop\app\adminapi\controller\delivery\Delivery@edit');
-
-    //删除配送员
-    Route::delete('delivery/staff/:id', 'addon\shop\app\adminapi\controller\delivery\Delivery@del');
+    /************************************************** 同城配送 *******************************************************/
 
     // 获取同城配送设置
-    Route::get('local', 'addon\shop\app\adminapi\controller\delivery\Local@getLocal');
+    Route::get('local_delivery/config', 'addon\shop\app\adminapi\controller\local_delivery\config\Local@getLocal');
 
     // 设置同城配送
-    Route::put('local', 'addon\shop\app\adminapi\controller\delivery\Local@setLocal');
-    Route::get('third/init', 'addon\shop\app\adminapi\controller\delivery\Local@getThirdPartyInit');
+    Route::put('local_delivery/config', 'addon\shop\app\adminapi\controller\local_delivery\config\Local@setLocal');
+
+    // 获取同城配送基础配置
+    Route::get('local_delivery/base_config', 'addon\shop\app\adminapi\controller\local_delivery\config\Config@getConfig');
+
+    // 设置同城配送基础配置
+    Route::put('local_delivery/base_config', 'addon\shop\app\adminapi\controller\local_delivery\config\Config@setConfig');
+
+    //获取已启用配送服务商列表
+    Route::get('local_delivery/list', 'addon\shop\app\adminapi\controller\local_delivery\service\LocalDeliveryService@getInUseList');
+
+    //同城配送服务商列表
+    Route::get('local_delivery/service', 'addon\shop\app\adminapi\controller\local_delivery\service\LocalDeliveryService@lists');
+
+    //同城配送服务商配置
+    Route::get('local_delivery/service/:delivery_type', 'addon\shop\app\adminapi\controller\local_delivery\service\LocalDeliveryService@getConfig');
+
+    //同城配送服务商配置修改
+    Route::put('local_delivery/service/:delivery_type', 'addon\shop\app\adminapi\controller\local_delivery\service\LocalDeliveryService@setConfig');
+
+    // 同城配送订单
+    Route::get('local_delivery/order', 'addon\shop\app\adminapi\controller\local_delivery\order\LocalDeliveryOrder@pages');
+
+    // 同城配送订单详情
+    Route::get('local_delivery/order/:id', 'addon\shop\app\adminapi\controller\local_delivery\order\LocalDeliveryOrder@info');
+
+    // 同城配送订单同步
+    Route::put('local_delivery/order/sync/:id', 'addon\shop\app\adminapi\controller\local_delivery\order\LocalDeliveryOrder@syncOrder');
+
+    // 同城配送订单取消原因
+    Route::get('local_delivery/order/cancel_reason', 'addon\shop\app\adminapi\controller\local_delivery\order\LocalDeliveryOrder@getCancelReasonList');
+
+    // 同城配送订单取消
+    Route::put('local_delivery/order/cancel/:id', 'addon\shop\app\adminapi\controller\local_delivery\order\LocalDeliveryOrder@closeOrder');
+
+    // 同城配送订单完成
+    Route::put('local_delivery/order/finish/:id', 'addon\shop\app\adminapi\controller\local_delivery\order\LocalDeliveryOrder@finishOrder');
+
+    // 同城配送订单状态列表
+    Route::get('local_delivery/order/status', 'addon\shop\app\adminapi\controller\local_delivery\order\LocalDeliveryOrder@getOrderStatusList');
+
+    /************************************************** 商家配送 *******************************************************/
+
+    //配送员分页列表
+    Route::get('shop_delivery/staff', 'addon\shop\app\adminapi\controller\shop_delivery\deliver\Deliver@pages');
+
+    //配送员列表
+    Route::get('shop_delivery/staff/list', 'addon\shop\app\adminapi\controller\shop_delivery\deliver\Deliver@lists');
+
+    //配送员详情
+    Route::get('shop_delivery/staff/:id', 'addon\shop\app\adminapi\controller\shop_delivery\deliver\Deliver@info');
+
+    //添加配送员
+    Route::post('shop_delivery/staff', 'addon\shop\app\adminapi\controller\shop_delivery\deliver\Deliver@add');
+
+    //编辑配送员
+    Route::put('shop_delivery/staff/:id', 'addon\shop\app\adminapi\controller\shop_delivery\deliver\Deliver@edit');
+
+    //删除配送员
+    Route::delete('shop_delivery/staff/:id', 'addon\shop\app\adminapi\controller\shop_delivery\deliver\Deliver@del');
+
+    // 商家配送订单
+    Route::get('shop_delivery/order', 'addon\shop\app\adminapi\controller\shop_delivery\order\ShopDeliveryOrder@pages');
+
+    // 商家配送订单详情
+    Route::get('shop_delivery/order/:id', 'addon\shop\app\adminapi\controller\shop_delivery\order\ShopDeliveryOrder@info');
+
+    // 商家配送订单取消
+    Route::put('shop_delivery/order/cancel/:id', 'addon\shop\app\adminapi\controller\shop_delivery\order\ShopDeliveryOrder@closeOrder');
+
+    // 商家配送订单完成
+    Route::put('shop_delivery/order/finish/:id', 'addon\shop\app\adminapi\controller\shop_delivery\order\ShopDeliveryOrder@finishOrder');
+
+    // 商家配送订单状态列表
+    Route::get('shop_delivery/order/status', 'addon\shop\app\adminapi\controller\shop_delivery\order\ShopDeliveryOrder@getOrderStatusList');
+
+//    Route::get('third/init', 'addon\shop\app\adminapi\controller\delivery\Local@getThirdPartyInit');
 
     /************************************************** 接口管理 *******************************************************/
 
@@ -413,6 +494,12 @@ Route::group('shop', function () {
 
     //获取订单配送方式
     Route::get('order/delivery_type', 'addon\shop\app\adminapi\controller\order\Order@getDeliveryType');
+
+    //获取已选订单项总重量
+    Route::get('order/select/weight', 'addon\shop\app\adminapi\controller\order\Order@getSelectOrderGoodsWeight');
+
+    //同城配送费用计算
+    Route::get('order/delivery/fee', 'addon\shop\app\adminapi\controller\order\Order@getDeliveryFee');
 
     //商家留言
     Route::put('order/shop_remark', 'addon\shop\app\adminapi\controller\order\Order@setShopRemark');

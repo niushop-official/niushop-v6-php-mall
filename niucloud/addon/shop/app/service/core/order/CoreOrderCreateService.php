@@ -12,6 +12,7 @@
 namespace addon\shop\app\service\core\order;
 
 use addon\shop\app\dict\active\ActiveDict;
+use addon\shop\app\dict\delivery\DeliveryDict;
 use addon\shop\app\dict\order\OrderDict;
 use addon\shop\app\dict\order\OrderGoodsDict;
 use addon\shop\app\model\cart\Cart;
@@ -52,7 +53,6 @@ class CoreOrderCreateService extends BaseCoreService
     {
         //参数赋值
         $this->setParam($data);
-
         $member_info = ( new CoreMemberService() )->getInfoByMemberId($data[ 'member_id' ], 'status');
 
         if (empty($member_info)) throw new CommonException('SHOP_ORDER_BUYER_NOT_FOUND');//无效的账号
@@ -62,6 +62,7 @@ class CoreOrderCreateService extends BaseCoreService
         //获取订单缓存缓存
         $this->getOrderCache($order_key);
 
+
         $this->goods_data = array_merge($this->goods_data, $this->gift_goods);
         $this->form_data = $this->param[ 'form_data' ] ?? []; // 万能表单数据
         //校验错误
@@ -69,6 +70,7 @@ class CoreOrderCreateService extends BaseCoreService
         //普通订单校验库存
         $this->checkStock($this->goods_data);
         $local_delivery_type = $data[ 'delivery' ]['local_delivery_type'] ?? '';
+        $delivery_type = $this->delivery[ 'delivery_type' ] ?? '';
         $order_data = [
             //订单整体
             'order_type' => OrderDict::TYPE,
@@ -83,10 +85,10 @@ class CoreOrderCreateService extends BaseCoreService
 //            'invoice_id' => $order_array['invoice_id'] ?? 0,
 
             //收发货相关
-            'delivery_type' => $this->delivery[ 'delivery_type' ] ?? '',
+            'delivery_type' => $delivery_type,
             'taker_name' => $data[ 'delivery' ][ 'taker_name' ] ?? $this->delivery[ 'take_address' ][ 'name' ] ?? '',
             'taker_mobile' => $data[ 'delivery' ][ 'taker_mobile' ] ?? $this->delivery[ 'take_address' ][ 'mobile' ] ?? '',
-            'buyer_ask_delivery_time' =>$local_delivery_type == 'now' ? "" :  $data[ 'delivery' ][ 'buyer_ask_delivery_time' ] ?? '', // 购买者期望的时间
+            'buyer_ask_delivery_time' => ($local_delivery_type == 'now' && $delivery_type == DeliveryDict::LOCAL_DELIVERY) ? "" :  $data[ 'delivery' ][ 'buyer_ask_delivery_time' ] ?? '', // 购买者期望的时间
             'taker_province' => $this->delivery[ 'take_address' ][ 'province_id' ] ?? 0,
             'taker_city' => $this->delivery[ 'take_address' ][ 'city_id' ] ?? 0,
             'taker_district' => $this->delivery[ 'take_address' ][ 'district_id' ] ?? 0,
@@ -205,6 +207,7 @@ class CoreOrderCreateService extends BaseCoreService
 
         //查询商品信息
         $this->getGoodsData();
+        ///$this->createGoodsData();
         //配送相关信息
         $this->getDelivery();
 
@@ -222,6 +225,7 @@ class CoreOrderCreateService extends BaseCoreService
         return true;
     }
 
+
     /**
      * 商品相关数据
      * @return array
@@ -236,7 +240,7 @@ class CoreOrderCreateService extends BaseCoreService
         if (!empty($cart_ids)) {
             $this->cart_ids = $cart_ids;
             //查询购物车
-            $cart = ( new Cart() )->where([ [ 'id', 'in', $cart_ids ] ])->field('goods_id, sku_id, num, market_type, market_type_id')->select();
+            $cart = ( new Cart() )->where([ [ 'id', 'in', $cart_ids ] ])->field('goods_id, sku_id, num')->select();
             if ($cart->isEmpty()) throw new CommonException('SHOP_ORDER_CARTS_EXPIRE');//无效的数据
             if ($cart->count() != count($cart_ids)) throw new CommonException('SHOP_ORDER_CARTS_EXPIRE');//无效的商品
             $sku_data = $cart->toArray();
@@ -280,13 +284,13 @@ class CoreOrderCreateService extends BaseCoreService
             //todo 需仔细看看
             $sku_info[ 'show_type' ] = 'original_price';
             $sku_info[ 'active_id' ] = '';
-            $sku_info[ 'member_price' ] = $this->getMemberPrice($sku_info);
-          //  $sku_info[ 'price' ] = $sku_info[ 'member_price' ];
             $goods_active_price_service = (new CoreGoodsActivePriceService());
             $show_price_data = $goods_active_price_service->getActivePrice($sku_info, $this->member_id);
             $sku_info[ 'show_type' ] = $show_price_data[ 'show_type' ];
             $sku_info[ 'price' ] = $show_price_data[ 'show_price' ];
             $sku_info[ 'active_id' ] = $show_price_data[ 'discount_id' ] ?? '';
+            $sku_info[ 'member_price' ] = $this->getMemberPrice($sku_info);
+
 
 
             //默认金额填充
@@ -338,7 +342,9 @@ class CoreOrderCreateService extends BaseCoreService
                 if (!empty($temp)) {
                     // 更新 SKU 信息
                     $sku_info = $temp[ 'sku_info' ];
+                    //todo 需仔细看看
                     $sku_info['relate_id'] = $temp[ 'relate_id' ];
+                    //todo 需仔细看看
                     if (!empty($this->extend_data)) {
                         // 更新扩展数据中的关联 ID 和活动类型
                         $this->extend_data[ 'relate_id' ] = $temp[ 'relate_id' ] ?? 0;

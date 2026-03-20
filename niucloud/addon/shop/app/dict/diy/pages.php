@@ -967,6 +967,7 @@ return [
                         "id" => "2ezdal8ps1og",
                         "componentName" => "ShopGoodsRecommend",
                         "componentTitle" => "商品推荐",
+                        "mode" => "aspectFill",
                         "ignore" => [],
                         "priceStyle" => [
                             "mainColor" => "#333333"
@@ -1441,6 +1442,7 @@ return [
                         "id" => "2hjc1q7f7q80",
                         "componentName" => "ShopNewcomer",
                         "componentTitle" => "新人专享",
+                        "mode" => "aspectFill",
                         "ignore" => [],
                         "style" => [
                             "title" => "风格1",
@@ -1496,6 +1498,7 @@ return [
                         "uses" => 0,
                         "id" => "2mxsu6pbqpu0",
                         "componentName" => "SingleRecommend",
+                        "mode" => "aspectFill",
                         "componentTitle" => "精选推荐",
                         "ignore" => [],
                         "titleStyle" => [
@@ -1631,6 +1634,7 @@ return [
                         "id" => "37adfqtqe080",
                         "componentName" => "ManyGoodsList",
                         "componentTitle" => "多商品组",
+                        "mode" => "aspectFill",
                         "ignore" => [
                             "componentBgUrl"
                         ],
@@ -2788,6 +2792,7 @@ return [
                         "id" => "17uao387qdds",
                         "componentName" => "GoodsList",
                         "componentTitle" => "商品列表",
+                        "mode" => "aspectFill",
                         "ignore" => [],
                         "style" => "style-3",
                         "source" => "all",
@@ -2939,6 +2944,7 @@ return [
                         "id" => "2u96wyrm79u0",
                         "componentName" => "GoodsList",
                         "componentTitle" => "商品列表",
+                        "mode" => "aspectFill",
                         "ignore" => [],
                         "style" => "style-1",
                         "source" => "all",
@@ -3059,6 +3065,7 @@ return [
                         "id" => "4y7mw7j2uko0",
                         "componentName" => "GoodsList",
                         "componentTitle" => "商品列表",
+                        "mode" => "aspectFill",
                         "ignore" => [],
                         "style" => "style-2",
                         "source" => "all",
@@ -3126,6 +3133,7 @@ return [
                         "id" => "65lv65b38ig0",
                         "componentName" => "ManyGoodsList",
                         "componentTitle" => "多商品组",
+                        "mode" => "aspectFill",
                         "ignore" => ['componentBgUrl'],
                         "style" => "style-2",
                         "num" => 6,
@@ -3767,6 +3775,7 @@ return [
                         "id" => "50pj7dmvbvo0",
                         "componentName" => "GoodsList",
                         "componentTitle" => "商品列表",
+                        "mode" => "aspectFill",
                         "ignore" => [],
                         'style' => 'style-1',
                         "source" => "all",
@@ -5182,6 +5191,7 @@ return [
                         "id" => "76wf7oom00o0",
                         "componentName" => "ShopExchangeGoods",
                         "componentTitle" => "积分商品",
+                        "mode" => "aspectFill",
                         "path" => "edit-shop-exchange-goods",
                         "uses" => 0,
                         "ignore" => [],

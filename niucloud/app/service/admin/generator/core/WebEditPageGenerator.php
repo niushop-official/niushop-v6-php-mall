@@ -156,7 +156,7 @@ class WebEditPageGenerator extends BaseGenerator
     {
         $content = '';
         foreach ($this->tableColumn as $column) {
-            if (!$column['is_insert'] || !$column['is_update'] || $column['is_pk']) {
+            if (!$column['is_insert'] || !$column['is_update'] || $column['is_pk'] || $column['is_delete']) {
                 continue;
             }
 
@@ -505,7 +505,7 @@ class WebEditPageGenerator extends BaseGenerator
 
     /**
      * 调用远程下拉方法
-     * @return void
+     * @return string
      */
     public function getModelData()
     {
@@ -528,7 +528,7 @@ class WebEditPageGenerator extends BaseGenerator
 
     /**
      * 编辑远程下拉方法
-     * @return void
+     * @return string
      */
     public function getEditWithApiPath()
     {

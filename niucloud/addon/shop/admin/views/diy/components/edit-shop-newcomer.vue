@@ -32,6 +32,17 @@
 
             </el-dialog>
         </div>
+        <div class="edit-attr-item-wrap">
+            <h3 class="mb-[10px]">{{ t('图片展示模式') }}</h3>
+            <el-form label-width="80px" class="px-[10px]">
+                <el-form-item :label="t('模式')">
+                    <el-radio-group v-model="diyStore.editComponent.mode">
+                        <el-radio label="aspectFill">{{ t('短边完整，长边裁剪') }}</el-radio>
+                        <el-radio label="aspectFit">{{ t('长边适配，等比缩放') }}</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+            </el-form>
+        </div>
 
         <div class="edit-attr-item-wrap">
             <h3 class="mb-[10px]">{{ t('titleContent') }}</h3>

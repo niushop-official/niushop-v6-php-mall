@@ -1,13 +1,14 @@
 <template>
     <view :style="themeColor()">
         <!-- #ifdef MP-WEIXIN || APP-PLUS -->
-        <top-tabbar :data="topTabbarData" scrollBool="1" :isBack="false" />
+        <top-tabbar :data="topTabbarData" scrollBool="1" :isBack="false" v-if="!config.search?.control" />
         <!-- #endif -->
         <view class="relative">
             <category-template-one-one class="category" v-if="config.level===1 && config.template === 'style-1'" :categoryId="categoryId" :config="config" />
             <category-template-two-one v-if="config.level===2 && config.template === 'style-1'" :categoryId="categoryId" :config="config" />
             <category-template-two-two class="category" v-if="config.level===2 && config.template === 'style-2'" :categoryId="categoryId" :config="config" />
         </view>
+        <tabbar addon="shop"/>
     </view>
 </template>
 <script setup lang="ts">
@@ -21,17 +22,20 @@ import { topTabar } from '@/utils/topTabbar';
 import useSystemStore from '@/stores/system';
 const systemStore = useSystemStore()
 
+const config: any = ref({
+})
+const categoryId = ref(0)
+
+
 /********* 自定义头部 - start ***********/
 const topTabarObj = topTabar()
-let topTabbarData = topTabarObj.setTopTabbarParam({ title: '商品分类', topStatusBar: { textColor: '#333' }})
+let topTabbarData = ref(topTabarObj.setTopTabbarParam({ title: '商品分类', topStatusBar: { textColor: '#333' }}))
 /********* 自定义头部 - end ***********/
-
-const config: any = ref({})
-const categoryId = ref(0)
 
 const getGoodsCategoryConfigFn = () => {
     getGoodsCategoryConfig().then(res => {
         config.value = res.data
+        topTabbarData.value.title = config.value.page_title
         uni.setNavigationBarTitle({
             title: config.value.page_title
         });

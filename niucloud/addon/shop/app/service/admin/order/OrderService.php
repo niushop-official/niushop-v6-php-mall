@@ -16,17 +16,16 @@ use addon\shop\app\dict\order\OrderDeliveryDict;
 use addon\shop\app\dict\order\OrderDict;
 use addon\shop\app\dict\order\OrderGoodsDict;
 use addon\shop\app\dict\order\OrderLogDict;
-use addon\shop\app\model\delivery\Local;
 use addon\shop\app\model\delivery\Store;
+use addon\shop\app\model\goods\GoodsSku;
+use addon\shop\app\model\local_delivery\Local;
 use addon\shop\app\model\order\Order;
 use addon\shop\app\model\order\OrderDelivery;
 use addon\shop\app\model\order\OrderGoods;
 use addon\shop\app\model\order\OrderRefund;
-use addon\shop\app\model\ShopStat;
 use addon\shop\app\service\admin\delivery\DeliveryService;
 use addon\shop\app\service\core\CoreStatService;
-use addon\shop\app\service\core\delivery\CoreLocalDeliveryService;
-use addon\shop\app\service\core\delivery\third_delivery\ThirdDeliveryLoader;
+use addon\shop\app\service\core\local_delivery\CoreLocalDeliveryService;
 use addon\shop\app\service\core\goods\CoreGoodsStatService;
 use addon\shop\app\service\core\order\CoreOrderEventService;
 use addon\shop\app\service\core\order\CoreOrderPayService;
@@ -80,6 +79,7 @@ class OrderService extends BaseAdminService
                 $pay_where[] = ['pay.type', '=', $where['pay_type']];
             }
         }
+
         $member_where = [];
         if ($where['keyword'] != '') {
             $member_where = [
@@ -102,12 +102,12 @@ class OrderService extends BaseAdminService
             ->with([
                 'order_goods' => function ($query) {
                     $query->with(['delivery_info' => function ($query) {
-                        $query->field('*')->append(['express_company_name']);
+                        $query->field('*')->with(['localDeliveryOrder'])->append(['express_company_name']);
                     }])
                         ->field('extend,order_goods_id, order_id, member_id, goods_id, sku_id, goods_name, sku_name, goods_image, sku_image, price, num, goods_money, is_enable_refund, goods_type, delivery_status, status,discount_money,delivery_id,is_gift')
                         ->append(['delivery_status_name', 'status_name', 'goods_image_thumb_small', 'impulse_buy_info']);
                 }
-            ])->order($order)->append(['order_from_name', 'order_type_name', 'status_name', 'delivery_type_name','activity_type_name']);
+            ])->order($order)->append(['order_from_name', 'order_type_name', 'status_name', 'delivery_type_name']);
         $order_status_list = OrderDict::getStatus();
         $order_close_list = OrderDict::getCloseType();
         $list = $this->pageQuery($search_model, function ($item, $key) use ($order_status_list, $order_close_list) {
@@ -199,20 +199,14 @@ class OrderService extends BaseAdminService
         if ($info['delivery_type'] == DeliveryDict::EXPRESS || $info['delivery_type'] == DeliveryDict::LOCAL_DELIVERY) {
             $info['order_delivery'] = (new OrderDelivery())
                 ->where([['order_id', '=', $info['order_id']]])
-                ->field('id, order_id, name, delivery_type, sub_delivery_type,express_company_id, express_number, create_time,third_delivery')
+                ->field('id, order_id, name, delivery_type, sub_delivery_type,express_company_id, express_number, create_time,third_delivery,local_delivery_order_id')
                 ->append(['third_delivery_name'])
                 ->select()->toArray();
             if ($info['delivery_type'] == DeliveryDict::LOCAL_DELIVERY) {
-                $third_party_config = (new CoreLocalDeliveryService())->getConfig();
-                foreach ($info['order_delivery'] as $k => $item) {
-                    if (!empty($item['third_delivery'])) {
-                        $third_delivery = $item['third_delivery'];
-                        $loader = new ThirdDeliveryLoader($third_delivery, $third_party_config[$third_delivery]);
-                        //三方配送下单
-                        $info['order_delivery'][$k]['third_delivery_info'] = $loader->queryOrderInfo([
-                            'order_no' => $info['order_no']
-                        ]);
-                    }
+                if (!empty($info['order_delivery'])) {
+                    $local_delivery_order_id = $info['order_delivery'][0]['local_delivery_order_id'];
+                    $local_delivery_order_info = (new CoreLocalDeliveryService()) ->getLocalDeliveryOrderInfo($local_delivery_order_id);
+                    $info = array_merge($info, $local_delivery_order_info);
                 }
             }
         }
@@ -317,10 +311,10 @@ class OrderService extends BaseAdminService
             "refund_order" => 0, //退款中（订单项）
         ];
 
-        $data['wait_pay_order'] = $this->model->where([ ['status', '=', OrderDict::WAIT_PAY]])->count();
-        $data['wait_delivery_order'] = $this->model->where([ ['status', '=', OrderDict::WAIT_DELIVERY]])->count();
-        $data['wait_take_order'] = $this->model->where([ ['status', '=', OrderDict::WAIT_TAKE]])->count();
-        $data['refund_order'] = (new OrderGoods())->where([ ['status', '=', OrderGoodsDict::REFUNDING]])->count();
+        $data['wait_pay_order'] = $this->model->where([['status', '=', OrderDict::WAIT_PAY]])->count();
+        $data['wait_delivery_order'] = $this->model->where([['status', '=', OrderDict::WAIT_DELIVERY]])->count();
+        $data['wait_take_order'] = $this->model->where([['status', '=', OrderDict::WAIT_TAKE]])->count();
+        $data['refund_order'] = (new OrderGoods())->where([['status', '=', OrderGoodsDict::REFUNDING]])->count();
 
         return $data;
     }
@@ -404,7 +398,7 @@ class OrderService extends BaseAdminService
             //订单改价后操作
             CoreOrderEventService::orderEditPriceAfter($order_param);
             if ($order_money == 0) {
-                (new CoreOrderPayService())->pay([ 'trade_id' => $order_id, 'main_type' => OrderLogDict::SYSTEM, 'main_id' => $this->uid]);
+                (new CoreOrderPayService())->pay(['trade_id' => $order_id, 'main_type' => OrderLogDict::SYSTEM, 'main_id' => $this->uid]);
             }
             Db::commit();
             return true;
@@ -523,7 +517,7 @@ class OrderService extends BaseAdminService
      */
     public function checkLocationInArea($order, $data)
     {
-        $local = (new Local())->where([ [ 'local_id', '>', 0 ] ])->field('fee_type,base_dist,base_price,grad_dist,grad_price,weight_start,weight_unit,weight_price,delivery_type,area,center')->findOrEmpty();
+        $local = (new Local())->where([['local_id', '>', 0]])->field('fee_type,base_dist,base_price,grad_dist,grad_price,weight_start,weight_unit,weight_price,delivery_type,area,center')->findOrEmpty();
         if ($local->isEmpty()) {
             $order['error_code'] = -1;
             $order['error_msg'] = get_lang('NOT_CONFIGURED_LOCAL_DELIVERY');
@@ -574,6 +568,21 @@ class OrderService extends BaseAdminService
     }
 
     /**
+     * 获取已选商品总重量
+     * @param $data
+     * @return float|int|mixed
+     */
+    public function getSelectOrderGoodsWeight($data)
+    {
+        $sku_ids = (new OrderGoods())->where([['order_goods_id', 'in', $data[ 'order_goods_ids' ]] ])->column('num', 'sku_id');
+        $weight = 0;
+        foreach ($sku_ids as $sku_id => $value) {
+            $weight += (new GoodsSku())->where([['sku_id', '=', $sku_id] ])->value('weight') ?? 0 * $value['num'];
+        }
+        return max($weight, 1);
+    }
+
+    /**
      * 待确定删除逻辑之后再细化
      * @param $order_ids
      * @return bool|void
@@ -584,7 +593,7 @@ class OrderService extends BaseAdminService
         if (empty($order_ids)) throw new AdminException('SHOP_ORDER_NOT_FOUND');
 
         $status_list = $this->model->field('order_id, status,order_no,create_time')->whereIn('order_id', $order_ids)->with(['orderGoods' => function ($query) {
-            $query->field(' order_id, goods_id');
+            $query->field('order_id, goods_id');
         }])->select()->toArray();
 
         $error_order_str = '';
@@ -615,7 +624,7 @@ class OrderService extends BaseAdminService
 
             //删除订单退款
             (new OrderRefund())::destroy(function ($query) use ($order_ids) {
-                $query->where([ [ 'order_id', 'in', $order_ids ]]);
+                $query->where([ [ 'order_id', 'in', $order_ids ] ]);
             });
 
             //删除统计
@@ -624,7 +633,7 @@ class OrderService extends BaseAdminService
                     foreach ($value['orderGoods'] as $v) {
                         CoreGoodsStatService::decStat(['goods_id' => $v['goods_id'], 'time' => $value['create_time'], 'sale_num' => 1]);
                     }
-                    CoreStatService::decStat([ 'time' => $value['create_time'], 'order_num' => 1]);
+                    CoreStatService::decStat(['time' => $value['create_time'], 'order_num' => 1]);
                 }
             }
 

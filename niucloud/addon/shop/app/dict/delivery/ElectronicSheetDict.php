@@ -14,6 +14,9 @@ namespace addon\shop\app\dict\delivery;
 class ElectronicSheetDict
 {
 
+
+
+
     /**
      * 获取邮费支付方式类型
      * @param $type

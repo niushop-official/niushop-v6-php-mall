@@ -60,24 +60,41 @@ class DiyService extends BaseAdminService
     /**
      * 获取自定义页面分页列表，轮播搜索组件用
      * 查询微页面，数据排除存在轮播搜索组件的
-     * @param array $where
      * @return array
+     * @throws DbException
      */
     public function getPageByCarouselSearch()
     {
-        $field = 'id,title,page_title,name,template,type,mode,is_default,share,visit_count,create_time,update_time,value';
+        $field = 'id,title,page_title,name,type,create_time,value';
         $order = "update_time desc";
-        $search_model = $this->model->whereOr([
-            [
-                [ 'type', '=', 'DIY_PAGE' ],
-                [ 'value', 'not in', [ 'top_fixed', 'right_fixed', 'bottom_fixed', 'left_fixed', 'fixed' ] ]
-            ],
-            [
-                [ 'type', '<>', 'DIY_PAGE' ],
-                [ 'is_default', '=', 0 ],
-                [ 'value', 'not in', [ 'top_fixed', 'right_fixed', 'bottom_fixed', 'left_fixed', 'fixed' ] ]
-            ]
-        ])->field($field)->order($order)->append([ 'type_name', 'type_page', 'addon_name' ]);
+        $search_model = $this->model
+            ->whereOr([
+                [
+                    [ 'type', '=', 'DIY_PAGE' ],
+                    [ 'value', 'not like',
+                        [
+                            '%"position":"top_fixed"%',
+                            '%"position":"right_fixed"%',
+                            '%"position":"bottom_fixed"%',
+                            '%"position":"left_fixed"%',
+                            '%"position":"fixed"%'
+                        ]
+                    ]
+                ],
+                [
+                    [ 'type', '<>', 'DIY_PAGE' ],
+                    [ 'is_default', '=', 0 ],
+                    [ 'value', 'not like',
+                        [
+                            '%"position":"top_fixed"%',
+                            '%"position":"right_fixed"%',
+                            '%"position":"bottom_fixed"%',
+                            '%"position":"left_fixed"%',
+                            '%"position":"fixed"%'
+                        ]
+                    ]
+                ]
+            ])->field($field)->order($order)->append([ 'type_name', 'type_page', 'addon_name' ]);
         return $this->pageQuery($search_model);
     }
 

@@ -92,7 +92,5 @@ Route::group(function () {
 Route::group(function () {
     //获取已安装插件列表
     Route::get('addon/list/install', 'addon.Addon/getInstallList');
-    Route::get('addon/list/showApp', 'addon.Addon/showApp');
-    Route::get('showMarketing', 'addon.Addon/showMarketing');
 
 });

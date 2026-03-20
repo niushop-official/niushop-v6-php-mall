@@ -103,7 +103,7 @@ class Index extends BaseInstall
             $this->assign("name", $name);
             $this->assign("verison", $verison);
             $this->assign("dirs_list", $dirs_list);
-            if ($verison && $pdo && $curl && $openssl && $gd && $fileinfo && $is_dir) {
+            if ($verison && $pdo && $curl && $openssl && $gd && $fileinfo && $is_dir && $imagick) {
                 $continue = true;
             } else {
                 $continue = false;
@@ -170,6 +170,15 @@ class Index extends BaseInstall
 
             $conn = @mysqli_connect($dbhost, $dbuser, $dbpwd);
             if ($conn) {
+                $sql_mode_result = mysqli_query($conn, "SELECT @@global.sql_mode");
+                $sql_mode = strtolower($sql_mode_result->fetch_array()[0] ?? '');
+                if (strpos($sql_mode, 'only_full_group_by') !== false) {
+                    return fail([
+                        "status" => -2,
+                        "message" => "请将mysql配置sql_mode字段中的值“ONLY_FULL_GROUP_BY”去掉"
+                    ]);
+                }
+
                 if (empty($dbname)) {
                     $result = [
                         "status" => 1,
@@ -390,6 +399,7 @@ class Index extends BaseInstall
             $this->setSuccessLog([ '初始化', 'success' ]);
 
             Cache::set('install_status', 2);//成功
+//            Cache::tag(MenuService::$cache_tag_name)->clear();
             return success();
         } catch (Exception $e) {
             $this->setSuccessLog([ '安装失败' . $e->getMessage(), 'error' ]);

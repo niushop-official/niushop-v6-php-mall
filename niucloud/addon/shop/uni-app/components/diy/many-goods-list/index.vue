@@ -36,21 +36,53 @@
                 </template>
             </template>
             <template v-else>
-                <view v-for="(item, index) in diyComponent.list" class="scroll-item"
-                      :class="[diyComponent.headStyle, { active: index == cateIndex }]" :id="'a' + index" :key="index"
-                      @click="changeCateIndex(item, index)">
-                    <view class="cate" v-if="diyComponent.headStyle == 'style-1'">
-                        <view class="name">{{ item.title }}</view>
-                        <view class="desc" :v-if="item.desc">{{ item.desc }}</view>
+                <template v-if="diyComponent.source == 'custom'">
+                    <view v-for="(item, index) in diyComponent.list" class="scroll-item"
+                          :class="[diyComponent.headStyle, { active: index == cateIndex }]" :id="'a' + index" :key="index"
+                          @click="changeCateIndex(item, index)">
+                        <view class="cate" v-if="diyComponent.headStyle == 'style-1'">
+                            <view class="name">{{ item.title }}</view>
+                            <view class="desc" :v-if="item.desc">{{ item.desc }}</view>
+                        </view>
+                        <view v-if="diyComponent.headStyle == 'style-2'" class="cate">
+                            <view class="name">{{ item.title }}</view>
+                            <text class="nc-iconfont nc-icon-xiaolian-2 !text-[40rpx] text-[var(--primary-color)] transform" v-if="index == cateIndex"></text>
+                        </view>
+                        <view v-if="diyComponent.headStyle == 'style-4'" class="cate">
+                            <view class="name">{{ item.title }}</view>
+                        </view>
                     </view>
-                    <view v-if="diyComponent.headStyle == 'style-2'" class="cate">
-                        <view class="name">{{ item.title }}</view>
-                        <text class="nc-iconfont nc-icon-xiaolian-2 !text-[40rpx] text-[var(--primary-color)] transform" v-if="index == cateIndex"></text>
+                </template>
+                <template v-if="diyComponent.source == 'goods_category'">
+                    <view class="scroll-item" :class="[diyComponent.headStyle, { active: currentCategoryId == 0 }]" @click="changeGoodsCategory({ category_id : 0 })">
+                        <view class="cate" v-if="diyComponent.headStyle == 'style-1'" >
+                            <view class="name">推荐</view>
+                            <view class="desc">猜你喜欢</view>
+                        </view>
+                        <view v-if="diyComponent.headStyle == 'style-2'" class="cate">
+                            <view class="name">全部</view>
+                            <text class="nc-iconfont nc-icon-xiaolian-2 !text-[40rpx] text-[var(--primary-color)] transform" v-if="currentCategoryId == 0"></text>
+                        </view>
+                        <view v-if="diyComponent.headStyle == 'style-4'" class="cate">
+                            <view class="name">全部</view>
+                        </view>
                     </view>
-                    <view v-if="diyComponent.headStyle == 'style-4'" class="cate">
-                        <view class="name">{{ item.title }}</view>
+                    <view v-for="(item, index) in goodsCategoryListData" class="scroll-item"
+                          :class="[diyComponent.headStyle, { active: currentCategoryId == item.category_id }]" :id="'a' + index" :key="index"
+                          @click="changeGoodsCategory(item, index)">
+                        <view class="cate" v-if="diyComponent.headStyle == 'style-1'" >
+                            <view class="name">{{ item.category_name }}</view>
+                            <view class="desc">{{ item.category_name }}</view>
+                        </view>
+                        <view v-if="diyComponent.headStyle == 'style-2'" class="cate">
+                            <view class="name">{{ item.category_name }}</view>
+                            <text class="nc-iconfont nc-icon-xiaolian-2 !text-[40rpx] text-[var(--primary-color)] transform" v-if="currentCategoryId == item.category_id"></text>
+                        </view>
+                        <view v-if="diyComponent.headStyle == 'style-4'" class="cate">
+                            <view class="name">{{ item.category_name }}</view>
+                        </view>
                     </view>
-                </view>
+                </template>
             </template>
         </scroll-view>
 
@@ -108,7 +140,7 @@ onMounted(() => {
 
 const refresh = () => {
     // 装修模式下设置默认图
-    if (diyComponent.value.headStyle == 'style-3' && diyComponent.value.source == 'goods_category' && diyComponent.value.goods_category) {
+    if (diyComponent.value.source == 'goods_category' && diyComponent.value.goods_category) {
         getGoodsCategoryFn(diyComponent.value.goods_category);
     } else {
         changeCateIndex(diyComponent.value.list[0], 0, true)
@@ -144,7 +176,7 @@ const getGoodsCategoryFn = (pid: any) => {
             if (goodsCategoryListData.value) {
                 refreshGoodsList({
                     source: 'category',
-                    goods_category: ''
+                    goods_category: pid
                 });
             }
         }
@@ -158,7 +190,7 @@ const changeGoodsCategory = (item: any) => {
     currentCategoryId.value = item.category_id
     refreshGoodsList({
         source: 'category',
-        goods_category: currentCategoryId.value
+        goods_category: currentCategoryId.value == 0 ? diyComponent.value.goods_category : currentCategoryId.value
     });
 }
 
@@ -181,7 +213,8 @@ const refreshGoodsList = (obj: any) => {
 
         elementBgColor: diyComponent.value.elementBgColor,
         topElementRounded: diyComponent.value.topElementRounded,
-        bottomElementRounded: diyComponent.value.bottomElementRounded
+        bottomElementRounded: diyComponent.value.bottomElementRounded,
+        mode: diyComponent.value.mode
     };
 
     if (obj.goods_category) {

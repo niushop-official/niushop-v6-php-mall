@@ -1,6 +1,6 @@
 <template>
     <view :style="warpCss" class="overflow-hidden">
-        <view class="goods-sku card-template" v-if="diyComponent.goods && diyComponent.goods.attr_format && Object.keys(diyComponent.goods.attr_format).length">
+        <view class="goods-sku card-template" v-if="diyComponent.goods && diyComponent.goods.attr_format && Object.keys(diyComponent.goods.attr_format).length || diyComponent.goods.goods_brand || diyComponent.weight >0 || diyComponent.volume>0">
             <view class="title mb-[30rpx]">商品属性</view>
             <view>
                 <template v-for="(item,index) in filteredAttrFormat" :key="index">
@@ -48,17 +48,42 @@ const diyComponent = computed(() => {
     }
 })
 
-// 过滤后的属性数组（去掉空值项）
+// 过滤后的属性数组（去掉空值项，包含重量和体积品牌）
 const filteredAttrFormat = computed(() => {
     const originalAttrs = diyComponent.value.goods?.attr_format || [];
-    return originalAttrs.filter(item => {
-        // 过滤掉空值项
+    // 第一步：过滤原始属性的空值项
+    const filteredOriginalAttrs = originalAttrs.filter(item => {
         if (Array.isArray(item.attr_child_value_name)) {
             return item.attr_child_value_name.length > 0;
         } else {
             return !!item.attr_child_value_name;
         }
     });
+
+    // 第二步：定义重量和体积属性项（保持和原有属性结构一致）
+    const extraAttrs = [];
+    if (diyComponent.value.goods.goods_brand) {
+        extraAttrs.push({
+            attr_value_name: '品牌',
+            attr_child_value_name: diyComponent.value.goods.goods_brand.brand_name
+        });
+    }
+    // 重量属性（非空时添加）
+    if (diyComponent.value.weight && diyComponent.value.weight > 0) {
+        extraAttrs.push({
+            attr_value_name: '重量',
+            attr_child_value_name: diyComponent.value.weight + 'kg'
+        });
+    }
+    // 体积属性（非空时添加）
+    if (diyComponent.value.volume && diyComponent.value.volume > 0) {
+        extraAttrs.push({
+            attr_value_name: '体积',
+            attr_child_value_name: diyComponent.value.volume + 'm³'
+        });
+    }
+    // 第三步：合并原始过滤后的属性 + 重量/体积属性
+    return [...extraAttrs, ...filteredOriginalAttrs];
 });
 
 const warpCss = computed(() => {
@@ -98,7 +123,7 @@ onMounted(() => {
             (newValue, oldValue) => {
                 if (newValue && newValue.componentName == 'ShopGoodsDetailAttr') {
                     nextTick(() => {
-                        if (diyComponent.value.goods && Object.keys(diyComponent.value.goods).length && diyComponent.value.goods.attr_format && Object.keys(diyComponent.value.goods.attr_format).length && diyComponent.value.isShow) {
+                        if (diyComponent.value.goods && Object.keys(diyComponent.value.goods).length && (diyComponent.value.goods.attr_format && Object.keys(diyComponent.value.goods.attr_format).length || diyComponent.value.goods.goods_brand || diyComponent.value.weight >0|| diyComponent.value.volume >0)&& diyComponent.value.isShow) {
                             emits('update:componentIsShow', true)
                         }else{
                             emits('update:componentIsShow', false)

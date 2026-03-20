@@ -25,16 +25,16 @@
                                 <span class="text-[#666666] text-[14px]">{{ t(item.key) }}</span>
                                 <div>
                                     <template v-if="item.key === 'local_delivery'">
-                                        <el-button type="primary" link @click="goRouter('/shop/order/delivery/staff')">{{ t('deliveryStaff') }}</el-button>
-                                        <el-button type="primary" link @click="goRouter('/shop/order/delivery/local')">{{ t('localConfig') }}</el-button>
+                                        <el-button type="primary" link @click="goRouter('/shop/delivery/local_config')">基础配置</el-button>
+                                        <el-button type="primary" link @click="goRouter('/shop/delivery/local')">{{ t('localConfig') }}</el-button>
                                     </template>
                                     <template v-if="item.key === 'express'">
-                                        <el-button type="primary" link @click="goRouter('/shop/order/delivery/company')">{{ t('deliveryCompany') }}</el-button>
-                                        <el-button type="primary" link @click="goRouter('/shop/order/shipping/template')">{{ t('deliveryTemplate') }}</el-button>
-                                        <el-button type="primary" link @click="goRouter('/shop/order/delivery/search')">{{ t('deliverySearch') }}</el-button>
+                                        <el-button type="primary" link @click="goRouter('/shop/delivery/company')">{{ t('deliveryCompany') }}</el-button>
+                                        <el-button type="primary" link @click="goRouter('/shop/shipping/template')">{{ t('deliveryTemplate') }}</el-button>
+                                        <el-button type="primary" link @click="goRouter('/shop/delivery/search')">{{ t('deliverySearch') }}</el-button>
                                     </template>
                                     <template v-if="item.key === 'store'">
-                                        <el-button type="primary" link @click="goRouter('/shop/order/delivery/store')">{{ t('deliveryStore') }}</el-button>
+                                        <el-button type="primary" link @click="goRouter('/shop/delivery_store')">{{ t('deliveryStore') }}</el-button>
                                     </template>
                                 </div>
                             </div>

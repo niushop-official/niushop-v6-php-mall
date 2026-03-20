@@ -225,7 +225,7 @@ class CoreSeckillOrderCreateService extends BaseCoreService
     public function checkMember($data): void
     {
         $this->delivery['take_address'] = $data['take_address'] ?? [];
-        $member_info = (new CoreMemberService())->getInfoByMemberId( $data['member_id'], 'status');
+        $member_info = (new CoreMemberService())->getInfoByMemberId($data['member_id'], 'status');
         if (empty($member_info)) throw new CommonException(get_lang('SHOP_ORDER_BUYER_NOT_FOUND'));//无效的账号
         if ($member_info['status'] == MemberDict::OFF) throw new CommonException(get_lang('SHOP_ORDER_BUYER_LOCKED'));//账号被锁定
     }

@@ -1,6 +1,9 @@
 <?php
 
+use Location\Coordinate;
+use Location\Distance\Vincenty;
 use think\Container;
+use think\exception\InvalidArgumentException;
 use think\Response;
 use think\facade\Lang;
 use think\facade\Queue;
@@ -756,7 +759,11 @@ function cache_remember(string $name = null, $value = '', $tag = null, $options 
     if (is_null($tag)) {
         Cache::set($name, $value, $options['expire'] ?? null);
     } else {
-        Cache::tag($tag)->set($name, $value, $options['expire'] ?? null);
+        try {
+            Cache::tag($tag)->set($name, $value, $options['expire'] ?? null);
+        } catch (InvalidArgumentException $e) {
+            Cache::tag($tag)->set($name, $value, $options['expire'] ?? null);
+        }
     }
     return $value;
 
@@ -897,7 +904,7 @@ function file_copy(string $source_file, string $to_file)
 function qrcode($url, $page, $data, $dir = '', $channel = 'h5', $style = ['is_transparent' => true], $outfile = true)
 {
     if ($outfile) {
-        $dir = $dir ?: 'upload' . '/' . 'qrcode' ;//二维码默认存储位置
+        $dir = $dir ?: 'upload' . '/' . 'qrcode';//二维码默认存储位置
         if (!is_dir($dir) && !mkdir($dir, 0777, true) && !is_dir($dir)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
         }
@@ -954,7 +961,7 @@ function is_url($string)
  * 获取站点插件
  * @return array
  */
-function get_install_addons() : array
+function get_install_addons(): array
 {
     $addons = Cache::get("local_install_addons");
     return is_null($addons) ? [] : $addons;
@@ -1150,4 +1157,19 @@ function downloadImage($img_url, $file_name)
     curl_close($ch);
     fclose($fp);
     return true;
+}
+
+/**
+ * 获取地图两坐标点之间距离
+ * @param $lat1
+ * @param $lng1
+ * @param $lat2
+ * @param $lng2
+ * @return float
+ */
+function get_map_distance($lat1, $lng1, $lat2, $lng2)
+{
+    $location = new Coordinate($lat1, $lng1);
+    $distance = ( new Vincenty() )->getDistance($location, new Coordinate((float) $lat2, (float) $lng2));
+    return round($distance/1000, 3);
 }

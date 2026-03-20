@@ -153,8 +153,11 @@
                                         </template>
                                     </el-table-column>
                                     <el-table-column min-width="100">
-                                        <template #default>
-                                            <span class="text-[14px]">{{ item.delivery_type_name }}</span>
+                                        <template #default="{ row }">
+                                             <div>
+                                                <div class="text-[14px]">{{ item.delivery_type_name }}</div>
+                                                <div class="text-[14px] cursor-pointer text-primary" @click="toDelivery(item)">{{ row.delivery_info?.local_delivery_status_name }}</div>
+                                            </div>
                                         </template>
                                     </el-table-column>
                                     <el-table-column min-width="100">
@@ -676,6 +679,16 @@ const batchDeleteFn = () => {
         }).catch(() => {
         })
     })
+}
+
+const toDelivery = (data: any) => {
+    const url = router.resolve({
+        path: '/shop/delivery/local/record',
+        query: {
+            trade_no: data.order_no
+        }
+    })
+    window.open(url.href)
 }
 </script>
 

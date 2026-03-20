@@ -1042,7 +1042,7 @@ return [
                 'children' => [
                     [
                         'menu_name' => '转账',
-                        'menu_key' => 'cash_out_transfer',
+                        'menu_key' => 'member_refund_transfer',
                         'menu_short_name' => '转账',
                         'menu_type' => '2',
                         'icon' => '',
@@ -1115,7 +1115,7 @@ return [
         'router_path' => 'marketing/verify/index',
         'view_path' => '',
         'methods' => 'get',
-        'sort' => '48',
+        'sort' => '30',
         'status' => '1',
         'is_show' => '1',
         'children' => [
@@ -1232,7 +1232,7 @@ return [
         'router_path' => 'marketing/sign/config',
         'view_path' => '',
         'methods' => 'get',
-        'sort' => '30',
+        'sort' => '91',
         'status' => '1',
         'is_show' => '1',
         'children' => [
@@ -2812,7 +2812,7 @@ return [
         'router_path' => '',
         'view_path' => '',
         'methods' => '',
-        'sort' => '0',
+        'sort' => '29',
         'status' => '1',
         'is_show' => '1',
         'menu_attr' => 'diy_form',
@@ -2862,7 +2862,7 @@ return [
         'router_path' => '',
         'view_path' => '',
         'methods' => '',
-        'sort' => '0',
+        'sort' => '27',
         'status' => '1',
         'is_show' => '1',
         'menu_attr' => 'setting_export',
@@ -2912,7 +2912,7 @@ return [
         'router_path' => '',
         'view_path' => '',
         'methods' => '',
-        'sort' => '0',
+        'sort' => '28',
         'status' => '1',
         'is_show' => '1',
         'menu_attr' => 'printer_management',

@@ -25,6 +25,7 @@ return [
                         "fontWeight" => 'normal',
                         "isShow" => true
                     ],
+                    "mode" => "aspectFill",
                     "priceStyle" => [
                         "color" => "#FF4142",
                         "control" => true,
@@ -126,6 +127,7 @@ return [
                 'value' => [
                     'style' => 'style-2',
                     'num' => 6,
+                    "mode" => "aspectFill",
                     "sortWay" => "default", // 排序方式，default：综合，sale_num：销量，price：价格
                     "headStyle" => "style-1",
                     "aroundRadius" => 25,
@@ -237,8 +239,8 @@ return [
                     "componentStartBgColor" => '', // 组件背景颜色（开始）
                     "componentEndBgColor" => '', // 组件背景颜色（结束）
                     "componentGradientAngle" => 'to bottom', // 渐变角度，上下（to bottom）、左右（to right）
-                    "topRounded" => 0, // 组件上圆角
-                    "bottomRounded" => 0, // 组件下圆角
+                    "topRounded" => 12, // 组件上圆角
+                    "bottomRounded" => 12, // 组件下圆角
                     "elementBgColor" => '', // 元素背景颜色
                     "topElementRounded" => 0,// 元素上圆角
                     "bottomElementRounded" => 0, // 元素下圆角
@@ -308,6 +310,7 @@ return [
                 'sort' => 10018,
                 'value' => [
                     'style' => 'style-2',
+                    "mode" => "aspectFill",
                     'source' => 'all',
                     'num' => 10,
                     'goods_category' => '',
@@ -365,6 +368,7 @@ return [
                     "priceStyle" => [
                         "mainColor" => "#333333",
                     ],
+                    "mode" => "aspectFill",
                     'source' => 'all',
                     "goods_ids" => [],
                     'list' => [
@@ -465,6 +469,7 @@ return [
                 'uses' => 0,
                 'sort' => 10019,
                 'value' => [
+                    "mode" => "aspectFill",
                     "titleStyle" => [
                         'title' => '风格1',
                         'value' => 'style-1'
@@ -553,6 +558,7 @@ return [
                 'uses' => 1,
                 'sort' => 10020,
                 'value' => [
+                    "mode" => "aspectFill",
                     "style" => [
                         'title' => '风格1',
                         'value' => 'style-1'
@@ -611,6 +617,7 @@ return [
                 'uses' => 0,
                 'sort' => 10021,
                 'value' => [
+                    "mode" => "aspectFill",
                     "list" => [
                         [
                             'bgUrl' => 'addon/shop/rank/rank_bg_01.jpg', // 榜单背景图
@@ -682,7 +689,81 @@ return [
                         "both" => 10 // 左右边距
                     ]
                 ]
-            ]
+            ],
+            'ShopGoodsHot' => [
+                'title' => '爆款商品',
+                'icon' => 'iconfont iconjifenshangpinpc',
+                'path' => 'edit-shop-goods-hot',
+                'support_page' => [],
+                'uses' => 0,
+                'sort' => 10022,
+                'value' => [
+                    "mode" => "aspectFill",
+                    'titleStyle' => [
+                        'text' => '大牌直降',
+                        'textColor' => '#FFFFFF',
+                        "fontWeight" => 'bold',
+                        "fontSize" => 18,
+                        'imgUrl' => '',
+                        'way' => 'text', // 展示方式，text：文本，img：图片
+                        "link" => [
+                            "name" => ""
+                        ]
+                    ],
+                    'subTitleStyle' => [
+                        'text' => '7月10日-29日',
+                        'textColor' => '#ffffff',
+                        'bgColor' => '#ff737a',
+                        "rounded" => 6,
+                        "fontSize" => 12
+                    ],
+                    'btnStyle' => [
+                        "text" => '立即抢购',
+                        'textColor' => '#ee695c',
+                        "startBgColor" => "",
+                        "endBgColor" => "",
+                        "gradientType" => "radial",
+                        "fontSize" => 12,
+                        "link" => [
+                            "name" => ""
+                        ]
+                    ],
+                    'goodsStyle' => [
+                        'bgColor' => '#ffffff',
+                        'labelText' => '大牌直降',
+                        'labelSize' => 10,
+                        'labelColor' => '#ffffff',
+                        'labelBgColor' => '#FF0000',
+                        "rounded" => 8,
+                        "imgRounded" => 7,
+                        'source' => 'all', // 商品来源方式
+                        'num' => 10,
+                        "goodsIds" => []
+                    ]
+                ],
+                // 组件属性
+                'template' => [
+                    "textColor" => "#303133", // 文字颜色
+                    'pageStartBgColor' => '#FF0000', // 底部背景颜色（开始）
+                    'pageEndBgColor' => '', // 底部背景颜色（结束）
+                    'pageGradientAngle' => 'to bottom', // 渐变角度，从上到下（to bottom）、从左到右（to right）
+                    'componentBgUrl' => '', // 组件背景图片
+                    'componentBgAlpha' => 2, // 组件背景图片的透明度，0~10
+                    "componentStartBgColor" => '', // 组件背景颜色（开始）
+                    "componentEndBgColor" => '', // 组件背景颜色（结束）
+                    "componentGradientAngle" => 'to bottom', // 渐变角度，上下（to bottom）、左右（to right）
+                    "topRounded" => 0, // 组件上圆角
+                    "bottomRounded" => 0, // 组件下圆角
+                    "elementBgColor" => '', // 元素背景颜色
+                    "topElementRounded" => 0,// 元素上圆角
+                    "bottomElementRounded" => 0, // 元素下圆角
+                    "margin" => [
+                        "top" => 12, // 上边距
+                        "bottom" => 12, // 下边距
+                        "both" => 10 // 左右边距
+                    ],
+                ]
+            ],
         ]
     ],
     'SHOP_GOODS_DETAIL_COMPONENT' => [

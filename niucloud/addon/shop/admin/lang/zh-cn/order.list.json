@@ -160,5 +160,22 @@
   "orderInfoEmpty": "暂无数据",
   "buyerAskDeliveryTime": "要求自提时间",
   "deleteTips": "是否确认删除该订单？",
-  "batchDeleteTips": "是否确认批量删除选中的订单？"
+  "batchDeleteTips": "是否确认批量删除选中的订单？",
+  "storeDeliveryWay": "商家配送",
+  "thirdPartyDeliveryWay": "第三方配送",
+  "deliverName": "配送员",
+  "deliverNamePlaceholder": "请选择配送员",
+  "deliverMobile": "配送员手机号",
+  "deliverMobilePlaceholder": "请输入配送员手机号",
+  "thirdDeliveryName": "配送平台",
+  "thirdDeliveryNamePlaceholder": "请选择配送平台",
+  "goodsWeight": "商品重量",
+  "goodsWeightPlaceholder": "请输入商品重量",
+  "weightTips": "[商品重量(kg)]格式输入错误",
+  "weightNotZeroTips": "商品重量(kg)必须大于0",
+  "deliveryStore": "提货点",
+  "deliveryStorePlaceholder": "请选择提货点",
+  "deliveryPlatform": "配送平台",
+  "deliveryStatus": "配送状态",
+  "goActive":"去开通"
 }
