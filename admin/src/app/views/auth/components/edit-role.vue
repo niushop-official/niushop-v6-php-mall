@@ -54,8 +54,34 @@ let popTitle: string = ''
 // 获取权限数据
 const menus = ref<Record<string, any>[]>([])
 getAuthMenus({ is_button: 0 }).then((res) => {
-    menus.value = res.data
+    menus.value = mergeMenuKeyAndAuth(res.data)
 })
+
+const mergeMenuKeyAndAuth = (arr: any) => {
+  // 递归终止条件：非数组直接返回原值
+  if (!Array.isArray(arr)) {
+    return arr;
+  }
+
+  // 遍历数组每个元素，返回新数组
+  return arr.map(item => {
+    // 深拷贝当前对象，避免修改原数据
+    const newItem = { ...item };
+
+    // 1. 如果当前节点有 menu_key 和 auth，执行合并
+    if (newItem.menu_key && Array.isArray(newItem.auth)) {
+      // 注意：menu_key 是字符串，需转为数组后合并（concat 支持非数组参数，会自动包装）
+      newItem.menu_key = newItem.auth.concat(newItem.menu_key);
+    }
+
+    // 2. 递归处理下一层 children（如果有）
+    if (Array.isArray(newItem.children)) {
+      newItem.children = mergeMenuKeyAndAuth(newItem.children);
+    }
+
+    return newItem;
+  });
+}
 // 全选
 const selectAll = ref(false)
 const checkStrictly = ref(false)
@@ -71,7 +97,7 @@ watch(selectAll, () => {
 })
 
 const handleCheckChange = debounce((e) => {
-    formData.rules = treeRef.value.getCheckedKeys()
+    formData.rules = treeRef.value.getCheckedKeys().flat(1)
 })
 
 const menuAction = () => {
@@ -145,7 +171,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
             loading.value = true
 
             const data = Object.assign({}, formData)
-            data.rules = data.rules.concat(treeRef.value.getHalfCheckedKeys())
+            data.rules = data.rules.concat(treeRef.value.getHalfCheckedKeys().flat(1))
 
             save(data).then(res => {
                 loading.value = false
@@ -190,7 +216,7 @@ const setFormData = async (row: any = null) => {
 function checked (menuKey:string, data:any, newArr:any) {
     Object.keys(data).forEach((key:string) => {
         const item = data[key]
-        if (item.menu_key == menuKey) {
+        if (!Array.isArray(item.menu_key) && item.menu_key == menuKey || Array.isArray(item.menu_key) && item.menu_key.indexOf(menuKey) != -1) {
             if (!item.children || item.children.length == 0) {
                 newArr.push(item.menu_key)
             }

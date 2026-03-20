@@ -43,6 +43,16 @@
                 <el-form-item :label="t('icon')">
                     <upload-image v-model="formData.front_end_icon" />
                 </el-form-item>
+
+                <el-form-item :label="t('metaTitle')">
+                    <el-input v-model.trim="formData.meta_title" :placeholder="t('MetaPlaceholder')" class="input-width" clearable maxlength="40" show-word-limit />
+                </el-form-item>
+                <el-form-item :label="t('metaDescription')">
+                    <el-input v-model.trim="formData.meta_desc" :placeholder="t('metaDescriptionPlaceholder')" class="input-width" clearable maxlength="200" show-word-limit />
+                </el-form-item>
+                <el-form-item :label="t('metaKeywords')">
+                    <el-input v-model.trim="formData.meta_keyword" :placeholder="t('metaKeywordsPlaceholder')" class="input-width" clearable maxlength="200" show-word-limit />
+                </el-form-item>
             </el-card>
 
             <el-card class="box-card mt-[15px] !border-none" shadow="never">
@@ -75,13 +85,10 @@ import { setWebsite, getWebsite, getService } from '@/app/api/sys'
 import { FormInstance, FormRules } from 'element-plus'
 import { getAppType } from '@/utils/common'
 import { useRoute } from 'vue-router'
-import useUserStore from '@/stores/modules/user'
-import useSystemStore from '@/stores/modules/system';
 
 const route = useRoute()
 const pageName = route.meta.title
 const loading = ref(true)
-const appType = ref(getAppType())
 const formData = reactive<Record<string, string>>({
     site_name: '',
     logo: '',
@@ -102,7 +109,10 @@ const formData = reactive<Record<string, string>>({
     icon: '',
     wechat_code: '',
     enterprise_wechat: '',
-    tel: ''
+    tel: '',
+    meta_title: '',
+    meta_desc: '',
+    meta_keyword: ''
 })
 
 const setFormData = async () => {

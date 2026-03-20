@@ -264,7 +264,7 @@ const deleteEvent = (id: number) => {
         }
     ).then(() => {
         deleteGenerateTable(id).then(() => {
-            loadGenerateTableList()
+            loadGenerateTableList(getTablePageStorage(codeTableData.searchParam).page)
         }).catch(() => {
         })
     })
@@ -314,7 +314,7 @@ const generateCreateFn = (id: any, generate_type: any) => {
             codeTableData.loading = false
             window.open(img(res.data.file), '_blank')
         } else {
-            loadGenerateTableList()
+            loadGenerateTableList(getTablePageStorage(codeTableData.searchParam).page)
         }
     }).catch(() => {
         codeTableData.loading = false
@@ -368,7 +368,7 @@ const listToTree = (arr:any) => {
                     }
                 }
                 if (!obj) {
-                    obj = { name: name, path: name.indexOf('.') < 0 ? '' : arr[i], key: 'k' + i + j + k }
+                    obj = { name, path: name.indexOf('.') < 0 ? '' : arr[i], key: 'k' + i + j + k }
                     if (name.indexOf('.') < 0) obj.children = []
                     if (obj.path === arr[0]) treeKey.value = obj.key
                     _ret.push(obj)

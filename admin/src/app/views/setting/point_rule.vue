@@ -100,7 +100,7 @@ const onSave = async () => {
     if (await ruleRefs.value[0].verify()) {
         if (saveLoading.value) return
         saveLoading.value = true
-      
+
         setPointRuleConfig(formData.value).then(() => {
             ruleDialog.value = false
             saveLoading.value = false

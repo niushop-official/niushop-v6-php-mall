@@ -53,7 +53,9 @@ const useUserStore = defineStore('user', {
             logout()
             // 清除tabbar
             useTabbarStore().clearTab()
-            router.push('/login')
+            const login = '/login'
+            // router.push(login)
+            location.href = `${location.origin}${login}`
         },
         getAuthMenusFn() {
             return new Promise((resolve, reject) => {

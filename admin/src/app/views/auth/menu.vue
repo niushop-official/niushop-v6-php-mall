@@ -9,7 +9,7 @@
                     <el-button type="primary" class="w-[100px]" @click="addEvent">
                         {{ t('addMenu') }}
                     </el-button>
-                    <el-button class="w-[100px]" @click="refreshMenu">
+                    <el-button class="w-[100px]" :loading="refreshLoading" @click="refreshMenu">
                         {{ t('initializeMenu') }}
                     </el-button>
                 </div>
@@ -129,6 +129,7 @@ const getMenuList = () => {
 }
 getMenuList()
 // 重置菜单
+const refreshLoading = ref(false)
 const refreshMenu = () => {
     ElMessageBox.confirm(h('div', null, [
         h('p', null, t('initializeMenuTipsOne')),
@@ -140,10 +141,13 @@ const refreshMenu = () => {
             // type: 'warning'
         }
     ).then(() => {
+        refreshLoading.value = true
         menuRefresh({}).then(res => {
-            location.reload()
-        }).catch(() => {})
-    }).catch(()=>{})
+            refreshLoading.value = false
+        }).catch(() => {
+            refreshLoading.value = false
+        })
+    }).catch(() => {})
 
 }
 /**

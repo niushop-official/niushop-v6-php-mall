@@ -196,10 +196,6 @@ getWeappConfig().then(res => {
     loading.value = false
 })
 
-getWeappConfig().then(res => {
-    Object.assign(res.data)
-})
-
 /**
  * 复制
  */

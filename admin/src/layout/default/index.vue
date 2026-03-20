@@ -11,12 +11,14 @@
             </el-header>
             <!-- 顶部 end -->
 
+            <layout-tab />
+
             <!-- 主体 -->
             <el-main class="h-full p-0 bg-page">
                 <el-scrollbar>
                     <div class="p-[15px]">
                         <router-view v-slot="{ Component, route }" v-if="appStore.routeRefreshTag">
-                            <keep-alive :include="tabbarStore.tabNames">
+                            <keep-alive :include="tabbarStore.tabNames" :max="15">
                                 <component :is="Component" :key="route.fullPath" />
                             </keep-alive>
                         </router-view>
@@ -32,6 +34,7 @@
 import { computed } from 'vue'
 import layoutHeader from './components/header/index.vue'
 import layoutAside from './components/aside/index.vue'
+import layoutTab from './components/tabs.vue'
 import useAppStore from '@/stores/modules/app'
 import useTabbarStore from '@/stores/modules/tabbar'
 import useSystemStore from '@/stores/modules/system'

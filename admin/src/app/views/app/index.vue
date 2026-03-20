@@ -66,7 +66,7 @@ getAppList()
 
 const toLink = (item: any) => {
     if (item.url) {
-            // 判断如果携带is_target=true就通过新窗口打开
+        // 判断如果携带is_target=true就通过新窗口打开
         if (item.url.indexOf('is_target=true') != -1) {
             const url = router.resolve(item.url)
             window.open(url.href)

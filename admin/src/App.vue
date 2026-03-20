@@ -35,7 +35,8 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" scoped></style>
+<style>
  .el-page-header__header .el-page-header__left .el-page-header__content{
     font-size: 14px !important;
     font-weight: 500 !important;

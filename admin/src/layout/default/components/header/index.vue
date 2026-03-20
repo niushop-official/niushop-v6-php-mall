@@ -258,4 +258,8 @@ const toPreview = () => {
     font-weight: inherit !important;
     color: var(--el-text-color-regular) !important;
 }
+:deep(.inter .el-breadcrumb__inner){
+    font-weight: inherit !important;
+    color: var(--el-text-color-regular) !important;
+}
 </style>

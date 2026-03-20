@@ -79,8 +79,12 @@ router.beforeEach(async (to: any, from, next) => {
 
                 // 设置首页路由
                 let firstRoute: symbol | string | undefined = findFirstValidRoute(userStore.routers)
-                if (systemStore.apps[0]) {
-                    firstRoute = userStore.addonIndexRoute[ systemStore.apps[0].key ]
+                for (let i = 0; i < systemStore.apps.length; i++) {
+                    const item = systemStore.apps[i]
+                    if (userStore.addonIndexRoute[item.key]) {
+                        firstRoute = userStore.addonIndexRoute[item.key]
+                        break
+                    }
                 }
 
                 ROOT_ROUTER.redirect = { name: firstRoute }

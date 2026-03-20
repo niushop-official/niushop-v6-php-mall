@@ -194,7 +194,7 @@ const searchFormRef = ref<FormInstance>()
 
 // 去空操作
 watch(() => siteAccountLogTable.searchParam.trade_no, (nval) => {
-    siteAccountLogTable.searchParam.trade_no = nval.trim();
+    siteAccountLogTable.searchParam.trade_no = nval.trim()
 })
 
 /**
