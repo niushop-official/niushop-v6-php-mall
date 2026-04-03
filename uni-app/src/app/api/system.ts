@@ -77,7 +77,6 @@ export function uploadVideo(data: AnyObject) {
     return request.upload('file/video', data, { showErrorMessage: true })
 }
 
-
 /**
  * 获取上传配置
  */

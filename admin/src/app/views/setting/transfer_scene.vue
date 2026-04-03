@@ -6,7 +6,7 @@
                 <div class="flex items-center">
                     <span class="text-[14px] mr-[10px]">{{ t('transferSceneId') }}：</span>
                     <div class="flex items-center">
-                        <el-input v-model.trim="item.scene_id" maxlength="5" class="!w-[60px]" :disabled="item.disabled" @blur="handleInput($event,key,item)" :ref="(el: any) =>{ if(el) inputRefs[key] = el }" v-show="!item.disabled"/>
+                        <el-input v-model.trim="item.scene_id" maxlength="5" minlength="4" class="!w-[60px]" :disabled="item.disabled" @blur="handleInput($event,key,item)" :ref="(el: any) =>{ if(el) inputRefs[key] = el }" v-show="!item.disabled"/>
                          <div v-show="item.disabled">{{item.scene_id ? item.scene_id : '--'}}</div>
                         <div @click="handleDisabled(item, key)" class="w-[40xp] flex items-center ml-[8px]"><el-icon size="20" color="var(--el-color-primary)"><Edit /></el-icon></div>
                     </div>
@@ -80,7 +80,8 @@ getTransferSceneFn()
 
 // 更改场景值
 const handleInput = (e: any, key: any, data: any) => {
-    if (e.target.value) {
+    const originalValue = originalValues.value[key]
+    if (e.target.value && e.target.value.length >= 4) {
         setSceneId({
             scene: key,
             scene_id: e.target.value
@@ -89,11 +90,15 @@ const handleInput = (e: any, key: any, data: any) => {
             getTransferSceneFn()
         })
     } else {
+        data.scene_id = originalValue
         data.disabled = true
     }
 }
 const inputRefs = ref<any>({})
+const originalValues = ref<any>({})
 const handleDisabled = (data: any, key: any) => {
+    // 保存原始值
+    originalValues.value[key] = data.scene_id
     data.disabled = false
     nextTick(() => {
         inputRefs.value[key].focus()

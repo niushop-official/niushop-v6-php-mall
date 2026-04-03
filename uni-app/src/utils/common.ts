@@ -2,10 +2,9 @@ import { getTabbarPages } from './pages'
 import useDiyStore from '@/app/stores/diy'
 import useMemberStore from '@/stores/member'
 import useSystemStore from '@/stores/system'
-import wechat from '@/utils/wechat'
 import useConfigStore from '@/stores/config'
 import { getNeedLoginPages } from '@/utils/pages'
-import { useLocation } from '@/hooks/useLocation'
+import manifestJson from "@/manifest.json";
 
 /**
  * 跳转页面
@@ -673,10 +672,12 @@ export function pxToRpx(px: any) {
 // 返回上一页
 export function goback(data: any) {
     let { url, mode, param, title } = data
-    uni.showToast({
-        title: title,
-        icon: 'none'
-    });
+    if (title) {
+        uni.showToast({
+            title: title,
+            icon: 'none'
+        });
+    }
     setTimeout(() => {
         if (getCurrentPages().length > 1) {
             uni.navigateBack({
@@ -689,7 +690,7 @@ export function goback(data: any) {
                 mode: mode || 'redirectTo'
             });
         }
-    }, 600);
+    }, title ? 600 : 0);
 }
 
 
@@ -818,4 +819,33 @@ export function distance(distance: string | number): string {
     const dist = typeof distance === 'string' ? parseFloat(distance) : distance;
     if (isNaN(dist)) return distance.toString();
     return dist < 1 ? parseInt((dist * 1000).toString()) + 'm' : dist.toFixed(1) + 'km'
+}
+
+/**
+ * 打开地图选择器
+ * @param backurl 回调URL
+ * @param params 参数
+ */
+export function openMapSelector(backurl: string, params = '') {
+    const configStore = useSystemStore();
+    const mapType = configStore.mapConfig?.map_type || 'tencent';
+    if (mapType === 'tencent') {
+        const url = `https://apis.map.qq.com/tools/locpicker?search=1&type=0&backurl=${ encodeURIComponent(backurl) }&key=${ manifestJson.h5.sdkConfigs.maps.qqmap.key }&referer=myapp`;
+        window.location.href = url;
+    } else if (mapType === 'tianditu') {
+        // 打开天地图选择器
+        const tiandituKey = configStore.mapConfig?.tianditu_map_web_key || '';
+        if (!tiandituKey) {
+            uni.showToast({
+                title: '天地图密钥未配置',
+                icon: 'none'
+            });
+            return;
+        }
+        // 天地图的位置选择器URL
+        // 注意：天地图的位置选择器API可能与腾讯地图不同，需要根据实际API文档调整
+        const baseUrl = (import.meta.env.VITE_APP_BASE_URL || `${ location.origin }`).replace(/\/api\/$/, '')
+        const url = baseUrl + `/tianmap?search=1&type=0&backurl=${ encodeURIComponent(backurl) }&key=${ tiandituKey }` + (params ? '&' + params : '')
+        window.location.href = url;
+    }
 }

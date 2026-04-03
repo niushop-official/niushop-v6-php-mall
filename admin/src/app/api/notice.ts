@@ -11,12 +11,64 @@ export function getNoticeList(params: any) {
 }
 
 /**
- * 消息发送记录
+ * 消发送记录
  * @param params
  * @returns
  */
 export function getNoticeLog(params: any) {
     return request.get(`notice/log`, { params })
+}
+
+/**
+ * 获取消息发送记录
+ * @param params
+ * @returns
+ */
+export function getBindInfo() {
+    return request.get(`notice/bind/info`)
+}
+
+/**
+ * 取消绑定
+ * @param params
+ * @returns
+ */
+export function cancelBind(params: any) {
+    return request.post(`notice/bind/cancel`, params)
+}
+
+/**
+ * 获取微信配置
+ * @returns
+ */
+export function getWechatAuthUrl() {
+    return request.get('notice/bind/wechat')
+}
+
+/**
+ * 获取微信配置
+ * @returns
+ */
+export function getWeappAuthUrl() {
+    return request.get('notice/bind/weapp')
+}
+
+
+/**
+ * 获取微信配置
+ * @returns
+ */
+export function sendSms(params: Record<string, any>) {
+    return request.post('notice/bind/sms/send',params, { showSuccessMessage: true })
+}
+
+
+/**
+ * 获取微信配置
+ * @returns
+ */
+export function bindSms(params: Record<string, any>) {
+    return request.post('notice/bind/sms/bind',params, { showSuccessMessage: true })
 }
 
 /**
@@ -186,6 +238,12 @@ export function getSmsCaptcha() {
     return request.get(`notice/niusms/captcha`)
 }
 
+/**
+ * 获取图像验证码
+ */
+export function getsiteCaptcha() {
+    return request.get(`site/captcha/create`)
+}
 /**
  * 发送验证码
  * @param params

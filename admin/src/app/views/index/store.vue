@@ -220,9 +220,9 @@
 				<el-table-column :label="t('appName')" align="left" width="300">
 					<template #default="{ row }">
 						<div class="flex items-center cursor-pointer relative left-[-10px]" @click="openDetail(row)">
-							<el-image class="w-[54px] h-[54px]" :src="row.icon" fit="contain">
+							<el-image class="w-[54px] h-[54px] rounded-[5px]" :src="row.icon" fit="contain">
 								<template #error>
-									<div class="flex items-center w-full h-full">
+									<div class="flex items-center w-full h-full rounded-[5px]">
 										<img class="max-w-full max-h-full" src="@/app/assets/images/icon-addon-one.png" alt="" />
 									</div>
 								</template>
