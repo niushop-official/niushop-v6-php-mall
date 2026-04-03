@@ -4,6 +4,7 @@ namespace app\listener\notice;
 
 use app\dict\notice\NoticeTypeDict;
 use app\service\core\member\CoreMemberService;
+use app\service\core\notice\CoreNoticeBindMerchantService;
 use app\service\core\notice\CoreNoticeLogService;
 use app\service\core\notice\CoreSmsService;
 use core\exception\NoticeException;
@@ -26,12 +27,19 @@ class Sms
             $member_id = $to[ 'member_id' ] ?? 0;
             $uid = $to[ 'uid' ] ?? 0;
             if (!$mobile) {
-                //会员的
-                if ($member_id > 0) {//查询openid
-                    $info = ( new CoreMemberService() )->getInfoByMemberId($member_id);
+                if ($template['receiver_type'] ==1){
+                    //会员的
+                    if ($member_id > 0) {//查询openid
+                        $info = ( new CoreMemberService() )->getInfoByMemberId($member_id);
+                        $mobile = $info[ 'mobile' ] ?? '';
+                        $nickname = $info[ 'nickname' ] ?? '';
+                    }
+                }else{
+                    $info = (new CoreNoticeBindMerchantService())->getInfo();
                     $mobile = $info[ 'mobile' ] ?? '';
-                    $nickname = $info[ 'nickname' ] ?? '';
+                    $nickname = '商户通知';
                 }
+
             }
 
             try {

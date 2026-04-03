@@ -12,7 +12,6 @@
 namespace addon\shop\app\adminapi\controller\delivery_store;
 
 use addon\shop\app\service\admin\delivery_store\DeliveryStoreService;
-use app\upgrade\v158\Upgrade;
 use core\base\BaseAdminController;
 use think\Response;
 

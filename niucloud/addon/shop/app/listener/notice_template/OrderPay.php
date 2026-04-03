@@ -11,11 +11,11 @@ use app\listener\notice_template\BaseNoticeTemplate;
  */
 class OrderPay extends BaseNoticeTemplate
 {
-    private $key = 'shop_order_pay';
+    private $keys = ['shop_order_pay','admin_shop_order_pay'];
 
     public function handle(array $params)
     {
-        if ($this->key == $params['key']) {
+        if (in_array($params['key'],$this->keys)) {
             $order = (new CoreOrderService())->getInfo($params['data']['order_id']);
             if (!empty($order)) {
                 $wap_domain = get_wap_domain();

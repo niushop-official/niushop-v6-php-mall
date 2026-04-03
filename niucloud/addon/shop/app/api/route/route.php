@@ -141,7 +141,14 @@ Route::group('shop', function () {
 
     Route::get('rank/getRankConfig', 'addon\shop\app\api\controller\goods\Rank@getRankConfig');
 
+    /***************************************************** 满减送 ****************************************************/
 
+    // 获取商品满减优惠信息
+    Route::get('manjian/info', 'addon\shop\app\api\controller\marketing\Manjian@info');
+
+
+    // 获取同城配送轨迹
+    Route::get('delivery/track_of_local', 'addon\shop\app\api\controller\delivery\Order@getTrackOfLocalDeliveryOrder');
 })->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class)//false表示不验证登录
     ->middleware(ApiLog::class);
@@ -205,14 +212,14 @@ Route::group('shop', function () {
     Route::get('order_create/store', 'addon\shop\app\api\controller\order\OrderCreate@getStore');
     Route::get('order_create/local', 'addon\shop\app\api\controller\order\OrderCreate@getLocalDeliveryConfig');
 
-    // 获取同城配送轨迹
-    Route::get('delivery/track_of_local', 'addon\shop\app\api\controller\delivery\Order@getTrackOfLocalDeliveryOrder');
-
     //获取订单确认数据
     Route::get('confirm', 'addon\shop\app\api\controller\order\OrderCreate@confirm');
 
     // 订单关闭
     Route::put('order/close/:id', 'addon\shop\app\api\controller\order\Order@orderClose');
+
+    //订单删除
+    Route::delete('order/delete/:id', 'addon\shop\app\api\controller\order\Order@delete');
 
     // 订单完成
     Route::put('order/finish/:id', 'addon\shop\app\api\controller\order\Order@orderFinish');
@@ -302,11 +309,9 @@ Route::group('shop', function () {
     // 发票详情
     Route::get('invoice/:id', 'addon\shop\app\api\controller\order\Invoice@info');
 
-    /***************************************************** 满减送 ****************************************************/
-
-    // 获取商品满减优惠信息
-    Route::get('manjian/info', 'addon\shop\app\api\controller\marketing\Manjian@info');
 
 })->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class, true)//表示验证登录
     ->middleware(ApiLog::class);
+
+

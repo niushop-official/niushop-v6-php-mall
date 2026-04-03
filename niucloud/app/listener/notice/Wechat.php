@@ -4,6 +4,7 @@ namespace app\listener\notice;
 
 use app\dict\notice\NoticeTypeDict;
 use app\service\core\member\CoreMemberService;
+use app\service\core\notice\CoreNoticeBindMerchantService;
 use app\service\core\notice\CoreNoticeLogService;
 use app\service\core\weapp\CoreWeappConfigService;
 use core\exception\NoticeException;
@@ -18,16 +19,25 @@ class Wechat
         $vars = $data[ 'vars' ];//模板变量
         $key = $data[ 'key' ];
         $to = $data[ 'to' ];//发送对象主题
-
+        $weapp_page = $vars[ '__weapp_page' ] ?? '';
         //完全信任消息的设置, 不再依赖support_type
         if ($template[ 'is_wechat' ]) {
             $member_id = $to[ 'member_id' ] ?? 0;
-            //会员的
-            if ($member_id > 0) {//查询openid
-                $info = ( new CoreMemberService() )->getInfoByMemberId($member_id);
-                $openid = $info[ 'wx_openid' ] ?? '';
-                $nickname = $info[ 'nickname' ] ?? '';
+            if ($template['receiver_type'] ==1){
+                //会员的
+                if ($member_id > 0) {//查询openid
+                    $info = ( new CoreMemberService() )->getInfoByMemberId($member_id);
+                    $openid = $info[ 'wx_openid' ] ?? '';
+                    $nickname = $info[ 'nickname' ] ?? '';
+                }
+            }else{
+                $weapp_page = '';//通知商户的消息不进行跳转
+                $vars[ '__wechat_page' ] = '';
+                $info = (new CoreNoticeBindMerchantService())->getInfo();
+                $openid = $info[ 'wechat_openid' ] ?? '';
+                $nickname = '商户通知';
             }
+
             //或者还有用户的
             if (!empty($openid)) {
                 $wechat_template_id = $template[ 'wechat_template_id' ];
@@ -59,7 +69,6 @@ class Wechat
                     'content' => $wechat
                 );
 
-                $weapp_page = $vars[ '__weapp_page' ] ?? '';
                 if (!empty($weapp_page)) {
                     $appid = ( new CoreWeappConfigService() )->getWeappConfig()[ 'app_id' ] ?? '';
                     if (!empty($appid)) {

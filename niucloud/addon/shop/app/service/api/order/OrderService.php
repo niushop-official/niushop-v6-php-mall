@@ -63,7 +63,7 @@ class OrderService extends BaseApiService
         $field = 'point,activity_type,order_id,order_no,close_type,order_type,order_from,out_trade_no,status,member_id,ip,goods_money,delivery_money,order_money,create_time,pay_time,delivery_type,taker_name,taker_mobile,taker_full_address,take_store_id,is_enable_refund,member_remark,shop_remark,close_remark,pay_money,is_evaluate,invoice_id';
         $order = 'create_time desc';
         $search_model = $this->model
-            ->where([['member_id', '=', $this->member_id]])
+            ->where([['member_id', '=', $this->member_id],['user_delete_time','=',0]])
             ->withSearch(['order_no', 'status', 'activity_type','body'], $where)
             ->field($field)
             ->with(
@@ -155,7 +155,7 @@ class OrderService extends BaseApiService
     public function getDetail($order_id)
     {
         $field = 'buyer_ask_delivery_time,relate_id,activity_type,point,order_id,order_no,order_type,order_from,out_trade_no,status,member_id,ip,goods_money,delivery_money,order_money,invoice_id,create_time,pay_time,delivery_time,take_time,finish_time,close_time,delivery_type,taker_name,taker_mobile,taker_province,taker_city,taker_district,taker_address,taker_full_address,taker_longitude,taker_latitude,take_store_id,is_enable_refund,member_remark,shop_remark,close_remark,discount_money,is_evaluate,form_record_id';
-        $info = $this->model->where([['order_id|out_trade_no', '=', $order_id], ['member_id', '=', $this->member_id]])->field($field)
+        $info = $this->model->where([['order_id|out_trade_no', '=', $order_id], ['member_id', '=', $this->member_id],['user_delete_time','=',0]])->field($field)
             ->with(
                 [
                     'order_goods' => function ($query) {
@@ -407,5 +407,18 @@ class OrderService extends BaseApiService
         return [
             'invoice_money' => $order_money,
         ];
+    }
+
+    /**
+     * 删除订单（仅用户端不显示，不做真实删除）
+     * @param $id
+     * @return void
+     */
+    public function delete($id)
+    {
+        $order = $this->model->where('order_id',$id)->findOrEmpty()->toArray();
+        if (empty($order)) throw new ApiException('SHOP_ORDER_NOT_FOUND');//订单不存在
+        if ($order['status'] != OrderDict::CLOSE) throw new ApiException('SHOP_ONLY_CLOSE_CAN_BE_DELETE');//只有已关闭的订单才能够删除
+        $this->model->where('order_id', $id)->update(['user_delete_time' => time()]);
     }
 }

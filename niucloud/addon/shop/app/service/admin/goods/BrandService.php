@@ -55,7 +55,7 @@ class BrandService extends BaseAdminService
      */
     public function getList(array $where = [], $field = 'brand_id,brand_name,logo,color_json,desc,sort,create_time')
     {
-        $order = 'create_time desc';
+        $order = 'sort desc';
         return $this->model->where([ [ 'brand_id', '>', 0 ] ])->withSearch([ "brand_name" ], $where)->field($field)->limit(10)->order($order)->select()->toArray();
     }
 
@@ -125,7 +125,7 @@ class BrandService extends BaseAdminService
     public function modifySort($data)
     {
         return $this->model->where([
-            [ 'brand_id', '=', $data[ 'brand_id' ] ],
+            [ 'brand_id', '=', $data[ 'brand_id' ] ]
         ])->update([ 'sort' => $data[ 'sort' ] ]);
     }
 

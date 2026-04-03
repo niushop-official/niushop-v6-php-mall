@@ -41,6 +41,7 @@ class Order extends BaseApiController
     {
         $data = $this->request->params([
             [ 'trade_no', '' ],
+            [ 'member_id', 0 ],
         ]);
         return success(( new OrderService() )->getTrackOfLocalDeliveryOrder($data));
     }

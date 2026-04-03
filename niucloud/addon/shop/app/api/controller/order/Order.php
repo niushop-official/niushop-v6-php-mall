@@ -95,4 +95,15 @@ class Order extends BaseApiController
     {
         return success(( new ConfigService() )->getConfig());
     }
+
+    /**
+     * 删除订单
+     * @param $id
+     * @return Response
+     */
+    public function delete($id)
+    {
+        ( new OrderService() )->delete($id);
+        return success('DELETE_SUCCESS');
+    }
 }
