@@ -46,7 +46,15 @@
 				</el-form-item>
 
 				<el-form-item>
-					<div id="container" class="w-[800px] h-[520px] relative" v-loading="mapLoading"></div>
+					<map-selector
+						ref="mapSelectorRef"
+						:longitude="formData.lng"
+						:latitude="formData.lat"
+						:zoom="14"
+						:width="800"
+                        :height="500"
+						@locationChange="handleLocationChange"
+					/>
 				</el-form-item>
 			</el-form>
 		</el-card>
@@ -65,10 +73,10 @@ import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { ArrowLeft } from "@element-plus/icons-vue"
 import { getShopAddressInfo, addShopAddress, editShopAddress } from '@/addon/shop/api/shop_address'
-import { getMap, getAreaListByPid, getAreaByCode } from '@/app/api/sys'
+import { getAreaListByPid, getAreaByCode } from '@/app/api/sys'
 import { useRoute } from 'vue-router'
-import { createMarker, latLngToAddress, addressToLatLng } from '@/utils/qqmap'
 import { filterNumber, debounce } from '@/utils/common'
+import MapSelector from '@/components/map-selector/index.vue'
 
 const route = useRoute()
 const id: number = parseInt(route.query.id as string)
@@ -87,6 +95,7 @@ const areaList = reactive<areaType>({
 const provinceRef = ref()
 const cityRef = ref()
 const districtRef = ref()
+const mapSelectorRef = ref()
 
 /**
  * 获取省
@@ -95,80 +104,118 @@ getAreaListByPid(0).then(res => {
     areaList.province = res.data
 })
 
-let mapKey: string = ''
 onMounted(() => {
-    const mapScript = document.createElement('script')
-    getMap().then(res => {
-        mapKey = res.data.key
-        mapScript.type = 'text/javascript'
-        mapScript.src = 'https://map.qq.com/api/gljs?libraries=tools,service&v=1.exp&key=' + res.data.key
-        document.body.appendChild(mapScript)
-    })
-    mapScript.onload = () => {
-        setTimeout(() => {
-            initMap()
-        }, 500)
-    }
+    // 地图组件会自动初始化
 })
 
 /**
-* 初始化地图
+* 处理地图位置变化
  */
-let map: any
-let marker: any
-const mapLoading = ref(true)
-const initMap = () => {
-    const TMap = (window as any).TMap
-    const LatLng = TMap.LatLng
-    const center = new LatLng(formData.lat, formData.lng)
-
-    map = new TMap.Map('container', {
-        center,
-        zoom: 14
-    })
-
-    map.on('tilesloaded', () => {
-        mapLoading.value = false
-    })
-
-    marker = createMarker(map)
-
-    map.on('click', (evt: any) => {
-        map.setCenter(evt.latLng)
-        marker.updateGeometries({
-            id: 'center',
-            position: evt.latLng
-        })
-        latLngChange(evt.latLng.lat, evt.latLng.lng)
-    })
-
-    latLngChange(center.lat, center.lng)
+const handleLocationChange = (data: { lat: number, lng: number, address: any }) => {
+    formData.lat = data.lat
+    formData.lng = data.lng
+    
+    // 处理地址信息
+    if (data.address) {
+        // 腾讯地图返回格式
+        if (data.address.formatted_addresses && !data.address.addressComponent) {
+            formData.address = data.address.formatted_addresses?.recommend || ''
+            const addressStr = data.address.address || ''
+            matchAreaFromAddress(addressStr)
+        } else if (data.address.addressComponent) {
+            // 天地图返回格式
+            // 使用 formatted_addresses.recommend 或 formatted_address
+            const detailAddr = data.address.formatted_addresses?.recommend || data.address.formatted_address || data.address.poi || ''
+            formData.address = detailAddr
+            matchAreaFromTianditu(data.address.addressComponent)
+        }
+    }
 }
 
-const storeArea = reactive({
-    province_id: 0,
-    city_id: 0,
-    district_id: 0
-})
-
-const latLngChange = (lat: number, lng: number) => {
-    latLngToAddress({ mapKey, lat, lng }).then(({ message, result }) => {
-        if (message == 'query ok' || message == 'Success') {
-            formData.lat = result.location.lat
-            formData.lng = result.location.lng
-            formData.address = result.formatted_addresses.recommend
-
-            getAreaByCode(result.ad_info.adcode).then(({ data }) => {
-                storeArea.province_id = data.province ? data.province.id : 0
-                storeArea.city_id = data.city ? data.city.id : 0
-                storeArea.district_id = data.district ? data.district.id : 0
+// 从地址字符串匹配省市区（腾讯地图）
+const matchAreaFromAddress = (addressStr: string) => {
+    const provinceMatch = addressStr.match(/^(.+?省|.+?市|.+?自治区)/)
+    const cityMatch = addressStr.match(/(.+?市)/)
+    const districtMatches = addressStr.match(/(.+?区|.+?县)/g)
+    
+    if (provinceMatch) {
+        const provinceName = provinceMatch[1]
+        const matchedProvince = areaList.province.find(item => 
+            item.name.includes(provinceName) || provinceName.includes(item.name)
+        )
+        
+        if (matchedProvince) {
+            formData.province_id = matchedProvince.id
+            getAreaListByPid(matchedProvince.id).then((cityRes: any) => {
+                areaList.city = cityRes.data || []
+                
+                if (cityMatch) {
+                    const cityName = cityMatch[1]
+                    const matchedCity = areaList.city.find(item => 
+                        item.name.includes(cityName) || cityName.includes(item.name)
+                    )
+                    
+                    if (matchedCity) {
+                        formData.city_id = matchedCity.id
+                        getAreaListByPid(matchedCity.id).then((districtRes: any) => {
+                            areaList.district = districtRes.data || []
+                            
+                            if (districtMatches && districtMatches.length > 0) {
+                                const districtName = districtMatches[districtMatches.length - 1]
+                                const matchedDistrict = areaList.district.find(item => 
+                                    item.name.includes(districtName) || districtName.includes(item.name)
+                                )
+                                if (matchedDistrict) {
+                                    formData.district_id = matchedDistrict.id
+                                }
+                            }
+                        })
+                    }
+                }
             })
-        } else {
-            console.error(message, result)
         }
-    }).catch(err => {
-        console.log(err)
-    })
+    }
+}
+
+// 从天地图地址组件匹配省市区
+const matchAreaFromTianditu = (addressComp: any) => {
+    if (!addressComp) return
+    
+    // 匹配省
+    if (addressComp.province) {
+        const matchedProvince = areaList.province.find(item => 
+            item.name.includes(addressComp.province) || addressComp.province.includes(item.name)
+        )
+        if (matchedProvince) {
+            formData.province_id = matchedProvince.id
+            getAreaListByPid(matchedProvince.id).then((cityRes: any) => {
+                areaList.city = cityRes.data || []
+                
+                // 匹配市
+                if (addressComp.city) {
+                    const matchedCity = areaList.city.find(item => 
+                        item.name.includes(addressComp.city) || addressComp.city.includes(item.name)
+                    )
+                    if (matchedCity) {
+                        formData.city_id = matchedCity.id
+                        getAreaListByPid(matchedCity.id).then((districtRes: any) => {
+                            areaList.district = districtRes.data || []
+                            
+                            // 匹配区
+                            if (addressComp.county) {
+                                const matchedDistrict = areaList.district.find(item => 
+                                    item.name.includes(addressComp.county) || addressComp.county.includes(item.name)
+                                )
+                                if (matchedDistrict) {
+                                    formData.district_id = matchedDistrict.id
+                                }
+                            }
+                        })
+                    }
+                }
+            })
+        }
+    }
 }
 
 /**
@@ -322,11 +369,8 @@ watch(() => formData.district_id, (nval) => {
     }
 })
 
-const areaChange = debounce(() => {
-    setTimeout(() => {
-        // let province = areaList.province.map((item) => { if (item.id == formData.province_id) { return item.name } })
-        // let city = areaList.city.map((item) => { if (item.id == formData.city_id) { return item.name } })
-        // let district = areaList.district.map((item) => { if (item.id == formData.district_id) { return item.name } })
+const areaChange = debounce(async () => {
+    setTimeout(async () => {
         // 获取省名称：找到第一个id匹配的省，取它的name；没找到则返回空字符串
         let province = areaList.province.find(item => item.id == formData.province_id)?.name || '';
         // 获取市名称
@@ -334,63 +378,26 @@ const areaChange = debounce(() => {
         // 获取区名称
         let district = areaList.district.find(item => item.id == formData.district_id)?.name || '';
 
-        const address = [
-            formData.province_id ? (provinceRef.value.selectedLabel || province) : '',
-            formData.city_id ? (cityRef.value.selectedLabel || city) : '',
-            formData.district_id ? (districtRef.value.selectedLabel || district) : '',
+        const fullAddress = [
+            formData.province_id ? (provinceRef.value?.selectedLabel || province) : '',
+            formData.city_id ? (cityRef.value?.selectedLabel || city) : '',
+            formData.district_id ? (districtRef.value?.selectedLabel || district) : '',
             formData.address
-        ]
-        addressToLatLng({ mapKey, address: address.join('') }).then(({ message, result }) => {
-            if (message == 'Success' || message == 'query ok') {
-                const latLng = new (window as any).TMap.LatLng(result.location.lat, result.location.lng)
-                map.setCenter(latLng)
-                marker.updateGeometries({
-                    id: 'center',
-                    position: latLng
-                })
-                formData.lat = result.location.lat
-                formData.lng = result.location.lng
-            } else {
-                console.error(message, result)
+        ].join('')
+        
+        if (fullAddress && mapSelectorRef.value) {
+            try {
+                const result = await mapSelectorRef.value.searchAddress(fullAddress)
+                formData.lat = result.lat
+                formData.lng = result.lng
+            } catch (error) {
+                console.error('地址搜索失败:', error)
             }
-        })
+        }
     }, 500)
 }, 500)
 
-/**
- * 地图点选获取市
- */
-watch(() => storeArea.province_id, (nval) => {
-    if (nval) {
-        getAreaListByPid(storeArea.province_id).then(res => {
-            areaList.city = res.data
-            formData.province_id = storeArea.province_id
-            formData.city_id = storeArea.city_id
-        })
-    }
-})
-
-/**
-* 地图点选获取区
- */
-watch(() => storeArea.city_id, (nval) => {
-    if (nval) {
-        getAreaListByPid(storeArea.city_id).then(res => {
-            areaList.district = res.data
-            formData.city_id = storeArea.city_id
-            formData.district_id = storeArea.district_id
-        })
-    }
-})
-
-/**
- * 地图点选获取区
- */
-watch(() => storeArea.district_id, (nval) => {
-    if (nval) {
-        formData.district_id = storeArea.district_id
-    }
-})
+// 地图点选获取区域信息已在handleLocationChange中处理
 
 const onSave = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return

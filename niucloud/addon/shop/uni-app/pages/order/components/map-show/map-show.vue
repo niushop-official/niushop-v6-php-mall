@@ -1,7 +1,7 @@
 <template>
     <view  class="container" v-if="!loading">
         <!-- 微信小程序地图组件 -->
-		<map  id="mapContainer"  :latitude="marker.center.latitude" :longitude="marker.center.longitude" :polyline="polyline" :include-points="marker.center" :markers="marker.points" :scale="scale" :min-scale="10" :max-scale="20" :style="mapStyle" enable-zoom></map>
+        <map id="mapContainer" :latitude="marker.center.latitude" :longitude="marker.center.longitude" :polyline="polyline" :include-points="marker.center" :markers="marker.points" :scale="scale" :min-scale="10" :max-scale="20" :style="mapStyle" enable-zoom></map>
     </view>
 </template>
 
@@ -9,6 +9,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { img } from '@/utils/common';
 import { getTrackOfLocal } from '@/addon/shop/api/order'
+
 const prop = defineProps({
     tradeNo:{
       type: String,
@@ -26,13 +27,13 @@ const mapStyle = computed(() => {
     return style
 })
 
-const emit = defineEmits(['comfirm']);
+const emit = defineEmits(['confirm']);
 
 // 查询地图
 let marker = ref<any>({
-    center: { 
-        latitude: 39.909, 
-        longitude: 116.39742 
+    center: {
+        latitude: 39.909,
+        longitude: 116.39742
     },
 })
 const loading = ref<any>(true)
@@ -60,12 +61,13 @@ const getTrackOfLocalFn = () => {
             processRouteData(marker.value.driving)
             scale.value = estimateZoomLevel(haversineDistance(marker.value.points[0].latitude, marker.value.points[0].longitude, marker.value.points[1].latitude, marker.value.points[marker.value.points.length - 1].longitude))
         }
-        emit('comfirm', res.data)
+        emit('confirm', res.data)
         loading.value = false;
     }).catch(() => {
         loading.value = false;
     })
 }
+
 const  getRandomInt = (min: Number, max: Number) => {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -79,16 +81,16 @@ const  processRouteData = (result: any) => {
     if (!result) {
         return false
     }
-    
+
     const route = result.routes[0];
     const coords = route.polyline;
-    
+
     // 坐标解压（腾讯地图采用的压缩算法）
     const kr = 1000000;
     for (let i = 2; i < coords.length; i++) {
         coords[i] = Number(coords[i - 2]) + Number(coords[i]) / kr;
     }
-    
+
     // 转换为polyline数据格式
     const points = [];
     for (let i = 0; i < coords.length; i += 2) {
@@ -97,7 +99,7 @@ const  processRouteData = (result: any) => {
             longitude: coords[i + 1]
         });
     }
-    
+
     // 更新地图路线
     polyline.value = [{
         points: points,
@@ -106,6 +108,7 @@ const  processRouteData = (result: any) => {
         arrowLine: true // 显示方向箭头
     }];
 }
+
 const  haversineDistance = (lat1: any, lon1: any, lat2: any, lon2: any) => {
     var R = 6371; // 地球半径，单位为公里
     var dLat = deg2rad(lat2 - lat1);
@@ -123,27 +126,26 @@ const deg2rad = (deg: any) => {
     return deg * (Math.PI / 180);
 }
 
-
 const estimateZoomLevel = (distance: any) => {
     let zoomLevel;
     if (distance > 1000000) {
-    zoomLevel = 5 - ((distance - 1000000) / 3000000) * 10;
+        zoomLevel = 5 - ((distance - 1000000) / 3000000) * 10;
     } else if (distance > 100000 && distance <= 1000000) {
-    zoomLevel = 7 + ((distance - 100000) / 900000) * 6;
+        zoomLevel = 7 + ((distance - 100000) / 900000) * 6;
     } else if (distance > 50000 && distance <= 100000) {
-    zoomLevel = 10 + (distance / 1000000) * 9;
+        zoomLevel = 10 + (distance / 1000000) * 9;
     } else if (distance > 10000 && distance <= 50000) {
-    zoomLevel = 11 + (distance / 1000000) * 6.5;
+        zoomLevel = 11 + (distance / 1000000) * 6.5;
     } else if (distance > 5000 && distance <= 10000) {
-    zoomLevel = 13 + (distance / 100000) * 6;
+        zoomLevel = 13 + (distance / 100000) * 6;
     } else if (distance > 900 && distance <= 5000) {
-    zoomLevel = 14 + (distance / 100000) * 8;
+        zoomLevel = 14 + (distance / 100000) * 8;
     } else if (distance > 500 && distance <= 900) {
-    zoomLevel = 16 + (distance / 10000) * 3;
+        zoomLevel = 16 + (distance / 10000) * 3;
     } else if (distance > 100 && distance <= 500) {
-    zoomLevel = 16.5 + (distance / 10000) * 2;
+        zoomLevel = 16.5 + (distance / 10000) * 2;
     } else {
-    zoomLevel = 17 + (distance / 10000) * 2;
+        zoomLevel = 17 + (distance / 10000) * 2;
     }
     // 限制缩放级别在合理范围内，假设缩放级别范围是3 - 17
     return parseInt(Math.max(3, Math.min(19, zoomLevel)) - 1);

@@ -2,12 +2,15 @@
     <view :style="themeColor()">
         <view class="bg-[var(--page-bg-color)] min-h-screen" v-if="!loading">
             <view v-if="!loading" class="pb-20rpx">
-                <view style="min-height: calc(50vh  + 150rpx);" v-if="isShowLocalDelivery">
-                    <!-- #ifdef MP-WEIXIN -->
-                    <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()" />
-                    <!-- #endif -->
-                    <map-show ref="mapShowRef"  :tradeNo="detail.order_no" @comfirm="handleComfirm"  v-if="detail.order_no" />
-                </view>
+                <template v-if="systemStore.mapConfig.map_type == 'tencent'">
+                    <view style="min-height: calc(50vh  + 150rpx);" v-if="isShowLocalDelivery">
+                        <!-- #ifdef MP-WEIXIN -->
+                        <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()" />
+                        <!-- #endif -->
+                        <map-show ref="mapShowRef" :tradeNo="detail.order_no" @confirm="handleComfirm" v-if="detail.order_no" />
+                    </view>
+                </template>
+                <view v-else style="min-height: 150rpx;"></view>
                 <view v-if="detail.status_name  && !isShowLocalDelivery" class="pl-[40rpx] pr-[35rpx] bg-linear pb-[100rpx]">
                     <!-- #ifdef MP-WEIXIN || APP-PLUS -->
                     <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()" />
@@ -52,6 +55,10 @@
                                 </view>
                             </view>
                         </view>
+                        <view @click.stop="openMap" class="flex flex-col ml-3" v-if="detail.delivery_type == 'local_delivery' && ['3','5'].indexOf(detail.status) != -1 && systemStore.mapConfig.map_type == 'tianditu'">
+                            <text class="nc-iconfont nc-icon-dizhiV6mm leading-[1] p-[8rpx] text-center bg-[#fff] text-[32rpx] rounded-full"></text>
+                            <text class="text-xs mt-[4rpx]">地图</text>
+                        </view>
                         <text class="nc-iconfont nc-icon-youV6xx ml-[10rpx]" v-if="detail.delivery_type == 'local_delivery' && ['3','5'].indexOf(detail.status) != -1"></text>
                     </view>
                     
@@ -72,8 +79,7 @@
                     <view v-if="detail.delivery_type == 'store'">
                         <view class="flex items-center mb-3">
                             <view>
-                                <u--image class="overflow-hidden" radius="var(--goods-rounded-mid)" width="100rpx"
-                                          height="100rpx" :src="img(detail.store.store_logo ? detail.store.store_logo : '')" model="aspectFill">
+                                <u--image class="overflow-hidden" radius="var(--goods-rounded-mid)" width="100rpx" height="100rpx" :src="img(detail.store.store_logo ? detail.store.store_logo : '')" model="aspectFill">
                                     <template #error>
                                         <image class="w-[100rpx] h-[100rpx] rounded-[var(--goods-rounded-mid)] overflow-hidden" :src="img('addon/shop/store_default.png')" mode="aspectFill" />
                                     </template>
@@ -447,6 +453,7 @@
                                 class="order-grey-hollow-btn ml-[20rpx]"
                                 @click="orderBtnFn('evaluate')">{{ detail.is_evaluate == 1 ? t('selectedEvaluate') : t('evaluate') }}</view>
                         </template>
+                        <view class="order-grey-hollow-btn ml-[20rpx]" v-if="detail.status == -1" @click="orderBtnFn('delete')">{{ t('orderDelete') }}</view>
                     </view>
                 </view>
             </view>
@@ -472,7 +479,7 @@ import { ref, reactive, computed, nextTick } from 'vue';
 import { onLoad } from '@dcloudio/uni-app'
 import { t } from '@/locale'
 import { img, redirect, copy, goback } from '@/utils/common';
-import { getShopOrderDetail, orderClose, orderFinish } from '@/addon/shop/api/order';
+import { getShopOrderDetail, orderClose, orderFinish, orderDelete } from '@/addon/shop/api/order';
 import { getEvaluateConfig } from '@/addon/shop/api/shop';
 import { getVerifyCode } from '@/app/api/verify';
 import logisticsTracking from '@/addon/shop/pages/order/components/logistics-tracking/logistics-tracking.vue'
@@ -483,6 +490,9 @@ import { topTabar } from '@/utils/topTabbar';
 import { cloneDeep } from 'lodash-es';
 import diyFormDetail from '@/addon/components/diy-form-detail/index.vue'
 import mapShow from '@/addon/shop/pages/order/components/map-show/map-show.vue'
+import useSystemStore from "@/stores/system";
+
+const systemStore = useSystemStore()
 
 /********* 自定义头部 - start ***********/
 const topTabarObj = topTabar()
@@ -503,6 +513,8 @@ const sendMessagePath = ref('')
 const sendMessageImg = ref('')
 
 const wxPrivacyPopupRef: any = ref(null)
+
+const tianmapUrl = ref('')
 
 onLoad((option: any) => {
     if (option.order_id) {
@@ -530,20 +542,30 @@ const orderDetailFn = (id: any) => {
     loading.value = true;
     getShopOrderDetail(id).then((res: any) => {
         detail.value = res.data;
+
         isShowLocalDelivery.value = detail.value.show_local_delivery_info
-        if(isShowLocalDelivery.value){
-           topTabbarData = topTabarObj.setTopTabbarParam({ title: '订单详情', topStatusBar: { textColor: '#333' }})
+        if (isShowLocalDelivery.value) {
+            topTabbarData = topTabarObj.setTopTabbarParam({ title: '订单详情', topStatusBar: { textColor: '#333' } })
+
+            if (systemStore.mapConfig.map_type == 'tianditu') {
+                let member_id = detail.value.member_id
+                let trade_no = detail.value.order_no
+
+                const tiandituKey = systemStore.mapConfig.tianditu_map_web_key || '';
+                const baseUrl = (import.meta.env.VITE_APP_BASE_URL || `${ location.origin }`).replace(/\/api\/$/, '')
+                tianmapUrl.value = baseUrl + `/addon/shop/tianmap/order_detail_track.html?member_id=${ member_id }&trade_no=${ trade_no }&key=${ tiandituKey }`
+            }
         }
         if (res.data.order_goods && res.data.order_goods.length && isShowVerify.value) {
             let obj: any = {};
             obj.order_goods_id = res.data.order_goods[0].order_goods_id
             getVerifyCodeFn(obj);
         }
-		if (res.data.order_goods && res.data.order_goods.length && isShowSelfPickup.value) {
-		    let obj: any = {};
-		    obj.order_id = res.data.order_id
-		    getSelfPickupCodeFn(obj);
-		}
+        if (res.data.order_goods && res.data.order_goods.length && isShowSelfPickup.value) {
+            let obj: any = {};
+            obj.order_id = res.data.order_id
+            getSelfPickupCodeFn(obj);
+        }
 
         detail.value.goods = []; //购买商品
         detail.value.gift_goods = []; //赠品
@@ -592,6 +614,22 @@ const close = (item: any) => {
             if (res.confirm) {
                 orderClose(item.order_id).then((data) => {
                     orderDetailFn(item.order_id);
+                })
+            }
+        }
+    })
+}
+
+// 删除订单
+const deleteFn = (item: any) => {
+    uni.showModal({
+        title: '提示',
+        content: '您确定要删除该订单吗？',
+        confirmColor: useConfigStore().themeColor['--primary-color'],
+        success: res => {
+            if (res.confirm) {
+                orderDelete(item.order_id).then((data) => {
+                    goback({ url: '/addon/shop/pages/order/list', title: '' })
                 })
             }
         }
@@ -709,6 +747,8 @@ const orderBtnFn = (type = '') => {
                 param: { order_id: detail.value.order_id }
             })
         }
+    } else if (type == 'delete') {
+        deleteFn(detail.value);
     }
 }
 
@@ -786,9 +826,8 @@ const showLogistics = (data: any) => {
 const verifyGoodsData = ref({}) //虚拟商品
 const isShowVerify = computed(() => {
     let bool = false;
-    if (detail.value.order_goods.length == 1) {
+    if (detail.value.order_goods && detail.value.order_goods.length == 1) {
         verifyGoodsData.value = detail.value.order_goods[0]
-
         let data = detail.value.order_goods[0];
         bool = data.is_verify == 1 && data.goods_type == 'virtual' && data.delivery_status == 'delivery_finish' && detail.value.status == 3 ? true : false;
     }
@@ -808,12 +847,13 @@ const getVerifyCodeFn = (data: any) => {
 // const verifyGoodsData = ref({}) //虚拟商品
 const isShowSelfPickup = computed(() => {
     let bool = false;
-    // if (detail.value.order_goods.length == 1) {
+    if (detail.value.order_goods && detail.value.order_goods.length == 1) {
         // verifyGoodsData.value = detail.value.order_goods[0]
         bool = detail.value.delivery_type == 'store' && detail.value.status == 2 ? true : false;
-    // }
+    }
     return bool
 })
+
 const selfPickupInfo = ref([])
 const getSelfPickupCodeFn = (data: any) => {
     selfPickupInfo.value = [];
@@ -843,16 +883,19 @@ const localeDeliveryFn = () => {
         deliveryRecordRef.value?.open(detail.value.local_delivery_order_log);
     }
 }
+
+const openMap = () => {
+    if (!tianmapUrl.value) return
+    if (systemStore.mapConfig.map_type == 'tianditu') {
+        // 微信小程序不支持天地图，需要打开网页查看
+        redirect({
+            url: '/app/pages/webview/index',
+            param: { src: encodeURIComponent(tianmapUrl.value) }
+        });
+    }
+}
 </script>
 <style lang="scss" scoped>
-.text-item {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
-
 .order-goods-item:nth-child(1) {
     margin-top: 0;
 }

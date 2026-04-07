@@ -735,6 +735,7 @@ CREATE TABLE `{{prefix}}shop_order`
     `form_record_id`          INT(11) NOT NULL DEFAULT 0 COMMENT '万能表单记录id',
     `relate_order_id`         INT(11) NOT NULL DEFAULT 0 COMMENT '关联活动来源订单id',
     `relate_source`           VARCHAR(255)   NOT NULL DEFAULT '' COMMENT 'seckill 秒杀系统',
+    `user_delete_time`        INT(255)   NOT NULL DEFAULT 0 COMMENT '用户删除订单时间',
     PRIMARY KEY (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci COMMENT='订单表';
 

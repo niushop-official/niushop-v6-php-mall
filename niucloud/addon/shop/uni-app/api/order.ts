@@ -44,6 +44,13 @@ export function orderClose(order_id: number) {
 }
 
 /**
+ * 删除订单
+ */
+export function orderDelete(order_id: number) {
+    return request.delete(`shop/order/delete/${ order_id }`)
+}
+
+/**
  * 订单完成
  */
 export function orderFinish(order_id: number) {

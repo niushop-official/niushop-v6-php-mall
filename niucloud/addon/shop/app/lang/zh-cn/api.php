@@ -4,6 +4,7 @@ return [
     'SHOP_ORDER_NOT_FOUND' => '订单不存在',
     'SHOP_ORDER_IS_INVALID' => '订单已失效',
     'SHOP_ONLY_WAIT_TAKE_CAN_BE_TAKE' => '只有待收货的订单才可以收货',
+    'SHOP_ONLY_CLOSE_CAN_BE_DELETE' => '只有已关闭的订单才可以删除',
     'SHOP_ONLY_WAIT_DELIVERY_CAN_BE_DELIVERY' => '只有待发货的订单才可以发货',
     'SHOP_ONLY_WAIT_PAY_CAN_BE_PAY' => '只有待支付的订单可以支付',
     'SHOP_GOODS_CATEGORY_NOT_EXIST' => '分类不存在',

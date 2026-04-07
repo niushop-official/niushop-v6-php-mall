@@ -70,7 +70,7 @@ class CoreTransferService extends BaseCoreService
      * @param string $transfer_no
      * @param string $transfer_type
      * @param array $data
-     * @return true
+     * @return array
      */
     public function transfer(string $transfer_no, string $transfer_type, array $data)
     {
@@ -94,11 +94,13 @@ class CoreTransferService extends BaseCoreService
             'transfer_payment_code' => $data[ 'transfer_payment_code' ] ?? ''
         );
         $transfer->save($transfer_data);
+        Log::write('【scene_data】'.json_encode($transfer_data,256));
         switch ($transfer_type) {
             case TransferDict::WECHAT:
 //                $out_batch_no = create_no();
                 $transfer_account = $data[ 'transfer_payee' ] ?? [];
                 $scene_data = ( new CoreTransferSceneService() )->getSceneInfoByType($transfer[ 'trade_type' ]);
+                Log::write('【scene_data】'.json_encode($scene_data,256));
                 //通过业务获取业务场景
                 $temp_infos = $scene_data[ 'infos' ] ?? [];//转账场景信息
                 if (!empty($temp_infos)) {
@@ -202,7 +204,6 @@ class CoreTransferService extends BaseCoreService
     /**
      * 转账完成
      * @param string $transfer_no
-     * @param string $transfer_type
      * @param array $params
      * @return bool
      */
@@ -245,7 +246,6 @@ class CoreTransferService extends BaseCoreService
     /**
      * 转账失败
      * @param string $transfer_no
-     * @param string $transfer_type
      * @param array $params
      * @return true
      */
@@ -297,7 +297,7 @@ class CoreTransferService extends BaseCoreService
     /**
      * 处理中
      * @param $transfer_no
-     * @param $type
+     * @param $status
      * @return true
      */
     public function dealing($transfer_no, $status)
@@ -337,7 +337,7 @@ class CoreTransferService extends BaseCoreService
     /**
      * 撤销转账
      * @param string $transfer_no
-     * @return void
+     * @return true
      */
     public function cancel(string $transfer_no)
     {

@@ -16,6 +16,7 @@ use app\model\pay\Pay;
 use app\service\core\pay\CoreTransferSceneService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
+
 /**
  * 支付服务层
  */
@@ -36,13 +37,16 @@ class TransferService extends BaseAdminService
      * 设置转账场景id
      * @param $scene
      * @param $data
-     * @return void
+     * @return true
      */
     public function setSceneId($scene, $data){
         $core_transfer_service = new CoreTransferSceneService();
         $config = $core_transfer_service->getWechatTransferSceneConfig() ?? [];
         $scene_list = TransferDict::getWechatTransferScene();
         if(empty($scene_list[$scene])) throw new AdminException('MERCHANT_TRANSFER_SCENARIOS_THAT_DO_NOT_EXIST');
+        if (strlen($data['scene_id']) <4) {
+            throw new AdminException('MERCHANT_TRANSFER_SCENE_ID_MIN_4');
+        }
         $config[$scene] = $data['scene_id'];
         $core_transfer_service->setWechatTransferSceneConfig($config);
         return true;
@@ -52,7 +56,7 @@ class TransferService extends BaseAdminService
      * 设置业务转账场景配置
      * @param $type
      * @param $data
-     * @return void
+     * @return true
      */
     public function setTradeScene($type, $data){
         $core_transfer_service = new CoreTransferSceneService();

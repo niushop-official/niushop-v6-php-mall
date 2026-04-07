@@ -1250,6 +1250,9 @@ class CoreManjianService extends BaseCoreService
      */
     public function canJoinManjian($manjian_info, $member_id)
     {
+        if(empty($member_id)) {
+            return false;
+        }
         //判断会员是否有参与资格
         $can_join = FALSE;
         $join_member_type = $manjian_info['join_member_type'];

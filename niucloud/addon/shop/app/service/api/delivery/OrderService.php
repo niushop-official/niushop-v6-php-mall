@@ -33,7 +33,7 @@ class OrderService extends BaseApiService
      * @return array|array[]
      */
     public function getTrackOfLocalDeliveryOrder($data){
-        $data['member_id'] = $this->member_id;
+        $data['member_id']  = $data['member_id'] ?: $this->member_id;
         return (new CoreLocalDeliveryOrderService())->getTrackInfo($data);
     }
 }

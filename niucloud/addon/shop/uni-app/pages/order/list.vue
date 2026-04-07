@@ -126,9 +126,10 @@
                                     v-if="item.status == 5 && evaluateConfig.evaluate_is_show && evaluateConfig.is_evaluate == 1"
                                     @click.stop="orderBtnFn(item, 'evaluate')">{{ item.is_evaluate == 1 ? t('selectedEvaluate') : t('evaluate') }}</view>
                                 <view class="text-[24rpx] font-500 leading-[52rpx] h-[56rpx] min-w-[150rpx] text-center border-[2rpx] border-solid border-[#ccc] rounded-full text-[var(--text-color-light3)] ml-[20rpx] box-border" v-if="item.is_can_invoice && invoiceConfig.is_invoice==1" @click.stop="orderBtnFn(item, 'invoice')">开票</view>
-
                             </view>
-                        
+                            <view class="flex justify-end text-[28rpx] mt-[20rpx] items-center" v-if="item.status == -1">
+                                <view class="text-[24rpx] font-500 leading-[52rpx] h-[56rpx] min-w-[150rpx] text-center border-[2rpx] border-solid border-[#ccc] rounded-full text-[var(--text-color-light3)] box-border" @click.stop="orderBtnFn(item, 'delete')">{{ t('orderDelete') }}</view>
+                            </view>
                     </view>
                     </view>
                     
@@ -167,7 +168,7 @@
 import { ref, nextTick,computed } from 'vue';
 import { t } from '@/locale'
 import { img, redirect, copy ,pxToRpx} from '@/utils/common'
-import { getShopOrderStatus, getShopOrder, orderClose, orderFinish } from '@/addon/shop/api/order';
+import { getShopOrderStatus, getShopOrder, orderClose, orderFinish, orderDelete } from '@/addon/shop/api/order';
 import { getInvoiceConfig } from '@/addon/shop/api/config'
 import { getEvaluateConfig } from '@/addon/shop/api/shop';
 import MescrollBody from '@/components/mescroll/mescroll-body/mescroll-body.vue';
@@ -401,8 +402,9 @@ const orderBtnFn = (data: any, type = '') => {
             redirect({ url: '/addon/shop/pages/evaluate/order_evaluate_view', param: { order_id: data.order_id } })
         }
     } else if (type == 'invoice') {
-
         redirect({ url: '/addon/shop/pages/invoice/invoice', param: { order_ids: JSON.stringify([data.order_id]) } })
+    } else if (type == 'delete') {
+        deleteFn(data);
     }
 }
 const optionLoading = ref(false)
@@ -434,6 +436,22 @@ const close = (item: any) => {
         success: res => {
             if (res.confirm) {
                 orderClose(item.order_id).then((data) => {
+                    getMescroll().resetUpScroll();
+                })
+            }
+        }
+    })
+}
+
+// 删除订单
+const deleteFn = (item: any) => {
+    uni.showModal({
+        title: '提示',
+        content: '您确定要删除该订单吗？',
+        confirmColor: useConfigStore().themeColor['--primary-color'],
+        success: res => {
+            if (res.confirm) {
+                orderDelete(item.order_id).then((data) => {
                     getMescroll().resetUpScroll();
                 })
             }

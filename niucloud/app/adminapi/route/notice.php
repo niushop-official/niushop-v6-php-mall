@@ -87,6 +87,14 @@ Route::group('notice', function () {
             Route::delete(':username/:template_id', 'notice.NiuSms/templateDelete');
         });
     });
+    //商家消息通知
+    Route::get('bind/weapp', 'notice.BindMerchant/getWeappQrcodeUrl');
+    Route::get('bind/wechat', 'notice.BindMerchant/getWechatQrcodeUrl');
+    Route::post('bind/sms/send', 'notice.BindMerchant/sendBindSms');
+    Route::post('bind/sms/bind', 'notice.BindMerchant/checkSmsCodeAndBind');
+
+    Route::get('bind/info', 'notice.BindMerchant/merchantBindInfo');
+    Route::post('bind/cancel', 'notice.BindMerchant/unBindMerchant');
 
 })->middleware([
     AdminCheckToken::class,

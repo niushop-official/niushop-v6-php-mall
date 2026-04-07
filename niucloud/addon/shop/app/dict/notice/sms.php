@@ -13,6 +13,16 @@ return [
             return "您购买的“{body}”已支付成功。查看详情{url}";
         }
     ],
+    'admin_shop_order_pay' => [
+        'is_need_closure_content' => 1,//是否需要闭包处理content
+        'content' => function ($data) {
+            $sms_type = $data['sms_type'];
+            if ($sms_type == SmsDict::NIUSMS) {
+                return "您有商品售出，单号：{order_no}，详情请登录后台查看";
+            }
+            return "您有商品售出，单号：{order_no}，详情请登录后台查看";
+        }
+    ],
     'shop_order_delivery' => [
         'is_need_closure_content' => 1,//是否需要闭包处理content
         'content' => function ($data) {
@@ -22,6 +32,10 @@ return [
             }
             return "您购买的“{body}”已于{delivery_time}发货。查看详情{url}";
         }
+    ],
+    'admin_shop_refund_agree' => [
+        'is_need_closure_content' => 0,
+        'content' => '已同意单号为{order_no}的退款申请，详情请登录后台查看。',
     ],
     'shop_refund_agree' => [
         'is_need_closure_content' => 0,

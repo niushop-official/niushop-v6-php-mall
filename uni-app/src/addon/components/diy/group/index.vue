@@ -143,6 +143,9 @@
                                        :index="index"/>
                     </template>
 
+
+                    <!-- 以下是addon文件夹下的自定义组件 -->
+
                 </view>
             </view>
         </template>
