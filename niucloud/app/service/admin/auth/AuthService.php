@@ -37,7 +37,7 @@ class AuthService extends BaseAdminService
      */
     public function checkRole(Request $request)
     {
-        $this->checkAuthinfo($request);
+//        $this->checkAuthinfo($request);
 
         $rule = strtolower(trim($request->rule()->getRule()));
         $method = strtolower(trim($request->method()));
