@@ -113,20 +113,4 @@ class MemberConfigService extends BaseAdminService
     public function setPointRuleConfig(array $data){
         return (new CoreMemberConfigService())->setPointRuleConfig($data);
     }
-
-    /**
-     * 获取分销配置
-     */
-    public function getDistributionConfig(){
-        return (new CoreMemberConfigService())->getDistributionConfig();
-    }
-
-    /**
-     * 分销配置
-     * @param array $data
-     * @return true
-     */
-    public function setDistributionConfig(array $data){
-        return (new CoreMemberConfigService())->setDistributionConfig($data);
-    }
 }

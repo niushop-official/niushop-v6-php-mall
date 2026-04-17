@@ -146,26 +146,4 @@ class Config extends BaseAdminController
         (new MemberConfigService())->setPointRuleConfig($data);
         return success('MODIFY_SUCCESS');
     }
-
-    /**
-     * 获取分销配置
-     * @return Response
-     */
-    public function getDistributionConfig()
-    {
-        return success((new MemberConfigService())->getDistributionConfig());
-    }
-
-    /**
-     * 设置分销配置
-     * @return Response
-     */
-    public function setDistributionConfig()
-    {
-        $data = $this->request->params([
-            ['rate', 0]
-        ]);
-        (new MemberConfigService())->setDistributionConfig($data);
-        return success('MODIFY_SUCCESS');
-    }
 }

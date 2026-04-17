@@ -185,37 +185,6 @@ class CoreMemberService extends BaseCoreService
     }
 
     /**
-     * 通过邀请码获取会员ID
-     * @param string $invite_code
-     * @return int
-     */
-    public static function getMemberIdByInviteCode(string $invite_code): int
-    {
-        if (empty($invite_code)) {
-            return 0;
-        }
-        $member = (new Member())->where([['invite_code', '=', $invite_code]])->findOrEmpty();
-        if ($member->isEmpty()) {
-            return 0;
-        }
-        return $member->member_id;
-    }
-
-    /**
-     * 校验邀请码是否存在
-     * @param string $invite_code
-     * @return bool
-     */
-    public static function checkInviteCode(string $invite_code): bool
-    {
-        if (empty($invite_code)) {
-            return false;
-        }
-        $member = (new Member())->where([['invite_code', '=', $invite_code]])->findOrEmpty();
-        return !$member->isEmpty();
-    }
-
-    /**
      * 发放成长值
      * @param int $member_id
      * @param string $key

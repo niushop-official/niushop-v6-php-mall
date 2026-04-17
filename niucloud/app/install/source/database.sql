@@ -1,4 +1,4 @@
-
+﻿
 SET NAMES utf8mb4;
 
 DROP TABLE IF EXISTS `account_log`;
@@ -185,7 +185,6 @@ DROP TABLE IF EXISTS `member`;
 CREATE TABLE `member` (
   `member_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `member_no` varchar(255) NOT NULL DEFAULT '' COMMENT '会员编码',
-  `invite_code` varchar(20) NOT NULL DEFAULT '' COMMENT '邀请码',
   `pid` int(11) NOT NULL DEFAULT 0 COMMENT '推广会员id',
   `username` varchar(255) NOT NULL DEFAULT '' COMMENT '会员用户名',
   `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '手机号',

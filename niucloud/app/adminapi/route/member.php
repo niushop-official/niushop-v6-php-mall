@@ -101,10 +101,6 @@ Route::group('member', function() {
     Route::get('config/point_rule', 'member.Config/getPointRuleConfig');
     //设置积分规则
     Route::post('config/point_rule', 'member.Config/setPointRuleConfig');
-    //获取分销配置
-    Route::get('config/distribution', 'member.Config/getDistributionConfig');
-    //设置分销配置
-    Route::post('config/distribution', 'member.Config/setDistributionConfig');
     /***************************************************** 会员体现**************************************************/
     //会员提现列表
     Route::get('cash_out', 'member.CashOut/lists');

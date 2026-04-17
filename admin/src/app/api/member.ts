@@ -268,21 +268,6 @@ export function getPointRuleConfig() {
 }
 
 /**
- * 获取分销配置
- */
-export function getDistributionConfig() {
-    return request.get(`member/config/distribution`)
-}
-
-/**
- * 设置分销配置
- * @param params
- */
-export function setDistributionConfig(params: Record<string, any>) {
-    return request.post(`member/config/distribution`, params, { showSuccessMessage: true })
-}
-
-/**
  * 获取会员转账方式
  */
 export function getTransfertype() {

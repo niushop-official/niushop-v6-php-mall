@@ -42,25 +42,5 @@ return [
         ]
     ],
     MemberAccountTypeDict::BALANCE => [
-        //分销佣金
-        'distribution_commission' => [
-            //名称
-            'name' => '分销佣金',
-            //是否增加
-            'inc' => 1,
-            //是否减少
-            'dec' => 0,
-        ],
-    ],
-    MemberAccountTypeDict::COMMISSION => [
-        //分销佣金
-        'distribution_commission' => [
-            //名称
-            'name' => '分销佣金',
-            //是否增加
-            'inc' => 1,
-            //是否减少
-            'dec' => 0,
-        ],
     ]
 ];
