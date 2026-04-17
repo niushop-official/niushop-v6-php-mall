@@ -36,9 +36,6 @@ export function usernameRegister(data : AnyObject) {
     if(uni.getStorageSync('pid')){
         data.pid = uni.getStorageSync('pid');
     }
-    if(uni.getStorageSync('invite_code')){
-        data.invite_code = uni.getStorageSync('invite_code');
-    }
     return request.post(url, data, { showErrorMessage: true })
 }
 
@@ -49,9 +46,6 @@ export function mobileRegister(data : AnyObject) {
     let url = 'register/mobile'
     if(uni.getStorageSync('pid')){
         data.pid = uni.getStorageSync('pid');
-    }
-    if(uni.getStorageSync('invite_code')){
-        data.invite_code = uni.getStorageSync('invite_code');
     }
     return request.post(url, data, { showErrorMessage: true })
 }
