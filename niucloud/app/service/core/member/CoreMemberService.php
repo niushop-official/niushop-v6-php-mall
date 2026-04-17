@@ -162,29 +162,6 @@ class CoreMemberService extends BaseCoreService
     }
 
     /**
-     * 生成唯一邀请码
-     * @return string
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
-     */
-    public static function createInviteCode() {
-        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        $code = '';
-        for ($i = 0; $i < 8; $i++) {
-            $code .= $chars[random_int(0, strlen($chars) - 1)];
-        }
-
-        $member = (new Member())->where([['invite_code', '=', $code]])->findOrEmpty();
-
-        if ($member->isEmpty()) {
-            return $code;
-        } else {
-            return self::createInviteCode();
-        }
-    }
-
-    /**
      * 发放成长值
      * @param int $member_id
      * @param string $key

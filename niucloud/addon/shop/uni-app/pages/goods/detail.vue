@@ -727,17 +727,12 @@ let posterParam = {};
 // 分享海报链接
 const copyUrlFn = ()=>{
 	copyUrlParam.value = '?sku_id='+goodsDetail.value.sku_id;
-	if (userInfo.value && userInfo.value.invite_code) {
-		copyUrlParam.value += '&invite_code=' + userInfo.value.invite_code;
-	} else if (userInfo.value && userInfo.value.member_id) {
-		copyUrlParam.value += '&mid=' + userInfo.value.member_id;
-	}
+	if (userInfo.value && userInfo.value.member_id) copyUrlParam.value += '&mid=' + userInfo.value.member_id;
 }
 
 const openShareFn = ()=>{
     posterParam.sku_id = goodsDetail.value.sku_id;
     if (userInfo.value && userInfo.value.member_id) posterParam.member_id = userInfo.value.member_id;
-    if (userInfo.value && userInfo.value.invite_code) posterParam.invite_code = userInfo.value.invite_code;
 	sharePosterRef.value.openShare()
 }
 /************* 分享海报-end **************/

@@ -18,7 +18,6 @@ use app\model\member\Member;
 use app\service\api\captcha\CaptchaService;
 use app\service\api\member\MemberConfigService;
 use app\service\api\member\MemberService;
-use app\service\core\member\CoreMemberService;
 use core\base\BaseApiService;
 use core\exception\AuthException;
 use think\db\exception\DataNotFoundException;
@@ -76,7 +75,6 @@ class RegisterService extends BaseApiService
                 $p_member_info = $member_service->findMemberInfo([ 'member_id' => $pid ]);
                 if (!$p_member_info->isEmpty()) $data[ 'pid' ] = $pid;//设置上级推荐人
             }
-            $data[ 'invite_code' ] = CoreMemberService::createInviteCode();
             $member_id = ( new MemberService() )->add($data);
             $data[ 'member_id' ] = $member_id;
             event('MemberRegister', $data);
