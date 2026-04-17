@@ -76,11 +76,6 @@ class RegisterService extends BaseApiService
                 $p_member_info = $member_service->findMemberInfo([ 'member_id' => $pid ]);
                 if (!$p_member_info->isEmpty()) $data[ 'pid' ] = $pid;//设置上级推荐人
             }
-            $invite_code = $this->request->get('invite_code', $this->request->post('invite_code', ''));
-            if (!empty($invite_code)) {
-                $p_member_info = $this->model->where([ [ 'invite_code', '=', $invite_code ] ])->findOrEmpty();
-                if (!$p_member_info->isEmpty()) $data[ 'pid' ] = $p_member_info->member_id;
-            }
             $member_id = ( new MemberService() )->add($data);
             $data[ 'member_id' ] = $member_id;
             event('MemberRegister', $data);
