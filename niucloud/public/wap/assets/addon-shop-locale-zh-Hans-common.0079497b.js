@@ -1,0 +1,1 @@
+const o="订单号",e="实付款",r="关闭订单",a="确认收货",t="优惠劵",d={orderNo:"订单号",actualPayment:"实付款",orderClose:r,orderFinish:a,coupon:"优惠劵"};export{e as actualPayment,t as coupon,d as default,r as orderClose,a as orderFinish,o as orderNo};

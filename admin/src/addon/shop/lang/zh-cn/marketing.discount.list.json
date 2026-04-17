@@ -1,0 +1,16 @@
+{
+    "addDiscount":"添加限时折扣",
+    "name":"名称",
+    "namePlaceholder":"请输入活动名称",
+    "title":"标题",
+    "status":"状态",
+    "statusPlaceholder":"请选择状态",
+    "paymentAmount":"支付金额",
+    "memberCount":"会员数",
+    "orderCount":"订单数",
+    "discountTime":"活动时间",
+    "detail":"详情",
+    "close":"关闭",
+    "closeTips":"活动正在进行中，是否确认关闭当前活动？",
+    "deleteTips":"是否确认删除当前活动"
+}

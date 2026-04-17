@@ -1,0 +1,21 @@
+{
+    "collectionCoupon":"领取记录",
+    "title": "优惠券名称",
+    "userName": "领用会员",
+    "receiveType": "领用方式",
+    "createTime": "领取时间",
+    "expireTime": "到期时间",
+    "status":"当前状态",
+    "useTime": "使用时间",
+    "validity":"使用有效期",
+    "mobile": "手机号",
+    "memberInfo": "会员信息",
+    "memberInfoPlaceholder":"请输入会员昵称/手机号",
+    "price": "面值",
+    "sumCount": "发放数量",
+    "receiveUseCount": "已使用",
+    "couponInfo": "优惠券基本信息",
+    "receiveCount":"已领取",
+    "receiveExpireCount":"已过期",
+    "showOrder": "查看订单"
+}
