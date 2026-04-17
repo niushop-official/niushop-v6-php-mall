@@ -360,10 +360,17 @@ export function handleOnloadParams(option:any) {
 				if(arr[0] == 'mid'){
 					uni.setStorageSync('pid', arr[1])
 				}
+				if(arr[0] == 'invite_code'){
+					uni.setStorageSync('invite_code', arr[1])
+				}
 			});
 		}
 	} else {
 		params = option;
+		// 处理URL中的邀请码参数
+		if (option.invite_code) {
+			uni.setStorageSync('invite_code', option.invite_code)
+		}
 	}
 	return params;
 }

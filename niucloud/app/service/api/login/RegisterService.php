@@ -14,6 +14,7 @@ namespace app\service\api\login;
 use app\dict\member\MemberLoginTypeDict;
 use app\dict\member\MemberRegisterTypeDict;
 use app\job\member\SetMemberNoJob;
+use app\job\member\SetMemberInviteCodeJob;
 use app\model\member\Member;
 use app\service\api\captcha\CaptchaService;
 use app\service\api\member\MemberConfigService;
@@ -75,10 +76,16 @@ class RegisterService extends BaseApiService
                 $p_member_info = $member_service->findMemberInfo([ 'member_id' => $pid ]);
                 if (!$p_member_info->isEmpty()) $data[ 'pid' ] = $pid;//设置上级推荐人
             }
+            $invite_code = $this->request->get('invite_code', $this->request->post('invite_code', ''));
+            if (!empty($invite_code)) {
+                $p_member_info = $this->model->where([ [ 'invite_code', '=', $invite_code ] ])->findOrEmpty();
+                if (!$p_member_info->isEmpty()) $data[ 'pid' ] = $p_member_info->member_id;
+            }
             $member_id = ( new MemberService() )->add($data);
             $data[ 'member_id' ] = $member_id;
             event('MemberRegister', $data);
             SetMemberNoJob::dispatch([ 'member_id' => $member_id ]);
+            SetMemberInviteCodeJob::dispatch([ 'member_id' => $member_id ]);
         }
         $member_info = $member_service->findMemberInfo([ 'member_id' => $member_id ]);
         if ($member_info->isEmpty()) throw new AuthException('MEMBER_NOT_EXIST');//账号不存在

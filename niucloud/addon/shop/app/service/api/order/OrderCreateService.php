@@ -42,6 +42,10 @@ class OrderCreateService extends BaseApiService
         $data['order_from'] = $this->channel;
         $data['main_type'] = OrderLogDict::MEMBER;
         $data['main_id'] = $this->member_id;
+        $invite_code = $this->request->get('invite_code', $this->request->post('invite_code', ''));
+        if (!empty($invite_code)) {
+            $data['invite_code'] = $invite_code;
+        }
         return (new CoreOrderCreateService())->create($data);
     }
 

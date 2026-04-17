@@ -61,6 +61,9 @@ export function orderCreateCalculate(params: Record<string, any>) {
  * 订单创建
  */
 export function orderCreate(params: Record<string, any>) {
+    if(uni.getStorageSync('invite_code')){
+        params.invite_code = uni.getStorageSync('invite_code');
+    }
     return request.post('shop/order_create/create', params)
 }
 

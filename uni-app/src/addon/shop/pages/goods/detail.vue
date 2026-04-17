@@ -727,7 +727,7 @@ let posterParam = {};
 // 分享海报链接
 const copyUrlFn = ()=>{
 	copyUrlParam.value = '?sku_id='+goodsDetail.value.sku_id;
-	if (userInfo.value && userInfo.value.member_id) copyUrlParam.value += '&mid=' + userInfo.value.member_id;
+	if (userInfo.value && userInfo.value.invite_code) copyUrlParam.value += '&invite_code=' + userInfo.value.invite_code;
 }
 
 const openShareFn = ()=>{

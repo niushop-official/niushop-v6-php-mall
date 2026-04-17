@@ -25,9 +25,9 @@ export const useShare = () => {
 
     const getQuery = () => {
         let query: any = currShareRoute().params;
-        let wap_member_id = uni.getStorageSync('wap_member_id');
-        if (wap_member_id) {
-            query.mid = wap_member_id;
+        let wap_member_info = uni.getStorageSync('wap_member_info');
+        if (wap_member_info && wap_member_info.invite_code) {
+            query.invite_code = wap_member_info.invite_code;
         }
 
         let queryStr = [];

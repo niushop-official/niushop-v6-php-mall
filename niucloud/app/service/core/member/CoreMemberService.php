@@ -126,6 +126,26 @@ class CoreMemberService extends BaseCoreService
         }
     }
 
+    public static function createInviteCode(int $member_id) {
+        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $code = '';
+        $max = strlen($chars) - 1;
+
+        $length = 8;
+        for ($i = 0; $i < $length; $i++) {
+            $code .= $chars[random_int(0, $max)];
+        }
+
+        $member = (new Member())->where([ ['invite_code', '=', $code] ])->findOrEmpty();
+
+        if ($member->isEmpty()) {
+            (new Member())->update([ 'invite_code' => $code ], [ ['member_id', '=', $member_id] ]);
+            return $code;
+        } else {
+            return self::createInviteCode($member_id);
+        }
+    }
+
     /**
      * 设置会员会员码
      * @param int $member_id

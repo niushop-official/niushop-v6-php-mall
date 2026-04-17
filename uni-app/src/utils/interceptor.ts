@@ -55,6 +55,10 @@ export const launchInterceptor = () => {
     if (launch.query && launch.query.mid) {
         uni.setStorageSync('pid', launch.query.mid)
     }
+    // 存储邀请码
+    if (launch.query && launch.query.invite_code) {
+        uni.setStorageSync('invite_code', launch.query.invite_code)
+    }
 
     loadShare()
 

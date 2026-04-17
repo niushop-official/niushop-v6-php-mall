@@ -93,6 +93,7 @@ class CoreOrderCreateService extends BaseCoreService
         ];//总
 
         $order_goods_data = [];//项
+        $invite_code = $data[ 'invite_code' ] ?? '';
         foreach ($this->goods_data as $v) {
             $order_goods_data[] = [
                 'member_id' => $data[ 'member_id' ],
@@ -110,6 +111,7 @@ class CoreOrderCreateService extends BaseCoreService
                 'order_id' => &$this->order_id,
                 'discount_money' => $v[ 'discount_money' ] ?? 0,
                 'status' => OrderGoodsDict::NORMAL,
+                'invite_code' => $invite_code,
             ];
         }
         $create_order_data = array(
