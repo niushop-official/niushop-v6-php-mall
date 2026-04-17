@@ -1,1 +1,0 @@
-import{am as e}from"./index-ad4e42d5.js";function n(){return e.get("niucloud/authinfo",{showErrorMessage:!1})}function t(o){return e.post("niucloud/authinfo",o,{showSuccessMessage:!0})}function r(o){return e.post(`addon/download/${o.addon}`,o,{showSuccessMessage:!0})}function u(){return e.get("niucloud/framework/version/list")}export{n as a,r as d,u as g,t as s};
