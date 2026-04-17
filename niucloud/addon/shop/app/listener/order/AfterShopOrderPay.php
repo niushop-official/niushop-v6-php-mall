@@ -14,6 +14,10 @@ use addon\shop\app\service\core\CoreStatService;
 use addon\shop\app\service\core\order\CoreInvoiceService;
 use addon\shop\app\service\core\order\CoreOrderDeliveryService;
 use addon\shop\app\service\core\order\CoreOrderLogService;
+use app\dict\member\MemberAccountTypeDict;
+use app\model\member\Member;
+use app\service\core\member\CoreMemberAccountService;
+use app\service\core\member\CoreMemberConfigService;
 use app\service\core\notice\NoticeService;
 use app\service\core\printer\CorePrinterService;
 use think\facade\Log;
@@ -77,6 +81,9 @@ class AfterShopOrderPay
 
             ( new DiscountService() )->orderPayAfter($order_data);
 
+            // 分销佣金发放
+            $this->distributionCommissionGrant($order_data);
+
             // 小票打印，订单付款之后
             return ( new CorePrinterService() )->printTicket([
                 "type" => "shopGoodsOrder",
@@ -88,6 +95,57 @@ class AfterShopOrderPay
 
         } catch (\Exception $e) {
             Log::write('订单AfterShopOrderPay失败' . $e->getMessage() . $e->getFile() . $e->getLine());
+        }
+    }
+
+    /**
+     * 分销佣金发放
+     * @param array $order_data
+     * @return void
+     */
+    private function distributionCommissionGrant(array $order_data)
+    {
+        try {
+            $member_id = $order_data['member_id'] ?? 0;
+            if ($member_id <= 0) {
+                return;
+            }
+
+            $member = (new Member())->where([['member_id', '=', $member_id]])->field('pid')->findOrEmpty();
+            if ($member->isEmpty() || $member['pid'] <= 0) {
+                return;
+            }
+
+            $distribution_config = (new CoreMemberConfigService())->getDistributionConfig();
+            $rate = intval($distribution_config['rate'] ?? 0);
+            if ($rate <= 0) {
+                return;
+            }
+
+            $pay_money = floatval($order_data['pay_money'] ?? 0);
+            if ($pay_money <= 0) {
+                return;
+            }
+
+            $commission = round($pay_money * $rate / 100, 2);
+            if ($commission <= 0) {
+                return;
+            }
+
+            $member_account_service = new CoreMemberAccountService();
+            $memo = '分销佣金：订单金额' . $pay_money . '元 × ' . $rate . '%';
+            $member_account_service->addLog(
+                $member['pid'],
+                MemberAccountTypeDict::BALANCE,
+                $commission,
+                'distribution_commission',
+                $memo,
+                $order_data['order_id']
+            );
+
+            Log::write('分销佣金发放成功：上级会员ID=' . $member['pid'] . ', 佣金=' . $commission . ', 订单ID=' . $order_data['order_id']);
+        } catch (\Exception $e) {
+            Log::write('分销佣金发放失败：' . $e->getMessage() . $e->getFile() . $e->getLine());
         }
     }
 }

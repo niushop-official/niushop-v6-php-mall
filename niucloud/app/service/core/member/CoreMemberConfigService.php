@@ -169,5 +169,34 @@ class CoreMemberConfigService extends BaseCoreService
         return true;
     }
 
+    /**
+     * 获取分销配置
+     * @return array
+     */
+    public function getDistributionConfig()
+    {
+        $info = ( new CoreConfigService() )->getConfig('DISTRIBUTION')[ 'value' ] ?? [];
+        return [
+            'rate' => $info[ 'rate' ] ?? 0, // 分销比例（0-100）
+        ];
+    }
+
+    /**
+     * 分销配置
+     * @param array $data
+     * @return true
+     */
+    public function setDistributionConfig(array $data)
+    {
+        $config = [
+            'rate' => intval($data[ 'rate' ] ?? 0),
+        ];
+        if ($config[ 'rate' ] < 0 || $config[ 'rate' ] > 100) {
+            throw new CommonException('分销比例必须在0-100之间');
+        }
+        ( new CoreConfigService() )->setConfig('DISTRIBUTION', $config);
+        return true;
+    }
+
 
 }

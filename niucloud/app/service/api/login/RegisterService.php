@@ -72,9 +72,27 @@ class RegisterService extends BaseApiService
             $data[ 'register_channel' ] = $this->channel;
             $data[ 'register_type' ] = $type;
             $pid = $this->request->get('pid', $this->request->post('pid', 0));
-            if ($pid > 0) {
+            $invite_code = $this->request->get('invite_code', $this->request->post('invite_code', ''));
+            $mid = $this->request->get('mid', $this->request->post('mid', 0));
+
+            if (!empty($invite_code)) {
+                $invite_pid = CoreMemberService::getMemberIdByInviteCode($invite_code);
+                if ($invite_pid > 0) {
+                    $p_member_info = $member_service->findMemberInfo([ 'member_id' => $invite_pid ]);
+                    if (!$p_member_info->isEmpty()) {
+                        $data[ 'pid' ] = $invite_pid;
+                    }
+                }
+            } elseif ($mid > 0) {
+                $p_member_info = $member_service->findMemberInfo([ 'member_id' => $mid ]);
+                if (!$p_member_info->isEmpty()) {
+                    $data[ 'pid' ] = $mid;
+                }
+            } elseif ($pid > 0) {
                 $p_member_info = $member_service->findMemberInfo([ 'member_id' => $pid ]);
-                if (!$p_member_info->isEmpty()) $data[ 'pid' ] = $pid;//设置上级推荐人
+                if (!$p_member_info->isEmpty()) {
+                    $data[ 'pid' ] = $pid;
+                }
             }
             $data[ 'invite_code' ] = CoreMemberService::createInviteCode();
             $member_id = ( new MemberService() )->add($data);
