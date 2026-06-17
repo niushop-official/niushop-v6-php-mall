@@ -67,7 +67,7 @@ class CoreWechatMessageService extends BaseCoreService
      * 事件分流
      * @return void
      */
-    public function event(int $message)
+    public function event($message)
     {
         switch ($message['Event'] ) {
             case WechatDict::EVENT_SUBSCRIBE:
@@ -83,7 +83,7 @@ class CoreWechatMessageService extends BaseCoreService
      * @param $message
      * @return Lang
      */
-    public function scan(int $message){
+    public function scan($message){
         $key = str_replace('qrscene_', '', $message['EventKey']);
         $core_scan_service = new CoreScanService();
         $core_scan_service->actionByScan($key, ['openid' => $message['FromUserName']]);
@@ -95,7 +95,7 @@ class CoreWechatMessageService extends BaseCoreService
      * @param $message
      * @return false
      */
-    public function subscribe(int $message){
+    public function subscribe($message){
         //todo 新增粉丝或将原有的粉丝改为关注状态
         // 因为时间的原因,这里可能需要将实践放在消息队列里面
         $core_wechat_fans_service = new CoreWechatFansService();
@@ -129,7 +129,7 @@ class CoreWechatMessageService extends BaseCoreService
      * @throws DbException
      * @throws ModelNotFoundException
      */
-    function text(int $message)
+    function text($message)
     {
         $core_wechat_reply_service = new CoreWechatReplyService();
         return $core_wechat_reply_service->reply(WechatDict::REPLY_KEYWORD, $message['Content'], openid: $message['FromUserName']) ?? false;

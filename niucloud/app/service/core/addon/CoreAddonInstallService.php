@@ -605,6 +605,7 @@ class CoreAddonInstallService extends CoreAddonBaseService
         $addon_info = $core_addon_service->getInfoByKey($this->addon);
         if (empty($addon_info)) throw new AddonException('NOT_UNINSTALL');
         if (!$this->uninstallSql()) throw new AddonException('ADDON_SQL_FAIL');
+        if (!$this->uninstallDir()) throw new AddonException('ADDON_DIR_FAIL');
 
         // 卸载菜单
         $this->uninstallMenu();
