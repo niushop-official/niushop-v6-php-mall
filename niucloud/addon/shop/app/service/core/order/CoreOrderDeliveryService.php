@@ -161,7 +161,7 @@ class CoreOrderDeliveryService extends BaseCoreService
             Db::commit();
             return true;
 
-        } catch (AdminException $exception) {
+        } catch (\Exception $exception) {
             Db::rollback();
             throw new AdminException($exception->getMessage());
         }

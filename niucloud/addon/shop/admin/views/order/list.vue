@@ -122,7 +122,7 @@
                                                 <span v-if="item.activity_type == 'exchange'">{{ row.extend.point }}{{ t('point') }}<span v-if="parseFloat(row.price)">+￥{{ row.price }}</span></span>
                                                 <span v-else-if="row.impulse_buy_info && row.impulse_buy_info.is_impulse_buy">￥{{ parseFloat(row.impulse_buy_info.impulse_buy_price).toFixed(2) }}</span>
                                                 <span v-else class="text-[13px]">￥{{ row.price }}</span>
-                                                <span class="text-[13px] mt-[5px]">{{ row.num }}{{ t('piece') }}</span>
+                                                <span class="text-[13px] mt-[5px]">{{ row.num }}{{ row.unit }}</span>
                                             </div>
                                         </template>
                                     </el-table-column>

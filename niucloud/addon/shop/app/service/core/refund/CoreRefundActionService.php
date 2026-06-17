@@ -20,6 +20,7 @@ use addon\shop\app\model\order\OrderRefund;
 use addon\shop\app\model\shop_address\ShopAddress;
 use core\base\BaseCoreService;
 use core\exception\CommonException;
+use think\facade\Db;
 
 /**
  * 订单退款服务层
@@ -93,13 +94,22 @@ class CoreRefundActionService extends BaseCoreService
             $update_data[ 'status' ] = OrderRefundDict::STORE_REFUSE_REFUND_GOODS_APPLY_WAIT_BUYER;
             $update_data[ 'shop_reason' ] = $data[ 'shop_reason' ];
         }
-        $order_refund_info->save($update_data);
-        //审核完毕后续事件
-        $data[ 'order_refund_no' ] = $order_refund_no;
-        $data[ 'refund_data' ] = array_merge($order_refund_info->toArray(), $update_data);
 
-        event('AfterShopOrderRefundAuditApply', $data);
-        return true;
+        Db::startTrans();
+        try {
+            $order_refund_info->save($update_data);
+            //审核完毕后续事件
+            $data[ 'order_refund_no' ] = $order_refund_no;
+            $data[ 'refund_data' ] = array_merge($order_refund_info->toArray(), $update_data);
+
+            event('AfterShopOrderRefundAuditApply', $data);
+
+            Db::commit();
+            return true;
+        } catch ( \Exception $e ) {
+            Db::rollback();
+            throw new CommonException($e->getMessage());
+        }
     }
 
     /**
@@ -195,35 +205,43 @@ class CoreRefundActionService extends BaseCoreService
         $order_goods_list = $check_data[ 'order_goods_list' ];
 
         foreach ($order_goods_list as $order_goods_info) {
-            $order_refund_no = create_no();
-            $insert_data = [
-                'order_id' => $order_goods_info[ 'order_id' ],
-                'order_goods_id' => $order_goods_info[ 'order_goods_id' ],
-                'order_refund_no' => $order_refund_no,
-                'refund_type' => OrderRefundDict::ONLY_REFUND,
-                'reason' => get_lang('dict_shop_order_refund_action.shop_active_refund'),
-                'member_id' => $order_goods_info[ 'member_id' ],
-                'apply_money' => $order_goods_info[ 'item_refund_money' ],
-                'money' => $order_goods_info[ 'item_refund_money' ],
-                'status' => OrderRefundDict::STORE_AGREE_REFUND_WAIT_TRANSFER,
-                'remark' => $data[ 'shop_active_refund_remark' ],
-                'voucher' => [],
-                'source' => OrderRefundDict::ACTIVE_REFUND,
-                'is_refund_delivery' => $order_goods_info[ 'is_refund_delivery' ],
-            ];
-            $order_refund_info = $this->model->create($insert_data);
+            Db::startTrans();
+            try {
+                $order_refund_no = create_no();
+                $insert_data = [
+                    'order_id' => $order_goods_info[ 'order_id' ],
+                    'order_goods_id' => $order_goods_info[ 'order_goods_id' ],
+                    'order_refund_no' => $order_refund_no,
+                    'refund_type' => OrderRefundDict::ONLY_REFUND,
+                    'reason' => get_lang('dict_shop_order_refund_action.shop_active_refund'),
+                    'member_id' => $order_goods_info[ 'member_id' ],
+                    'apply_money' => $order_goods_info[ 'item_refund_money' ],
+                    'money' => $order_goods_info[ 'item_refund_money' ],
+                    'status' => OrderRefundDict::STORE_AGREE_REFUND_WAIT_TRANSFER,
+                    'remark' => $data[ 'shop_active_refund_remark' ],
+                    'voucher' => [],
+                    'source' => OrderRefundDict::ACTIVE_REFUND,
+                    'is_refund_delivery' => $order_goods_info[ 'is_refund_delivery' ],
+                ];
+                $order_refund_info = $this->model->create($insert_data);
 
-            //将订单项的退款单号覆盖
-            $order_goods_info->save([
-                'order_refund_no' => $order_refund_no,
-                'shop_active_refund' => 1,
-                'shop_active_refund_money' => $order_goods_info[ 'item_refund_money' ],
-                'status' => OrderGoodsDict::REFUNDING
-            ]);
+                //将订单项的退款单号覆盖
+                $order_goods_info->save([
+                    'order_refund_no' => $order_refund_no,
+                    'shop_active_refund' => 1,
+                    'shop_active_refund_money' => $order_goods_info[ 'item_refund_money' ],
+                    'status' => OrderGoodsDict::REFUNDING
+                ]);
 
-            $data[ 'refund_data' ] = $order_refund_info->toArray();
-            $data[ 'order_goods_data' ] = $order_goods_info->toArray();
-            event('AfterShopOrderRefundActiveCreate', $data);
+                $data[ 'refund_data' ] = $order_refund_info->toArray();
+                $data[ 'order_goods_data' ] = $order_goods_info->toArray();
+                event('AfterShopOrderRefundActiveCreate', $data);
+
+                Db::commit();
+            } catch ( \Exception $e ) {
+                Db::rollback();
+                throw new CommonException($e->getMessage());
+            }
         }
         return true;
     }

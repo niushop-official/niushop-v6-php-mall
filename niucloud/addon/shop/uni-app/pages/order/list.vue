@@ -487,9 +487,17 @@ const finish = (item: any) => {
                 merchant_trade_no: item.out_trade_no
             },
             success: (res: any) => {
-                orderFinish(item.order_id).then((data) => {
-                    getMescroll().resetUpScroll();
-                })
+                if (res.extraData && res.extraData.status) {
+                    if (res.extraData.status === 'confirm'|| res.extraData.status === 'success') {
+                        orderFinish(item.order_id).then((data) => {
+                            getMescroll().resetUpScroll();
+                        })
+                    } else {
+                        // 用户点击了取消
+                        // console.log('用户取消确认收货操作', res.extraData)
+                        uni.showToast({ title: '用户未操作确认收货'})
+                    }
+                }
             },
             fail: (res: any) => {
                 console.log('小程序确认收货组件打开失败 fail', res);

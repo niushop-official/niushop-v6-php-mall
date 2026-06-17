@@ -2,15 +2,17 @@
     <view :style="themeColor()">
         <view class="bg-[var(--page-bg-color)] min-h-screen" v-if="!loading">
             <view v-if="!loading" class="pb-20rpx">
-                <template v-if="systemStore.mapConfig.map_type == 'tencent'">
-                    <view style="min-height: calc(50vh  + 150rpx);" v-if="isShowLocalDelivery">
-                        <!-- #ifdef MP-WEIXIN -->
-                        <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()" />
-                        <!-- #endif -->
-                        <map-show ref="mapShowRef" :tradeNo="detail.order_no" @confirm="handleComfirm" v-if="detail.order_no" />
-                    </view>
+                <template v-if="isShowLocalDelivery">
+                    <template v-if="systemStore.mapConfig.map_type == 'tencent'">
+                        <view style="min-height: calc(50vh  + 150rpx);">
+                            <!-- #ifdef MP-WEIXIN -->
+                            <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()" />
+                            <!-- #endif -->
+                            <map-show ref="mapShowRef" :tradeNo="detail.order_no" @confirm="handleComfirm" v-if="detail.order_no" />
+                        </view>
+                    </template>
+                    <view v-else style="min-height: 150rpx;"></view>
                 </template>
-                <view v-else style="min-height: 150rpx;"></view>
                 <view v-if="detail.status_name  && !isShowLocalDelivery" class="pl-[40rpx] pr-[35rpx] bg-linear pb-[100rpx]">
                     <!-- #ifdef MP-WEIXIN || APP-PLUS -->
                     <top-tabbar :data="topTabbarData" :scrollBool="topTabarObj.getScrollBool()" />
@@ -664,9 +666,17 @@ const finish = (item: any) => {
                 merchant_trade_no: item.out_trade_no
             },
             success: (res: any) => {
-                orderFinish(item.order_id).then((data) => {
-                    orderDetailFn(item.order_id);
-                })
+                if (res.extraData && res.extraData.status) {
+                    if (res.extraData.status === 'confirm'|| res.extraData.status === 'success') {
+                        orderFinish(item.order_id).then((data) => {
+                            orderDetailFn(item.order_id);
+                        })
+                    } else {
+                        // 用户点击了取消
+                        // console.log('用户取消确认收货操作', res.extraData)
+                        uni.showToast({ title: '用户未操作确认收货'})
+                    }
+                }
             },
             fail: (res: any) => {
                 console.log('小程序确认收货组件打开失败 fail', res);

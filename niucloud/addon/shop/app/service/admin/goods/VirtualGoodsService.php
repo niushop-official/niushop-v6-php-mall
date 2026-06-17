@@ -58,7 +58,7 @@ class VirtualGoodsService extends BaseAdminService
 
         if (!empty($params[ 'goods_id' ])) {
             // 查询商品信息，用于编辑
-            $field = 'goods_id,goods_name,sub_title,goods_type,goods_cover,goods_image,goods_video,goods_desc,brand_id,goods_category,label_ids,service_ids,unit,stock,virtual_sale_num,is_limit,limit_type,max_buy,min_buy,status,sort,supplier_id,attr_ids,attr_format,virtual_auto_delivery,virtual_receive_type,virtual_verify_type,virtual_indate,member_discount,poster_id,is_gift,form_id';
+            $field = 'goods_id,goods_name,sub_title,goods_type,goods_cover,goods_image,goods_video,goods_desc,brand_id,goods_category,label_ids,service_ids,unit,stock,virtual_sale_num,is_limit,limit_type,max_buy,min_buy,status,sort,supplier_id,attr_ids,attr_format,virtual_auto_delivery,virtual_receive_type,virtual_verify_type,virtual_indate,member_discount,poster_id,is_gift,form_id,diy_detail_id';
             $goods_info = $this->model->field($field)->where([ [ 'goods_id', '=', $params[ 'goods_id' ] ] ])->findOrEmpty()->toArray();
             if (!empty($goods_info)) {
 

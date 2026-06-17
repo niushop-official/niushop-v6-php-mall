@@ -17,6 +17,7 @@ use addon\shop\app\dict\order\OrderDict;
 use addon\shop\app\dict\order\OrderGoodsDict;
 use addon\shop\app\dict\order\OrderLogDict;
 use addon\shop\app\model\delivery\Store;
+use addon\shop\app\model\goods\Goods;
 use addon\shop\app\model\goods\GoodsSku;
 use addon\shop\app\model\local_delivery\Local;
 use addon\shop\app\model\order\Order;
@@ -117,6 +118,17 @@ class OrderService extends BaseAdminService
             if (!empty($item_pay)) {
                 $item_pay->append(['type_name']);
                 $item_pay['pay_type_name'] = PayDict::getPayType()[PayDict::FRIENDSPAY]['name'] ?? '';
+            }
+
+            if ($item['order_goods']) {
+                foreach ($item['order_goods'] as $kk => $vv) {
+                    $goods_info = (new Goods())->field('unit')->where([['goods_id', '=', $vv['goods_id']]])->findOrEmpty()->toArray();
+                    if (!empty($goods_info)) {
+                        $item['order_goods'][$kk]['unit'] = $goods_info['unit'];
+                    } else {
+                        $item['order_goods'][$kk]['unit'] = '件';
+                    }
+                }
             }
         });
         $list['data'] = $this->getOrderRelateSourceInfo($list['data']);
@@ -253,6 +265,12 @@ class OrderService extends BaseAdminService
         }
         if (!empty($info['order_goods'])) {
             foreach ($info['order_goods'] as &$item) {
+                $goods_info = (new Goods())->field('unit')->where([['goods_id', '=', $item['goods_id']]])->findOrEmpty()->toArray();
+                if (!empty($goods_info)) {
+                    $item['unit'] = $goods_info['unit'];
+                } else {
+                    $item['unit'] = '件';
+                }
                 $field_count = $diy_form_records_fields_model->where([['record_id', '=', $item['form_record_id']]])->count();
                 if ($field_count > 0) {
                     $item['form_record_show'] = true;
@@ -577,7 +595,7 @@ class OrderService extends BaseAdminService
         $sku_ids = (new OrderGoods())->where([['order_goods_id', 'in', $data[ 'order_goods_ids' ]] ])->column('num', 'sku_id');
         $weight = 0;
         foreach ($sku_ids as $sku_id => $value) {
-            $weight += (new GoodsSku())->where([['sku_id', '=', $sku_id] ])->value('weight') ?? 0 * $value['num'];
+            $weight += (new GoodsSku())->where([['sku_id', '=', $sku_id] ])->value('weight') ?? 0 * $value;
         }
         return max($weight, 1);
     }

@@ -519,7 +519,7 @@ class DiscountService extends BaseAdminService
      */
     public function cancelGoodsDiscount($discount_ids)
     {
-        $list = $this->model->where([ [ 'discount_id', 'in', $discount_ids ],['status','=',DiscountDict::ACTIVE] ])->select()->toArray();
+        $list = $this->model->where([ [ 'discount_id', 'in', $discount_ids ] ])->select()->toArray();
         if (empty($list)) return true;
 
         $discount_goods_model = new DiscountGoods();

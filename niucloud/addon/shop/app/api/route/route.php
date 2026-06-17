@@ -304,7 +304,7 @@ Route::group('shop', function () {
     Route::post('exchange_order/create', 'addon\shop\app\api\controller\exchange\OrderCreate@create');
 
     // 发票列表
-    Route::get('invoice', 'addon\shop\app\api\controller\order\Invoice@lists');
+    Route::get('invoice', 'addon\shop\app\api\controller\order\Invoice@list');
 
     // 发票详情
     Route::get('invoice/:id', 'addon\shop\app\api\controller\order\Invoice@info');

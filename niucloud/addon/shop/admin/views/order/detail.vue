@@ -193,11 +193,11 @@
                                     {{ row.impulse_buy_info.show_tips }}
                                 </span>
                                 <span v-if="row.extend && row.extend.newcomer_price" class="text-[13px] mt-[5px]">
-                                    <span v-if="parseFloat(row.extend.newcomer_price) && row.num > 1">{{ row.num }}{{ t('piece') }}<span
-                                        class="text-[#999]">（第1{{ t('piece') }}，￥{{ parseFloat(row.extend.newcomer_price).toFixed(2) }}/{{ t('piece') }}；第{{ row.num > 2 ? '2~' + row.num : '2' }}{{ t('piece') }}，￥{{ parseFloat(row.price).toFixed(2) }}/{{ t('piece') }}）</span></span>
-                                    <span v-else>{{ row.num }}{{ t('piece') }}</span>
+                                    <span v-if="parseFloat(row.extend.newcomer_price) && row.num > 1">{{ row.num }}{{ row.unit }}<span
+                                        class="text-[#999]">（第1{{ row.unit }}，￥{{ parseFloat(row.extend.newcomer_price).toFixed(2) }}/{{ row.unit }}；第{{ row.num > 2 ? '2~' + row.num : '2' }}{{ row.unit }}，￥{{ parseFloat(row.price).toFixed(2) }}/{{ row.unit }}）</span></span>
+                                    <span v-else>{{ row.num }}{{ row.unit }}</span>
                                 </span>
-                                <span v-else class="text-[13px] mt-[5px]">{{ row.num }}{{ t('piece') }}</span>
+                                <span v-else class="text-[13px] mt-[5px]">{{ row.num }}{{ row.unit }}</span>
                             </div>
                         </template>
                     </el-table-column>

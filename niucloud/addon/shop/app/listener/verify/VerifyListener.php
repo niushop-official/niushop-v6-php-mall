@@ -18,7 +18,9 @@ use addon\shop\app\dict\order\OrderGoodsDict;
 use addon\shop\app\dict\order\OrderLogDict;
 use addon\shop\app\model\order\Order;
 use addon\shop\app\model\order\OrderGoods;
+use addon\shop\app\service\core\order\CoreOrderDeliveryService;
 use addon\shop\app\service\core\order\CoreOrderFinishService;
+use app\model\pay\Pay;
 use core\exception\CommonException;
 
 /**
@@ -74,6 +76,15 @@ class VerifyListener
                 if (in_array($order_goods_info[ 'delivery_status' ], [ OrderDeliveryDict::TAKED, OrderDeliveryDict::EXPIRE ])) throw new CommonException('SHOP_ORDER_ITEM_HAS_BEEN_WRITTEN_OFF_OR_EXPIRED');
                 if (in_array($order_goods_info[ 'status' ], [ OrderGoodsDict::REFUNDING, OrderGoodsDict::REFUND_FINISH ])) throw new CommonException('SHOP_THE_ITEM_IS_BEING_REFUNDED_OR_HAS_BEEN_REFUNDED');
             }
+
+            if($order_info[ 'status' ] == OrderDict::WAIT_DELIVERY){
+                $pay_info = (new Pay())->where([['out_trade_no', '=', $order_info['out_trade_no']]])->field('channel')->findOrEmpty()->toArray();
+                if($pay_info['channel'] == 'weapp') {
+                    // 小程序同步发货
+                    (new CoreOrderDeliveryService())->orderShippingUploadShippingInfo(['order_id' => $order_id]);
+                }
+            }
+
             //暂时自提订单核销为统一核销 故校验完数据后直接结束该自提订单
             ( new CoreOrderFinishService() )->finish([
                 'main_type' => OrderLogDict::SYSTEM,
