@@ -123,7 +123,6 @@
                 <template v-if="component.componentName == 'Text'">
                    <diy-text ref="diyTextRef" :component="component" :global="data.global" :index="index" :scrollBool="diyGroup.componentsScrollBool.Text" @update:componentIsShow="component.componentIsShow = $event" />
                 </template>
-
                 </view>
             </view>
         </template>

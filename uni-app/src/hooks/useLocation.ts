@@ -4,6 +4,10 @@ import { getAddressByLatlng } from '@/app/api/system';
 import wechat from '@/utils/wechat'
 import useSystemStore from '@/stores/system';
 
+// 单例定位服务
+// 使用全局 Promise 确保整个应用中只有一个定位请求在执行
+let locationPromise: Promise<void> | null = null;
+
 export function useLocation(isOpenLocation: any) {
     const systemStore = useSystemStore();
 
@@ -12,6 +16,80 @@ export function useLocation(isOpenLocation: any) {
     if (systemStore.mapConfig.is_open != 1) {
         isOpen = false;
     }
+
+    const init = () => {
+        if (!isOpen) return false;
+        
+        // 使用 locationPromise 作为唯一的锁源
+        if (locationPromise) {
+            return;
+        }
+        
+        // 立即设置空 Promise 作为锁
+        locationPromise = new Promise<void>(() => {});
+        
+        // 排除手动地图选择位置的情况
+        if (!uni.getStorageSync('manually_select_location_from_map')) {
+            // #ifdef H5
+            if (isWeixinBrowser() && systemStore.mapConfig.is_open && !uni.getStorageSync('location_address')) {
+                wechat.init(() => {
+                    wechat.getLocation(res => {
+                        locationPromise = null;
+                        let latlng = res.latitude + ',' + res.longitude;
+                        getAddressByLatlngFn(latlng);
+                    });
+                });
+            } else {
+                locationPromise = null;
+            }
+            // #endif
+
+            // #ifndef H5
+            if (systemStore.mapConfig.is_open && !uni.getStorageSync('location_address')) {
+                uni.getLocation({
+                    // #ifndef APP-PLUS
+                    type: 'gcj02',
+                    // #endif
+                    success: res => {
+                        locationPromise = null;
+                        let latlng = res.latitude + ',' + res.longitude;
+                        getAddressByLatlngFn(latlng);
+                    },
+                    fail: (res) => {
+                        locationPromise = null;
+                        // uni.showToast({ title: res.errMsg, icon: 'none', duration: 15000 });
+                        systemStore.defaultPositionAddress = '定位失败';
+                        if (res.errno) {
+                            if (res.errno == 104) {
+                                let msg = '用户未授权隐私权限，获取位置失败';
+                                // uni.showToast({ title: msg, icon: 'none' });
+                                console.log(msg)
+                            } else if (res.errno == 112) {
+                                let msg = '隐私协议中未声明，获取位置失败';
+                                // uni.showToast({ title: msg, icon: 'none' });
+                                console.log(msg)
+                            }
+                        }
+                        if (res.errMsg) {
+                            if (res.errMsg.indexOf('getLocation:fail') != -1 || res.errMsg.indexOf('deny') != -1 || res.errMsg.indexOf('denied') != -1) {
+                                let msg = '用户未授权获取位置权限，将无法提供服务';
+                                // uni.showToast({ title: msg, icon: 'none' });
+                                console.log(msg)
+                            } else {
+                                // uni.showToast({ title: res.errMsg, icon: 'none' });
+                                console.log(res.errMsg)
+                            }
+                        }
+                    }
+                });
+            } else {
+                locationPromise = null;
+            }
+            // #endif
+        } else {
+            locationPromise = null;
+        }
+    };
 
     // 监听页面加载
     const onLoadLifeCycle = (callback: any = '') => {
@@ -25,76 +103,112 @@ export function useLocation(isOpenLocation: any) {
         });
     }
 
-    const init = () => {
+    // 刷新页面时需要调用的
+    const refreshLocation = () => {
         if (!isOpen) return false;
+        
+        // 使用 locationPromise 作为唯一的锁源
+        // 如果已经有定位在进行，直接返回
+        if (locationPromise) {
+            return;
+        }
+        
+        // 立即设置空 Promise 作为锁（这是关键！必须在任何检查之前设置）
+        // 第二个调用者会在上面的检查中看到 locationPromise 已存在，直接返回
+        locationPromise = new Promise<void>(() => {});
+        
+        // 只读取一次本地缓存，减少重复存储调用
+        const locationCache = uni.getStorageSync('location_address');
+        const manualSelect = uni.getStorageSync('manually_select_location_from_map');
+
+        // 存在手动选点标记，直接终止逻辑
+        if (manualSelect) {
+            locationPromise = null;
+            return;
+        }
+
+        // 有定位缓存
+        if (locationCache) {
+            const cacheInfo = locationStorage();
+            // 缓存未过期，恢复定位信息
+            if (!cacheInfo.is_expired) {
+                // 检查经纬度是否有效（非空且非0）
+                const hasValidLatLng = locationCache.latitude && locationCache.longitude && 
+                                      locationCache.latitude !== 0 && locationCache.longitude !== 0;
+                if (hasValidLatLng) {
+                    systemStore.setAddressInfo(locationCache);
+                    locationPromise = null;
+                    return; // 有有效缓存，直接返回，不触发定位
+                }
+                // 经纬度无效，继续往下走重新定位
+            }
+            // 缓存过期或经纬度无效，删除缓存
+            uni.removeStorageSync('location_address');
+        }
+
+        // 无缓存或缓存无效/过期，直接执行定位
         // 排除手动地图选择位置的情况
         if (!uni.getStorageSync('manually_select_location_from_map')) {
             // #ifdef H5
-            if (isWeixinBrowser() && systemStore.mapConfig.is_open && !uni.getStorageSync('location_address')) {
+            if (isWeixinBrowser() && systemStore.mapConfig.is_open) {
                 wechat.init(() => {
                     wechat.getLocation(res => {
-                        let latlng = res.latitude + ',' + res.longitude; // 纬度（浮点数，范围为90 ~ -90），经度（浮点数，范围为180 ~ -180）
-                        getAddressByLatlngFn(latlng)
-                    })
+                        locationPromise = null;
+                        let latlng = res.latitude + ',' + res.longitude;
+                        getAddressByLatlngFn(latlng);
+                    });
                 });
-
+            } else {
+                locationPromise = null;
             }
             // #endif
 
             // #ifndef H5
-            if (systemStore.mapConfig.is_open && !uni.getStorageSync('location_address')) {
+            if (systemStore.mapConfig.is_open) {
                 uni.getLocation({
                     // #ifndef APP-PLUS
                     type: 'gcj02',
                     // #endif
                     success: res => {
-                        let latlng = res.latitude + ',' + res.longitude; // 纬度（浮点数，范围为90 ~ -90），经度（浮点数，范围为180 ~ -180）
+                        locationPromise = null;
+                        let latlng = res.latitude + ',' + res.longitude;
                         getAddressByLatlngFn(latlng);
                     },
                     fail: (res) => {
-                        uni.showToast({ title: res.errMsg, icon: 'none', duration: 15000 })
+                        locationPromise = null;
+                        // uni.showToast({ title: res.errMsg, icon: 'none', duration: 15000 });
                         systemStore.defaultPositionAddress = '定位失败';
                         if (res.errno) {
                             if (res.errno == 104) {
                                 let msg = '用户未授权隐私权限，获取位置失败';
-                                uni.showToast({ title: msg, icon: 'none' })
+                                // uni.showToast({ title: msg, icon: 'none' });
+                                console.log(msg)
                             } else if (res.errno == 112) {
                                 let msg = '隐私协议中未声明，获取位置失败';
-                                uni.showToast({ title: msg, icon: 'none' })
+                                // uni.showToast({ title: msg, icon: 'none' });
+                                console.log(msg)
                             }
                         }
                         if (res.errMsg) {
                             if (res.errMsg.indexOf('getLocation:fail') != -1 || res.errMsg.indexOf('deny') != -1 || res.errMsg.indexOf('denied') != -1) {
                                 let msg = '用户未授权获取位置权限，将无法提供服务';
-                                uni.showToast({ title: msg, icon: 'none' })
+                                // uni.showToast({ title: msg, icon: 'none' });
+                                console.log(msg)
                             } else {
-                                uni.showToast({ title: res.errMsg, icon: 'none' })
+                                // uni.showToast({ title: res.errMsg, icon: 'none' });
+                                console.log(res.errMsg)
                             }
                         }
                     }
                 });
+            } else {
+                locationPromise = null;
             }
             // #endif
+        } else {
+            locationPromise = null;
         }
-    }
-
-    // 刷新页面时需要调用的
-    const refreshLocation = () => {
-        if (!isOpen) return false;
-        if (!uni.getStorageSync('manually_select_location_from_map') && uni.getStorageSync('location_address')) {
-            if (locationStorage() && !locationStorage().is_expired) {
-                systemStore.setAddressInfo(uni.getStorageSync('location_address'))
-            } else {
-                uni.removeStorageSync('location_address');
-            }
-
-        }
-
-        // 定位信息过期后，重新获取定位
-        if (!uni.getStorageSync('manually_select_location_from_map') && locationStorage() && locationStorage().is_expired) {
-            init();
-        }
-    }
+    };
 
     // 通过经纬度获取地址信息
     const getAddressByLatlngFn = (latlng: any = '') => {
@@ -161,12 +275,15 @@ export function useLocation(isOpenLocation: any) {
                 if (res.errMsg && res.errno) {
                     if (res.errno == 104) {
                         let msg = '用户未授权隐私权限，选择位置失败';
-                        uni.showToast({ title: msg, icon: 'none' })
+                        // uni.showToast({ title: msg, icon: 'none' })
+                        console.log(msg)
                     } else if (res.errno == 112) {
                         let msg = '隐私协议中未声明，打开地图选择位置失败';
-                        uni.showToast({ title: msg, icon: 'none' })
+                        // uni.showToast({ title: msg, icon: 'none' })
+                        console.log(msg)
                     } else {
-                        uni.showToast({ title: res.errMsg, icon: 'none' })
+                        // uni.showToast({ title: res.errMsg, icon: 'none' })
+                        console.log(res.errMsg)
                     }
                 }
             }

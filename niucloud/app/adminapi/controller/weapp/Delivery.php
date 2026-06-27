@@ -30,13 +30,18 @@ class Delivery extends BaseAdminController
     public function getIsTradeManaged()
     {
         try {
+            // 尝试实例化服务
             $wechat_template_service = new WeappDeliveryService();
             $result = $wechat_template_service->getIsTradeManaged();
             if ($result) {
                 return success([ 'is_trade_managed' => true ]);
             }
-
+        } catch (\ParseError $e) {
+            // 捕获语法解析错误（通常是vendor文件问题）
+            return success([ 'is_trade_managed' => false, 'error' => 'Parse error: ' . $e->getMessage() ]);
         } catch (\Exception $e) {
+            // 捕获其他运行时异常
+            return success([ 'is_trade_managed' => false, 'error' => $e->getMessage() ]);
         }
         return success([ 'is_trade_managed' => false ]);
     }

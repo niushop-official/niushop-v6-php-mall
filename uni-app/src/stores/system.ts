@@ -61,7 +61,7 @@ const useSystemStore = defineStore('system', {
             },
             shareCallback: null,
             defaultPositionAddress: '定位中',
-            diyAddressInfo: null,
+            diyAddressInfo: {},
             currTabbar: {
                 path: '',
                 query: {}

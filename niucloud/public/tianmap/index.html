@@ -870,9 +870,13 @@
             window.postMessage({ type: 'tianmap:select', data: payload }, '*');
             // alert('已选择坐标：' + selectedLongitude.toFixed(6) + ',' + selectedLatitude.toFixed(6));
         }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(onLoad, 100);
+        });
     </script>
 </head>
-<body onLoad="onLoad()">
+<body>
 <div class="page">
     <div class="map-wrap">
         <div id="mapDiv"></div>

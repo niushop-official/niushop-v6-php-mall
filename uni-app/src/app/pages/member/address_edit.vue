@@ -85,6 +85,8 @@ import useSystemStore from '@/stores/system';
 import { useLocation } from '@/hooks/useLocation'
 
 const systemStore = useSystemStore();
+const { refresh: refreshLocation } = useLocation(true);
+
 const formData: any = ref({
     id: 0,
     name: '',
@@ -111,6 +113,7 @@ const isSelectMap = ref(2) // 值为1，该地址需要有经纬度，反之不�
 const wxPrivacyPopupRef: any = ref(null)
 
 onLoad((data: any) => {
+    refreshLocation();
     isSelectMap.value = data.isSelectMap || '';
     const selectAddress = uni.getStorageSync('selectAddressCallback')
     if (data.id) {
@@ -260,8 +263,12 @@ const save = () => {
 
 // 选择地址
 const chooseLocation = () => {
-    let latitude = systemStore.diyAddressInfo ? systemStore.diyAddressInfo.latitude : '';
-    let longitude = systemStore.diyAddressInfo ? systemStore.diyAddressInfo.longitude : '';
+    // 安全取值，空对象时直接返回空字符串
+    const latitude = systemStore.diyAddressInfo?.latitude ?? ''
+    const longitude = systemStore.diyAddressInfo?.longitude ?? ''
+
+    // let latitude = systemStore.diyAddressInfo ? systemStore.diyAddressInfo.latitude : '';
+    // let longitude = systemStore.diyAddressInfo ? systemStore.diyAddressInfo.longitude : '';
 
     // #ifndef H5
     uni.chooseLocation({
@@ -276,6 +283,12 @@ const chooseLocation = () => {
             if (res.latitude && res.longitude) {
                 let latng = res.latitude + ',' + res.longitude;
                 getAddress(latng);
+                // 关键：选完地址后，存入仓库 + 本地缓存
+                systemStore.setAddressInfo({
+                    latitude: res.latitude,
+                    longitude: res.longitude,
+                    address: res.address
+                })
             }
         },
         fail: (res) => {
@@ -283,12 +296,15 @@ const chooseLocation = () => {
             if (res.errMsg && res.errno) {
                 if (res.errno == 104) {
                     let msg = '用户未授权隐私权限，选择位置失败';
-                    uni.showToast({ title: msg, icon: 'none' })
+                    // uni.showToast({ title: msg, icon: 'none' })
+                    console.log(msg)
                 } else if (res.errno == 112) {
                     let msg = '隐私协议中未声明，打开地图选择位置失败';
-                    uni.showToast({ title: msg, icon: 'none' })
+                    // uni.showToast({ title: msg, icon: 'none' })
+                    console.log(msg)
                 } else {
-                    uni.showToast({ title: res.errMsg, icon: 'none' })
+                    // uni.showToast({ title: res.errMsg, icon: 'none' })
+                    console.log(res.errMsg)
                 }
             }
         }
@@ -385,7 +401,7 @@ const choosegAddress = () =>{
                 // 匹配市id（基于省id）
                 formData.value.city_id = findIdByNameAndParentId(areaTree.value, res.cityName, formData.value.province_id);
                 // 匹配区id（基于市id）
-                formData.value.district_id = findIdByNameAndParentId(areaTree.value, res.countyName, formData.value.cityId);
+                formData.value.district_id = findIdByNameAndParentId(areaTree.value, res.countyName, formData.value.city_id);
             },
             fail(err) {
                loadingchoosegAddress.value = false
@@ -393,7 +409,14 @@ const choosegAddress = () =>{
         });
 }
 
-onMounted(()=>{
+onMounted(async ()=>{
+    // 读取本地缓存的历史定位地址
+    const cacheLocation = uni.getStorageSync('location_address')
+    if(cacheLocation && Object.keys(cacheLocation).length) {
+        // 调用仓库方法，把缓存塞进去
+        systemStore.setAddressInfo(cacheLocation)
+    }    
+
     // #ifdef MP 
     uni.authorize({
         scope: 'scope.userLocation',
@@ -410,7 +433,7 @@ onMounted(()=>{
                             success: (settingRes) => {
                                 if (settingRes.authSetting['scope.userLocation']) {
                                     const locationVal = useLocation(true);
-                                    locationVal.init();
+                                    locationVal.refresh();
                                 }
                             }
                         });

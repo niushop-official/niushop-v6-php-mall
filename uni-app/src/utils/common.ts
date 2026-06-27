@@ -576,12 +576,15 @@ export function copy(value: any, callback: any) {
             if (res.errMsg && res.errno) {
                 if (res.errno == 104) {
                     let msg = '用户未授权隐私权限，设置剪贴板数据失败';
-                    uni.showToast({ title: msg, icon: 'none' })
+                    // uni.showToast({ title: msg, icon: 'none' })
+                    console.log(msg)
                 } else if (res.errno == 112) {
                     let msg = '隐私协议中未声明，设置剪贴板数据失败';
-                    uni.showToast({ title: msg, icon: 'none' })
+                    // uni.showToast({ title: msg, icon: 'none' })
+                    console.log(msg)
                 } else {
-                    uni.showToast({ title: res.errMsg, icon: 'none' })
+                    // uni.showToast({ title: res.errMsg, icon: 'none' })
+                    console.log(res.errMsg)
                 }
             }
         }
@@ -845,7 +848,7 @@ export function openMapSelector(backurl: string, params = '') {
         // 天地图的位置选择器URL
         // 注意：天地图的位置选择器API可能与腾讯地图不同，需要根据实际API文档调整
         const baseUrl = (import.meta.env.VITE_APP_BASE_URL || `${ location.origin }`).replace(/\/api\/$/, '')
-        const url = baseUrl + `/tianmap/index.html?search=1&type=0&backurl=${ encodeURIComponent(backurl) }&key=${ tiandituKey }` + (params ? '&' + params : '')
+        const url = baseUrl + `/tianmap/index.html?search=1&type=0&backurl=${ encodeURIComponent(backurl) }&key=${ tiandituKey }&t=${Date.now()}` + (params ? '&' + params : '')
         window.location.href = url;
     }
 }
