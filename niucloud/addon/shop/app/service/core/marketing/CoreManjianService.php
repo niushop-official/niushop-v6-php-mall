@@ -1303,9 +1303,11 @@ class CoreManjianService extends BaseCoreService
             ['start_time', '<=', time()],
             ['end_time', '>', time()]
         ];
+
+        //全部商品参与
         $manjian_info_all_goods = $this->model->field($field)->where($common_where)->where([['goods_type', '=', ManjianDict::ALL_GOODS]])->findOrEmpty()->toArray();
         $all_manjian_info = [];
-        if (!empty($manjian_info_all_goods)) {//全部商品参与
+        if (!empty($manjian_info_all_goods)) {
             $manjian_info = $manjian_info_all_goods;
             $can_join = $this->canJoinManjian($manjian_info, $member_id);
             if ($can_join) {
@@ -1315,12 +1317,21 @@ class CoreManjianService extends BaseCoreService
             $all_manjian_info[] = $manjian_info;
         }
 
+        //指定商品不参与
         $manjian_info_selected_goods_not = $this->model->field($field)
             ->where($common_where)
             ->where([['goods_type', '=', ManjianDict::SELECTED_GOODS_NOT]])
             ->select()->toArray();
-        if (!empty($manjian_info_selected_goods_not)) {//指定商品不参与
+        if (!empty($manjian_info_selected_goods_not)) {
             foreach ($manjian_info_selected_goods_not as $manjian_info) {
+                $manjian_goods_count = (new ManjianGoods())->where([
+                    ['manjian_id', '=', $manjian_info['manjian_id']],
+                    ['goods_id', '=', $goods_id],
+                    ['sku_id', '=', $sku_id],
+                    ['status', '=', ManjianDict::ACTIVE]
+                ])->where([['goods_type', '=', ManjianDict::SELECTED_GOODS_NOT]])->count();
+                if($manjian_goods_count > 0) continue;
+
                 $can_join = $this->canJoinManjian($manjian_info, $member_id);
                 if ($can_join) {
                     $rule_content = $this->getRuleContent($manjian_info, $gift_goods);
@@ -1329,6 +1340,7 @@ class CoreManjianService extends BaseCoreService
                 $all_manjian_info[] = $manjian_info;
             }
         }
+
         //指定商品参与
         $manjian_info_selected_goods = $this->model->field($field)->where($common_where)
             ->where([['goods_type', '=', ManjianDict::SELECTED_GOODS]])

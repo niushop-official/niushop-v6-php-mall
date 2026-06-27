@@ -723,6 +723,7 @@ trait CoreOrderCreateTrait
                 if (!empty($this->param[ 'delivery' ][ 'take_store_id' ])) {
                     $this->delivery[ 'take_store' ] = ( new CoreStoreService() )->getInfoById($this->param[ 'delivery' ][ 'take_store_id' ]);
                 }
+                $this->delivery[ 'take_address' ] = [];
             } else {
                 //查询默认收货地址
                 if (!empty($this->param[ 'delivery' ][ 'take_address_id' ])) {

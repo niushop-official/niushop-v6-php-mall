@@ -136,18 +136,22 @@ const getStoreListFn = (callback: any) => {
                     if (res.errno) {
                         if (res.errno == 104) {
                             let msg = '用户未授权隐私权限，获取位置失败';
-                            uni.showToast({ title: msg, icon: 'none' })
+                            // uni.showToast({ title: msg, icon: 'none' })
+                            console.log(msg)
                         } else if (res.errno == 112) {
                             let msg = '隐私协议中未声明，获取位置失败';
-                            uni.showToast({ title: msg, icon: 'none' })
+                            // uni.showToast({ title: msg, icon: 'none' })
+                            console.log(msg)
                         }
                     }
                     if (res.errMsg) {
                         if (res.errMsg.indexOf('getLocation:fail') != -1 || res.errMsg.indexOf('deny') != -1 || res.errMsg.indexOf('denied') != -1) {
                             let msg = '用户未授权获取位置权限，将无法提供距离最近的门店';
-                            uni.showToast({ title: msg, icon: 'none' })
+                            // uni.showToast({ title: msg, icon: 'none' })
+                            console.log(msg)
                         } else {
-                            uni.showToast({ title: res.errMsg, icon: 'none' })
+                            // uni.showToast({ title: res.errMsg, icon: 'none' })
+                            console.log(res.errMsg)
                         }
                     }
                 }
