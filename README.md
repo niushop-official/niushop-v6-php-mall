@@ -95,18 +95,6 @@ NIUCLOUD-ADMIN是一款快速开发通用管理后台框架，整体功能架构
  - [PHPStudy安装部署V6](https://doc.niucloud.com/v6.html?keywords=/ben-di-an-zhuang-bu-shu/san-3001-ben-di-an-zhuang-bu-shu)
 
 
-### 二次开发视频教程
-
-- [开发准备工作与创建插件](https://niucloud-document-video.oss-cn-beijing.aliyuncs.com/video/1-1.mp4)
-- [插件目录整体说明](https://niucloud-document-video.oss-cn-beijing.aliyuncs.com/video/2-1.mp4)
-- [插件安装与打包原理](https://niucloud-document-video.oss-cn-beijing.aliyuncs.com/video/8-1.mp4)
-- [消息队列](https://niucloud-document-video.oss-cn-beijing.aliyuncs.com/video/9-1.mp4)
-- [计划任务](https://niucloud-document-video.oss-cn-beijing.aliyuncs.com/video/10-1.mp4)
-- [DIY自定义小组件和页面装修开发](https://niucloud-document-video.oss-cn-beijing.aliyuncs.com/video/11-1.mp4)
-- [支付接口开发](https://niucloud-document-video.oss-cn-beijing.aliyuncs.com/video/12-1.mp4)
-- [插件升级包打包流程以及云编译](https://niucloud-document-video.oss-cn-beijing.aliyuncs.com/video/13-1.mp4)
-
-
 ### 演示地址
 - 管理后台演示网址：[<a href='https://v6.site.niucloud.com/admin' target="_blank"> 查看 </a>]       
 <a href='https://v6.site.niucloud.com/admin' target="_blank">https://v6.site.niucloud.com/admin  账号：admin  密码：123456
