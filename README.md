@@ -100,12 +100,11 @@ NIUCLOUD-ADMIN是一款快速开发通用管理后台框架，整体功能架构
 
 加入企业微信群技术交流，请扫描下面二维码 :point_down: 
 
-![输入图片说明](https://media.niucloud.com/170312377249fc5bc70c5f914fda3d7c5cf3413ddc_aliyun.jpg)
+![输入图片说明](https://doc.press.niucloud.com/assets/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E4%BA%8C%E7%BB%B4%E7%A0%81.2X1GoZf1.jpg)
 
 
 ### 产品LOGO
 
-![输入图片说明](https://media.niucloud.com/1712452101f24e83b1d36c9078c433015d0b6f44c1_aliyun.png)
 
 ![输入图片说明](https://foruda.gitee.com/avatar/1682227978769691031/1342405_niushop_1682227978.png)
 
