@@ -24,7 +24,7 @@ HBUILDER, VSCODE，微信小程序开发工具，打包，上传，发布！ V6�
 ### NIUCLOUD-ADMIN 是什么？
 NIUCLOUD-ADMIN是一款快速开发通用管理后台框架，整体功能架构全部精心设计！代码干净整洁！低耦合，高质量！！！前后端API接口完全分离 :raised_hands: ！！！前端采用最新技术 **Vite+TypeScript+Vue3+ElementPlus** ，后台采用PHP8、MYSQL8、THINKPHP8 全部最新技术栈，内置Workman高性能消息队列，计划任务处理，完全兼容容器路由运行技术。 内置代码生成器，插件生成器，一键云编译、一键云部署，集成用户权限、表单设计、云存储、短信发送、素材中心、微信及公众号、Api模块一系列开箱即用功能，是一款快速搭建开发企业级应用的软件系统。源码100%开源无加密！框架采用MIT协议，终身免费，商用免费！
 
-请到官方网站了解更多 http://www.niucloud.com
+请到官方网站了解更多 https://www.niucloud.com
 
 ### NIUSHOP V6 和 NIUCLOUD-ADMIN 的区别和关系怎样的？
 首先，NIUSHOP 产品系列是以商城系统（2016年立项研发，V1一直升级到V5版本， V6是完全从零研发的新产品）为主的独立的产品线。NIUCLOUD产品系列（从2022年底开始立项研发）是以NIUCLOUD-ADMIN框架（分单用户独立版、SAAS版）为根本，在此基础上发展各种应用插件，包括第三方开发者生态产品，主要以SAAS产品系列为主。而 NIUSHOP V6 是 使用  **NIUCLOUD-ADMIN**  框架单用户独立版设计的商城应用，以NIUSHOP品牌推广。一句话概括就是，单用户专业化系统以NIUSHOP品牌整体运营推广，SAAS版本插件和应用市场以及NIUCLOUD框架（单用户、SAAS）以NIUCLOUD品牌运营推广。NIUSHOP和NIUCLOUD都是牛之云科技有限公司投资研发运作。
