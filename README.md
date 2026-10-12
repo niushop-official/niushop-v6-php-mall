@@ -55,21 +55,22 @@ NIUCLOUD-ADMIN是一款快速开发通用管理后台框架，整体功能架构
 
 ![输入图片说明](https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/v6_kj2.png)
 
+### 商城插件SHOP
+
 <table>
     <tbody>
     <tr>
-        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop3.jpg"></td>
-        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop7.jpg"></td>
-        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop9.jpg"></td>
-        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop11.jpg"></td>
+        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A27.Bll5k5Oi.jpg"></td>
+        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A28.CWYJfJc4.jpg"></td>
+        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A24.BL9nyNIW.jpg"></td>
+        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A26.D_LsTXAd.jpg"></td>
     </tr>
     <tr>
-        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop6.jpg"></td>
-        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop10.jpg"></td>
-        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop12.jpg"></td>
-        <td><img src="https://niucloud-bucket.oss-cn-beijing.aliyuncs.com/gitee_saas/saas_shop13.jpg"></td>
-    </tr>	 
-</tbody></table>
+        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A21.DG4KeG7m.jpg"></td>
+        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A22.DUOosIBy.jpg"></td>
+        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A23.DqUGqBi6.jpg"></td>
+        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A25.kD9xOpcL.jpg"></td>
+    </tr>
 
 
 
