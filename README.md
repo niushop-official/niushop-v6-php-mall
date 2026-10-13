@@ -53,16 +53,16 @@ NIUCLOUD-ADMIN是一款快速开发通用管理后台框架，整体功能架构
 <table>
     <tbody>
     <tr>
-        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A27.Bll5k5Oi.jpg"></td>
-        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A28.CWYJfJc4.jpg"></td>
-        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A24.BL9nyNIW.jpg"></td>
-        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A26.D_LsTXAd.jpg"></td>
+        <td><img src="niucloud/public/static/resource/images/shop1.png"></td>
+        <td><img src="niucloud/public/static/resource/images/shop2.png"></td>
+        <td><img src="niucloud/public/static/resource/images/shop3.png"></td>
+        <td><img src="niucloud/public/static/resource/images/shop4.png"></td>
     </tr>
     <tr>
-        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A21.DG4KeG7m.jpg"></td>
-        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A22.DUOosIBy.jpg"></td>
-        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A23.DqUGqBi6.jpg"></td>
-        <td><img src="https://doc.press.niucloud.com/assets/%E5%95%86%E5%9F%8E%E7%95%8C%E9%9D%A25.kD9xOpcL.jpg"></td>
+        <td><img src="niucloud/public/static/resource/images/shop5.png"></td>
+        <td><img src="niucloud/public/static/resource/images/shop6.png"></td>
+        <td><img src="niucloud/public/static/resource/images/shop7.png"></td>
+        <td><img src="niucloud/public/static/resource/images/shop8.png"></td>
     </tr>	 
     </tbody>
 </table>
@@ -100,15 +100,15 @@ NIUCLOUD-ADMIN是一款快速开发通用管理后台框架，整体功能架构
 
 加入企业微信群技术交流，请扫描下面二维码 :point_down: 
 
-![输入图片说明](https://doc.press.niucloud.com/assets/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E4%BA%8C%E7%BB%B4%E7%A0%81.2X1GoZf1.jpg)
+![输入图片说明](niucloud/public/static/resource/images/weixin1.png)
 
 
 ### 产品LOGO
 
 
-![输入图片说明](https://foruda.gitee.com/avatar/1682227978769691031/1342405_niushop_1682227978.png)
+![输入图片说明](niucloud/public/static/resource/images/logo1.png)
 
-![输入图片说明](https://www.niucloud.com/_nuxt/login_logo.650a27e2.png)
+![输入图片说明](niucloud/public/static/resource/images/logo2.png)
 
 
 ### 开源使用须知
