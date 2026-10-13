@@ -53,16 +53,16 @@ NIUCLOUD-ADMIN是一款快速开发通用管理后台框架，整体功能架构
 <table>
     <tbody>
     <tr>
-        <td><img src="niucloud/public/static/resource/images/shop1.png"></td>
-        <td><img src="niucloud/public/static/resource/images/shop2.png"></td>
-        <td><img src="niucloud/public/static/resource/images/shop3.png"></td>
-        <td><img src="niucloud/public/static/resource/images/shop4.png"></td>
+        <td><img src="niucloud/public/static/resource/images/shop1.jpg"></td>
+        <td><img src="niucloud/public/static/resource/images/shop2.jpg"></td>
+        <td><img src="niucloud/public/static/resource/images/shop3.jpg"></td>
+        <td><img src="niucloud/public/static/resource/images/shop4.jpg"></td>
     </tr>
     <tr>
-        <td><img src="niucloud/public/static/resource/images/shop5.png"></td>
-        <td><img src="niucloud/public/static/resource/images/shop6.png"></td>
-        <td><img src="niucloud/public/static/resource/images/shop7.png"></td>
-        <td><img src="niucloud/public/static/resource/images/shop8.png"></td>
+        <td><img src="niucloud/public/static/resource/images/shop5.jpg"></td>
+        <td><img src="niucloud/public/static/resource/images/shop6.jpg"></td>
+        <td><img src="niucloud/public/static/resource/images/shop7.jpg"></td>
+        <td><img src="niucloud/public/static/resource/images/shop8.jpg"></td>
     </tr>	 
     </tbody>
 </table>
